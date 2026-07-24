@@ -55,7 +55,7 @@
 | Task | Sarlavha | Bog'liqlik | Holat |
 |---|---|---|---|
 | T-023 | Error handling darajasi auditi (faqat tahlil) | — | ✅ Tugagan |
-| T-024 | Axios'ga o'tish — imkoniyat tahlili (faqat tahlil) | — | 📝 Draft (`tasks/`) |
+| T-024 | Axios'ga o'tish — imkoniyat tahlili (faqat tahlil) | — | ✅ Tugagan (Variant A — kam-ta'sirli tavsiya qilindi) |
 | T-025 | Axios'ni amalga oshirish | T-024 tugagandan keyin, uning rejasiga rioya qiladi | 📝 Draft (`tasks/`) |
 
 ## 5. Performance/UX seriyasi (T-026..T-031)
@@ -78,8 +78,8 @@
 ## 7. Umumiy holat
 
 - **Jami:** 32 ta task.
-- **Tugagan:** 23 ta (T-001..T-023).
-- **Draft, hali dispatch qilinmagan:** 9 ta (T-024..T-032).
+- **Tugagan:** 24 ta (T-001..T-024).
+- **Draft, hali dispatch qilinmagan:** 8 ta (T-025..T-032).
 - **API/state docs seriyasi (T-020..T-022) TO'LIQ TUGADI** —
   `project_docs/api/README.md` 17 modulga havola beruvchi indeks. Bundan
   buyon yangilab borish qoidasi: `orcestor/requirements.MD` 7-bo'lim.
