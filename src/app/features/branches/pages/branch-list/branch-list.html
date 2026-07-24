@@ -1,1 +1,31 @@
-<p>branch-list works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Filiallar</h2>
+    <a routerLink="/branches/new" class="btn btn-primary">Yangi filial</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nomi</th>
+        <th>Manzil</th>
+        <th>Telefon</th>
+        <th>Amallar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let branch of branches">
+        <td>{{ branch.name }}</td>
+        <td>{{ branch.address }}</td>
+        <td>{{ branch.phone }}</td>
+        <td>
+          <a [routerLink]="['/branches', branch.id, 'edit']" class="btn btn-sm btn-info">Tahrirlash</a>
+          <button (click)="deleteBranch(branch.id)" class="btn btn-sm btn-danger">O'chirish</button>
+        </td>
+      </tr>
+      <tr *ngIf="branches.length === 0">
+        <td colspan="4" class="text-center">Ma'lumot topilmadi</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

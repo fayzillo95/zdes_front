@@ -1,0 +1,14 @@
+.form {
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+}

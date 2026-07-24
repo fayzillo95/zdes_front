@@ -1,1 +1,35 @@
-<p>advance-list works!</p>
+<div class="advance-list-container">
+  <div class="header">
+    <h2>Advances</h2>
+    <a routerLink="new" class="btn btn-primary">New Advance</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Employee ID</th>
+        <th>Amount</th>
+        <th>Reason</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let advance of advances">
+        <td>{{ advance.id }}</td>
+        <td>{{ advance.employeeId }}</td>
+        <td>{{ advance.amount }}</td>
+        <td>{{ advance.reason }}</td>
+        <td>{{ advance.date }}</td>
+        <td>
+          <a [routerLink]="['edit', advance.id]" class="btn btn-sm btn-info">Edit</a>
+          <button (click)="deleteAdvance(advance.id)" class="btn btn-sm btn-danger">Delete</button>
+        </td>
+      </tr>
+      <tr *ngIf="advances.length === 0">
+        <td colspan="6" class="text-center">No advances found.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,1 +1,30 @@
-<p>work-schedule-list works!</p>
+<div class="list-container">
+  <div class="header">
+    <h2>Work Schedules</h2>
+    <a routerLink="new" class="btn btn-primary">Create New</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let schedule of workSchedules">
+        <td>{{ schedule.id }}</td>
+        <td>{{ schedule.name }}</td>
+        <td>{{ schedule.startTime }}</td>
+        <td>{{ schedule.endTime }}</td>
+        <td class="actions">
+          <a [routerLink]="[schedule.id]" class="btn btn-edit">Edit</a>
+          <button (click)="deleteWorkSchedule(schedule.id)" class="btn btn-delete">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

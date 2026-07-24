@@ -1,1 +1,12 @@
-<p>attendance-detail works!</p>
+<div class="attendance-detail-container" *ngIf="attendance">
+  <h2>Attendance Detail</h2>
+  <p><strong>ID:</strong> {{ attendance.id }}</p>
+  <p><strong>Employee ID:</strong> {{ attendance.employeeId }}</p>
+  <p><strong>Date:</strong> {{ attendance.date }}</p>
+  <p><strong>Check In:</strong> {{ attendance.checkIn }}</p>
+  <p><strong>Check Out:</strong> {{ attendance.checkOut }}</p>
+  <p><strong>Status:</strong> {{ attendance.status }}</p>
+</div>
+<div *ngIf="!attendance">
+  Loading...
+</div>

@@ -1,1 +1,5 @@
-export interface Position {}
+export interface Position {
+  id: string;
+  name: string;
+  departmentId?: string;
+}

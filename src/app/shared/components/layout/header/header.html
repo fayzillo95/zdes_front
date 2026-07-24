@@ -1,1 +1,12 @@
-<p>header works!</p>
+<header class="header">
+  <div class="logo">ZDES</div>
+  <div class="user-actions">
+    <button class="theme-toggle-btn" (click)="toggleTheme()" title="Mavzuni almashtirish">
+      {{ theme() === 'light' ? '🌙' : '☀️' }}
+    </button>
+    @if (currentUser()) {
+      <span class="user-name">Salom, {{ currentUser()?.firstName || currentUser()?.username }}!</span>
+      <button class="logout-btn" (click)="logout()">Chiqish</button>
+    }
+  </div>
+</header>

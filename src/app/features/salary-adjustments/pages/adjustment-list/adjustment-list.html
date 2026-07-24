@@ -1,1 +1,32 @@
-<p>adjustment-list works!</p>
+<div class="header">
+  <h2>Salary Adjustments</h2>
+  <button routerLink="new">New Adjustment</button>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Employee ID</th>
+      <th>Amount</th>
+      <th>Type</th>
+      <th>Reason</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of adjustments">
+      <td>{{ item.id }}</td>
+      <td>{{ item.employeeId }}</td>
+      <td>{{ item.amount }}</td>
+      <td>{{ item.type }}</td>
+      <td>{{ item.reason }}</td>
+      <td>{{ item.date }}</td>
+      <td>
+        <button [routerLink]="[item.id, 'edit']">Edit</button>
+        <button (click)="delete(item.id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

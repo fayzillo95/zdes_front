@@ -1,1 +1,38 @@
-<p>data-table works!</p>
+<div class="data-table-container">
+  <table class="data-table" *ngIf="!loading && data.length > 0">
+    <thead>
+      <tr>
+        <th *ngFor="let col of columns" 
+            (click)="handleSort(col)"
+            [class.sortable]="col.sortable">
+          {{ col.label }}
+          <span *ngIf="col.sortable && sortKey === col.key" class="sort-icon">
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of paginatedData" (click)="onRowClick(row)" class="clickable-row">
+        <td *ngFor="let col of columns">
+          {{ getCellValue(row, col.key) }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Yuklanmoqda...</p>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && (!data || data.length === 0)">
+    <p>{{ emptyMessage }}</p>
+  </div>
+
+  <div class="pagination" *ngIf="!loading && data.length > pageSize">
+    <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Oldingi</button>
+    <span class="page-info">Sahifa {{ currentPage }} / {{ totalPages }}</span>
+    <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Keyingi</button>
+  </div>
+</div>

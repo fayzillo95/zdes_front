@@ -1,1 +1,21 @@
-<p>scanner works!</p>
+<div class="scanner-container">
+  <h2>Skaner (Qo'lda tanlash)</h2>
+  <!-- haqiqiy terminal/biometrik qurilma integratsiyasi keyingi bosqichga qoldirilgan, bu soddalashtirilgan qo'lda tanlash UI -->
+  
+  <div class="form-group">
+    <label for="employeeSelect">Xodimni tanlang:</label>
+    <select id="employeeSelect" [(ngModel)]="selectedEmployeeId" class="form-control">
+      <option value="">-- Tanlang --</option>
+      <option *ngFor="let emp of employees" [value]="emp.id">{{ emp.fullName }}</option>
+    </select>
+  </div>
+
+  <div class="action-buttons">
+    <button class="btn btn-primary" (click)="checkIn()" [disabled]="!selectedEmployeeId">Kelish</button>
+    <button class="btn btn-secondary" (click)="checkOut()" [disabled]="!selectedEmployeeId">Ketish</button>
+  </div>
+
+  <div *ngIf="message" class="alert" [ngClass]="{'alert-danger': isError, 'alert-success': !isError}">
+    {{ message }}
+  </div>
+</div>

@@ -1,1 +1,5 @@
-export interface Department {}
+export interface Department {
+  id: string;
+  name: string;
+  branchId?: string;
+}

@@ -1,1 +1,33 @@
-<p>terminal-list works!</p>
+<div class="terminal-list-container">
+  <div class="header">
+    <h2>Terminals</h2>
+    <a routerLink="new" class="btn btn-primary">Create New Terminal</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Branch ID</th>
+        <th>IP Address</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let terminal of terminals">
+        <td>{{ terminal.id }}</td>
+        <td>{{ terminal.name }}</td>
+        <td>{{ terminal.branchId }}</td>
+        <td>{{ terminal.ipAddress }}</td>
+        <td>
+          <a [routerLink]="[terminal.id]" class="btn btn-sm btn-info">Edit</a>
+          <button (click)="deleteTerminal(terminal.id)" class="btn btn-sm btn-danger">Delete</button>
+        </td>
+      </tr>
+      <tr *ngIf="terminals.length === 0">
+        <td colspan="5" class="text-center">No terminals found.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

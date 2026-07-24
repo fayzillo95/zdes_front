@@ -1,1 +1,31 @@
-<p>holiday-list works!</p>
+<div class="holiday-list-container">
+  <div class="header-actions">
+    <h2>Holidays</h2>
+    <a routerLink="new" class="btn btn-primary">Add New Holiday</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let holiday of holidays">
+        <td>{{ holiday.id }}</td>
+        <td>{{ holiday.name }}</td>
+        <td>{{ holiday.date | date }}</td>
+        <td class="actions">
+          <a [routerLink]="[holiday.id, 'edit']" class="btn btn-sm btn-outline">Edit</a>
+          <button (click)="deleteHoliday(holiday.id)" class="btn btn-sm btn-danger">Delete</button>
+        </td>
+      </tr>
+      <tr *ngIf="holidays.length === 0">
+        <td colspan="4" class="text-center">No holidays found.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

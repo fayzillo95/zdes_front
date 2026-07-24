@@ -1,0 +1,83 @@
+.payroll-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.header-section {
+  margin-bottom: 24px;
+}
+
+.header-section h2 {
+  font-size: 1.5rem;
+  color: #111827;
+  font-weight: 600;
+  margin: 0;
+}
+
+.table-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.payroll-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.payroll-table th {
+  background-color: #f9fafb;
+  padding: 16px 24px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.payroll-table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.payroll-table tr:hover {
+  background-color: #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.amount {
+  font-weight: 500;
+}
+
+.deduction {
+  color: #ef4444;
+}
+
+.total {
+  font-weight: 600;
+  color: #10b981;
+}
+
+.btn-details {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #3b82f6;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-details:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+}

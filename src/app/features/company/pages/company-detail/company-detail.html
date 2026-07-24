@@ -1,1 +1,41 @@
-<p>company-detail works!</p>
+<div class="company-detail-container">
+  <h2>Kompaniya sozlamalari</h2>
+  
+  <div *ngIf="message" class="alert-message">
+    {{ message }}
+  </div>
+
+  <form [formGroup]="companyForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Nomi *</label>
+      <input id="name" type="text" formControlName="name" placeholder="Kompaniya nomi" />
+    </div>
+
+    <div class="form-group">
+      <label for="address">Manzil</label>
+      <input id="address" type="text" formControlName="address" placeholder="Manzil" />
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Telefon</label>
+      <input id="phone" type="text" formControlName="phone" placeholder="+998..." />
+    </div>
+
+    <div class="form-group">
+      <label for="currency">Valyuta *</label>
+      <input id="currency" type="text" formControlName="currency" placeholder="UZS, USD..." />
+    </div>
+
+    <div class="form-group">
+      <label for="workDayStart">Ish boshlanish vaqti *</label>
+      <input id="workDayStart" type="time" formControlName="workDayStart" />
+    </div>
+
+    <div class="form-group">
+      <label for="workDayEnd">Ish tugash vaqti *</label>
+      <input id="workDayEnd" type="time" formControlName="workDayEnd" />
+    </div>
+
+    <button type="submit" [disabled]="companyForm.invalid" class="submit-btn">Saqlash</button>
+  </form>
+</div>

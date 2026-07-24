@@ -1,0 +1,47 @@
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.form-control {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+.btn {
+  padding: 8px 16px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.btn-primary {
+  background-color: #28a745;
+  color: white;
+}
+.btn-primary:disabled {
+  background-color: #94d3a2;
+  cursor: not-allowed;
+}
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}

@@ -1,1 +1,45 @@
-<p>holiday-form works!</p>
+<div class="holiday-form-container">
+  <div class="header-actions">
+    <h2>{{ isEditMode ? 'Edit' : 'Add New' }} Holiday</h2>
+    <a routerLink="/holidays" class="btn btn-outline">Back to List</a>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-state">
+    Loading...
+  </div>
+
+  <form *ngIf="!isLoading" [formGroup]="holidayForm" (ngSubmit)="onSubmit()" class="form">
+    <div class="form-group">
+      <label for="name">Holiday Name</label>
+      <input 
+        id="name" 
+        type="text" 
+        formControlName="name" 
+        class="form-control"
+        placeholder="e.g. New Year"
+      />
+      <div *ngIf="holidayForm.get('name')?.invalid && holidayForm.get('name')?.touched" class="error-msg">
+        Name is required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="date">Date</label>
+      <input 
+        id="date" 
+        type="date" 
+        formControlName="date" 
+        class="form-control"
+      />
+      <div *ngIf="holidayForm.get('date')?.invalid && holidayForm.get('date')?.touched" class="error-msg">
+        Date is required
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="holidayForm.invalid">
+        {{ isEditMode ? 'Update' : 'Save' }} Holiday
+      </button>
+    </div>
+  </form>
+</div>

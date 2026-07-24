@@ -1,1 +1,30 @@
-<p>terminal-form works!</p>
+<div class="terminal-form-container">
+  <h2>{{ isEditMode ? 'Edit' : 'Create' }} Terminal</h2>
+
+  <form [formGroup]="terminalForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name <span class="required">*</span></label>
+      <input type="text" id="name" formControlName="name" class="form-control" />
+      <div *ngIf="terminalForm.get('name')?.invalid && terminalForm.get('name')?.touched" class="error-text">
+        Name is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="branchId">Branch ID</label>
+      <input type="number" id="branchId" formControlName="branchId" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="ipAddress">IP Address</label>
+      <input type="text" id="ipAddress" formControlName="ipAddress" class="form-control" />
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" routerLink="/terminals">Cancel</button>
+      <button type="submit" class="btn btn-primary" [disabled]="terminalForm.invalid">
+        {{ isEditMode ? 'Update' : 'Create' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,1 +1,27 @@
-<p>image-upload works!</p>
+<div class="image-upload-container">
+  <div class="upload-area">
+    <input 
+      type="file" 
+      accept="image/*" 
+      (change)="onFileSelected($event)" 
+      id="fileInput" 
+      class="file-input"
+    />
+    <label for="fileInput" class="upload-label">
+      @if (previewUrl()) {
+        <img [src]="previewUrl()" alt="Preview" class="image-preview" />
+      } @else {
+        <div class="upload-placeholder">
+          <span class="icon">📷</span>
+          <span>Rasm tanlang (Max 5MB)</span>
+        </div>
+      }
+    </label>
+  </div>
+  
+  @if (errorMessage()) {
+    <div class="error-message">
+      {{ errorMessage() }}
+    </div>
+  }
+</div>

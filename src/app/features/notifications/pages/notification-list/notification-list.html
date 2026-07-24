@@ -1,1 +1,25 @@
-<p>notification-list works!</p>
+<div class="notification-list">
+  <h1 class="notification-list__title">Bildirishnomalar</h1>
+
+  @if (loading()) {
+    <p class="notification-list__status">Yuklanmoqda...</p>
+  } @else if (notifications().length === 0) {
+    <p class="notification-list__status">Bildirishnomalar yo'q.</p>
+  } @else {
+    <ul class="notification-list__items">
+      @for (notification of notifications(); track notification.id) {
+        <li class="notification-item" [class.notification-item--unread]="!notification.read">
+          <div class="notification-item__body">
+            <span class="notification-item__title">{{ notification.title }}</span>
+            <span class="notification-item__message">{{ notification.message }}</span>
+          </div>
+          @if (!notification.read) {
+            <button type="button" class="notification-item__action" (click)="markAsRead(notification)">
+              O'qildi deb belgilash
+            </button>
+          }
+        </li>
+      }
+    </ul>
+  }
+</div>

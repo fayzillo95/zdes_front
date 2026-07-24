@@ -1,3 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import 'tailwindcss';
+
+/* LIGHT THEME (Standart) */
+:root {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f3f4f6;
+  
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #6c757d;
+  
+  --color-border: #e5e7eb;
+  
+  --color-primary: #007bff;
+  --color-primary-hover: #0056b3;
+  
+  --color-danger: #dc3545;
+  --color-success: #10b981;
+  
+  --color-overlay: rgba(0, 0, 0, 0.5);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* DARK THEME */
+:root[data-theme="dark"] {
+  --color-bg-primary: #121212;
+  --color-bg-secondary: #1e1e1e;
+  
+  --color-text-primary: #f3f4f6;
+  --color-text-secondary: #9ca3af;
+  
+  --color-border: #374151;
+  
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  
+  --color-danger: #ef4444;
+  --color-success: #34d399;
+  
+  --color-overlay: rgba(255, 255, 255, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.5);
+}

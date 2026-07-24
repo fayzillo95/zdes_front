@@ -1,1 +1,27 @@
-<p>attendance-list works!</p>
+<div class="attendance-list-container">
+  <h2>Attendance List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Employee ID</th>
+        <th>Date</th>
+        <th>Check In</th>
+        <th>Check Out</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of attendances">
+        <td>{{ record.employeeId }}</td>
+        <td>{{ record.date }}</td>
+        <td>{{ record.checkIn }}</td>
+        <td>{{ record.checkOut }}</td>
+        <td>{{ record.status }}</td>
+        <td>
+          <a [routerLink]="[record.id]">Batafsil</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

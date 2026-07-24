@@ -1,1 +1,42 @@
-<p>employee-form works!</p>
+<div class="form-container">
+  <h2>{{ isEditMode ? 'xodimni tahrirlash' : 'Yangi xodim qo\'shish' }}</h2>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>To'liq ism (FullName)</label>
+      <input type="text" formControlName="fullName" class="form-control">
+    </div>
+    
+    <div class="form-group">
+      <label>Telefon</label>
+      <input type="text" formControlName="phone" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Status</label>
+      <select formControlName="status" class="form-control">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Filial ID (Branch)</label>
+      <input type="text" formControlName="branchId" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Bo'lim ID (Department)</label>
+      <input type="text" formControlName="departmentId" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label>Lavozim ID (Position)</label>
+      <input type="text" formControlName="positionId" class="form-control">
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Saqlash</button>
+      <a routerLink="/employees" class="btn btn-secondary">Bekor qilish</a>
+    </div>
+  </form>
+</div>

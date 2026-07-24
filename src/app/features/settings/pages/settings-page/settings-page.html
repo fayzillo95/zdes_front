@@ -1,1 +1,35 @@
-<p>settings-page works!</p>
+<div class="settings-page">
+  <h1 class="settings-page__title">Sozlamalar</h1>
+
+  <form class="settings-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label class="form-label" for="companyName">Kompaniya nomi</label>
+      <input id="companyName" class="form-input" type="text" formControlName="companyName" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="currency">Valyuta</label>
+      <input id="currency" class="form-input" type="text" formControlName="currency" />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="workDayStart">Ish kuni boshlanishi</label>
+        <input id="workDayStart" class="form-input" type="time" formControlName="workDayStart" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="workDayEnd">Ish kuni tugashi</label>
+        <input id="workDayEnd" class="form-input" type="time" formControlName="workDayEnd" />
+      </div>
+    </div>
+
+    <button type="submit" class="btn-save" [disabled]="loading()">
+      {{ loading() ? 'Saqlanmoqda...' : 'Saqlash' }}
+    </button>
+
+    @if (saved()) {
+      <p class="settings-page__saved">Sozlamalar saqlandi.</p>
+    }
+  </form>
+</div>

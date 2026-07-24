@@ -1,1 +1,32 @@
-<p>payroll-list works!</p>
+<div class="payroll-container">
+  <div class="header-section">
+    <h2>Ish haqi (Payroll)</h2>
+  </div>
+  
+  <div class="table-card">
+    <table class="payroll-table">
+      <thead>
+        <tr>
+          <th>Xodim ID</th>
+          <th>Davr</th>
+          <th>Asosiy summa</th>
+          <th>Ushlab qolingan</th>
+          <th>Yakuniy summa</th>
+          <th>Amallar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payroll of payrolls$ | async">
+          <td>{{ payroll.employeeId }}</td>
+          <td>{{ payroll.period }}</td>
+          <td class="amount">{{ payroll.baseSalary | currency }}</td>
+          <td class="deduction">{{ payroll.deductions | currency }}</td>
+          <td class="total">{{ payroll.totalAmount | currency }}</td>
+          <td>
+            <a [routerLink]="[payroll.id]" class="btn-details">Batafsil</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

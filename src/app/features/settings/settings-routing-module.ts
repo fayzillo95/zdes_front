@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SettingsPage } from './pages/settings-page/settings-page';
 
-const routes: Routes = [];
+const routes: Routes = [{ path: '', component: SettingsPage }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

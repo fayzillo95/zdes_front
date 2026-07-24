@@ -1,1 +1,40 @@
-<p>leave-form works!</p>
+<div class="leave-form-container">
+  <h2>{{ isEditMode ? 'Edit' : 'Create' }} Leave</h2>
+  <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label>Employee ID:</label>
+      <input type="number" formControlName="employeeId" class="form-control" />
+    </div>
+    
+    <div class="form-group">
+      <label>Start Date:</label>
+      <input type="date" formControlName="startDate" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>End Date:</label>
+      <input type="date" formControlName="endDate" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>Type:</label>
+      <select formControlName="type" class="form-control">
+        <option value="vacation">Vacation</option>
+        <option value="sick">Sick</option>
+        <option value="unpaid">Unpaid</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Status:</label>
+      <select formControlName="status" class="form-control">
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="leaveForm.invalid">Save</button>
+    <button type="button" class="btn btn-secondary" routerLink="/leaves">Cancel</button>
+  </form>
+</div>

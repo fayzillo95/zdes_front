@@ -1,1 +1,13 @@
-<p>employee-detail works!</p>
+<div class="employee-detail-container" *ngIf="employee$ | async as employee">
+  <div class="header">
+    <h2>Xodim ma'lumotlari</h2>
+    <a [routerLink]="['edit']" class="edit-btn">Tahrirlash</a>
+  </div>
+
+  <div class="info-card">
+    <p><strong>FIO:</strong> {{ employee.fullName }}</p>
+    <p><strong>Telefon:</strong> {{ employee.phone }}</p>
+    <p><strong>Status:</strong> {{ employee.status }}</p>
+    <p><strong>Qabul qilingan sana:</strong> {{ employee.hiredAt | date }}</p>
+  </div>
+</div>

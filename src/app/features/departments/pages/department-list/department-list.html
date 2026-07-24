@@ -1,1 +1,27 @@
-<p>department-list works!</p>
+<div class="container">
+  <div class="header">
+    <h2>Bo'limlar</h2>
+    <a routerLink="/departments/new" class="btn btn-primary">Yangi bo'lim</a>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nomi</th>
+        <th>Amallar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let department of departments">
+        <td>{{ department.name }}</td>
+        <td>
+          <a [routerLink]="['/departments', department.id, 'edit']" class="btn btn-sm btn-info">Tahrirlash</a>
+          <button (click)="deleteDepartment(department.id)" class="btn btn-sm btn-danger">O'chirish</button>
+        </td>
+      </tr>
+      <tr *ngIf="departments.length === 0">
+        <td colspan="2" class="text-center">Ma'lumot topilmadi</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

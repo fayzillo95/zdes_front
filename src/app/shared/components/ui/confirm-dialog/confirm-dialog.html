@@ -1,1 +1,10 @@
-<p>confirm-dialog works!</p>
+<div class="confirm-dialog-overlay" (click)="onCancel()">
+  <div class="confirm-dialog" (click)="$event.stopPropagation()">
+    <h2 class="confirm-dialog-title">{{ title }}</h2>
+    <p class="confirm-dialog-message">{{ message }}</p>
+    <div class="confirm-dialog-actions">
+      <button class="btn btn-cancel" (click)="onCancel()">Bekor qilish</button>
+      <button class="btn btn-confirm" (click)="onConfirm()">Tasdiqlash</button>
+    </div>
+  </div>
+</div>

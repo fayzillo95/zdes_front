@@ -1,1 +1,30 @@
-<p>employee-list works!</p>
+<div class="employee-list-container">
+  <div class="header">
+    <h2>Employees</h2>
+    <a routerLink="new" class="btn btn-primary">Yangi</a>
+  </div>
+
+  <table class="employee-table">
+    <thead>
+      <tr>
+        <th>Ism (FullName)</th>
+        <th>Status</th>
+        <th>Amallar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let emp of employees">
+        <td>{{ emp.fullName }}</td>
+        <td>{{ emp.status }}</td>
+        <td class="actions">
+          <a [routerLink]="['/employees', emp.id]" class="btn btn-info">Batafsil</a>
+          <a [routerLink]="[emp.id, 'edit']" class="btn btn-warning">Tahrirlash</a>
+          <button (click)="deleteEmployee(emp.id)" class="btn btn-danger">O'chirish</button>
+        </td>
+      </tr>
+      <tr *ngIf="employees.length === 0">
+        <td colspan="3" class="text-center">Hech qanday ma'lumot topilmadi.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
