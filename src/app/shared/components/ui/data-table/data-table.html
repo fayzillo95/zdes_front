@@ -21,9 +21,8 @@
     </tbody>
   </table>
 
-  <div class="loading-state" *ngIf="loading">
-    <div class="spinner"></div>
-    <p>Yuklanmoqda...</p>
+  <div class="loading-state" *ngIf="loading" style="padding: 0; display: block;">
+    <app-skeleton-loader [rows]="pageSize" [columns]="columns.length"></app-skeleton-loader>
   </div>
 
   <div class="empty-state" *ngIf="!loading && (!data || data.length === 0)">

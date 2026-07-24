@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader';
 
 export interface Column {
   key: string;
@@ -10,7 +11,7 @@ export interface Column {
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SkeletonLoaderComponent],
   templateUrl: './data-table.html',
   styleUrls: ['./data-table.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
