@@ -93,8 +93,22 @@ so'radi — u qaytib tasdiqlagunicha commit'lar local'da kutadi). Batafsil:
   `project_docs/api/` endi bir martalik snapshot emas — kod o'zgargan
   sari (yangi endpoint/tip/state/modul) shu hujjatlar ham majburiy
   yangilanadi; qoida to'liq yozildi: `orcestor/requirements.MD` 7-bo'lim,
-  `ROOT.MD`da ham havola qo'shildi. Navbatdagi: **T-023** (error handling
-  auditi, mustaqil). T-024–T-031 hali `orcestor/tasks/`da draft.
+  `ROOT.MD`da ham havola qo'shildi. **T-023 ✅ TUGAGAN** (error handling
+  auditi — markazlashgan Toast/Alert yo'qligi, ko'p joyda xato handle
+  qilinmasligi topildi, reja yozildi). **T-024 ✅ TUGAGAN** (Axios tahlili
+  — Variant A/kam-ta'sirli tavsiya qilindi). **T-025 ✅ TUGAGAN — Claude
+  Code o'zi to'g'ridan-to'g'ri yozdi, AGY'ga dispatch qilinmadi** (sabab:
+  `core/services/http.ts` — barcha 15+ feature service bog'liq kritik
+  infra, Fayzillo "muhim api/auth strukturalarda qat'iy tekshirish kerak,
+  Geminida gallyutsinatsiya yuqori" degan ko'rsatmasidan keyin xavfni
+  butunlay yo'q qilish uchun): `axios` o'rnatildi, `http.ts` axios asosida
+  qayta yozildi (tashqi `Observable<T>` interfeys saqlanган, `defer()`
+  bilan), eski Angular `auth-interceptor.ts`/`error-interceptor.ts`
+  o'chirildi (mantiq axios request/response interceptor'ga ko'chdi),
+  `app.config.ts` tozalandi. `npm run build` xatosiz o'tdi,
+  `src/app/features/**` FAYLLARINING BIRORTASI HAM O'ZGARMADI (tekshirildi
+  `git diff --stat`). Navbatdagi: **T-026** (Skeleton loading, mustaqil).
+  T-027–T-032 hali `orcestor/tasks/`da draft.
 - **T-032 (Auth `/sign` + Login/Register switch, mustaqil, navbatdan
   tashqari Fayzillo so'rovi bilan qo'shilgan):** hali draft,
   `orcestor/tasks/T-032.md`.

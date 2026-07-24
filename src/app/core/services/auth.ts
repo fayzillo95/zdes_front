@@ -58,7 +58,7 @@ export class Auth {
 
   /**
    * Clears the stored token and resets the currentUser signal to null.
-   * Call this on explicit logout AND from errorInterceptor on 401.
+   * Call this on explicit logout AND from Http's axios response interceptor on 401.
    */
   logout(): void {
     localStorage.removeItem(TOKEN_KEY);
