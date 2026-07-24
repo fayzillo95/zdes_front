@@ -6,12 +6,22 @@
 > (2) hozirgi holat, (3) darhol ishlatsa bo'ladigan davom ettirish
 > prompti.
 
-**Oxirgi yangilanish:** 2026-07-25, ~03:36 — `app.html`da router-outlet
-yo'qligi (barcha marshrutlar ishlamasligi) va `login.css`dagi
-rang-o'zgaruvchi to'qnashuvi (matn fon bilan bir xil rangda, ko'rinmas)
-buglari tuzatildi. Batafsil: [`session/2026-07-25-app-shell-va-login-css-buglari.md`](./session/2026-07-25-app-shell-va-login-css-buglari.md).
-Bosqich 3 (T-020–T-031) hali dispatch qilinmagan — pastdagi holat
-o'zgarishsiz qoladi.
+**Oxirgi yangilanish:** 2026-07-25 — Bosqich 3 dispatch boshlandi: **T-020
+TUGADI** (`project_docs/api/{auth,dashboard,company,branches,departments,
+positions}.md` yaratildi). **T-021 jarayonda** (employees/attendance/
+work-schedules/terminals qismi tugagan, leaves/holidays/advances qismi
+dispatch qilingan, natija kutilmoqda). Qo'shimcha: Fayzillo so'rovi bilan
+**T-032** (Auth `/auth/login` → `/sign`, Login/Register switch-form,
+mustaqil) navbatga qo'shildi — `orcestor/tasks/T-032.md`. Bitta marotaba
+mustaqil AGY-tahlil ishi (`report/completed-tasks-analysis.md`) ham
+bajarildi — natija past sifatli chiqdi (ko'p yolg'on "fayl topilmadi"
+signali, chunki AGY qisqartirilgan yo'llarni tekshirgan), qo'lda
+tasdiqlangan haqiqiy fayllar mavjud ekan. **YANGI qoida (Fayzillo,
+2026-07-25):** har bir task `task_compliete/`ga yopilgandan keyin darhol
+`git commit` + `git push` qilinsin (avvalgi "commit/push qilinmaydi"
+qoidasi shu buyruq bilan bekor qilindi, faqat shu holat uchun). Batafsil:
+[`session/2026-07-25-app-shell-va-login-css-buglari.md`](./session/2026-07-25-app-shell-va-login-css-buglari.md),
+[`orcestor/tasklist.md`](./orcestor/tasklist.md).
 
 ---
 
@@ -65,13 +75,19 @@ o'zgarishsiz qoladi.
 
 ---
 
-## 2. Hozirgi holat (2026-07-25, ~22:40)
+## 2. Hozirgi holat (2026-07-25, dispatch jarayonida)
 
 - **Bosqich 1 (T-003–T-012, 10 asosiy modul):** ✅ TUGAGAN.
 - **Bosqich 2 (T-013–T-019, sifat auditi):** ✅ TUGAGAN.
-- **Bosqich 3 (T-020–T-031, docs/error-handling/axios/performance):** 📝
-  Barcha 12 tasi `orcestor/tasks/`da to'liq yozilgan, **hali BIRORTASI
-  dispatch qilinmagan.**
+- **Bosqich 3 (T-020–T-031, docs/error-handling/axios/performance):**
+  dispatch boshlandi — **T-020 ✅ TUGAGAN**, **T-021 jarayonda**
+  (`task_pending/`), T-022–T-031 hali `orcestor/tasks/`da draft.
+- **T-032 (Auth `/sign` + Login/Register switch, mustaqil, navbatdan
+  tashqari Fayzillo so'rovi bilan qo'shilgan):** hali draft,
+  `orcestor/tasks/T-032.md`.
+- Orkestrator (bu sessiya) T-020dan boshlab ketma-ket dispatch qilyapti;
+  har bir task yopilgandan keyin darhol `git commit` + `git push`
+  qilinadi (Fayzillo, 2026-07-25 buyrug'i).
 
 To'liq holat jadvali: [`orcestor/tasklist.md`](./orcestor/tasklist.md).
 Draft tasklar tezkor xulosasi: [`orcestor/tasks/tasklist.md`](./orcestor/tasks/tasklist.md).
@@ -141,7 +157,11 @@ holatni yangilab bor.
   `machine-resources`.
 - Fayzillo to'liq avtonom vakolat bergan (shu loyiha yo'li ichida) — har
   bir AGY natijasini baribir o'zi tekshirib, keyin yopish kerak.
-- `git commit`/`push` qilinmagan — buyurtma bo'lmasa commit qilinmaydi.
+- **(2026-07-25 yangilandi)** Avval "commit/push qilinmaydi" qoidasi bor
+  edi — Fayzillo endi buni bekor qildi: har bir task
+  `task_compliete/`ga yopilgandan keyin darhol `git add` + `git commit` +
+  `git push origin fayzillo95_dev` qilinadi (branch o'zgartirilmaydi,
+  faqat shu branchga push).
 - Ikkinchi, alohida Claude Code sessiyasi (boshqa terminalda) faqat
   `.claude/settings.local.json` permission'larini kuzatib turadi va
   `orcestor/dispatch.py`ga `check` subcommand qo'shgan (advisory) —

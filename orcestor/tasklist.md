@@ -46,7 +46,7 @@
 
 | Task | Sarlavha | Bog'liqlik | Holat |
 |---|---|---|---|
-| T-020 | [Docs 1/3] Core/Auth/Dashboard/Tashkiliy tuzilma — API + state hujjati | — | 📝 Draft (`tasks/`) |
+| T-020 | [Docs 1/3] Core/Auth/Dashboard/Tashkiliy tuzilma — API + state hujjati | — | ✅ Tugagan |
 | T-021 | [Docs 2/3] Xodimlar/Davomat/Ta'til guruhi — API + state hujjati | — | 📝 Draft (`tasks/`) |
 | T-022 | [Docs 3/3] Payroll/Admin + yakuniy indeks (`project_docs/api/README.md`) | T-020, T-021 tugagandan keyin | 📝 Draft (`tasks/`) |
 
@@ -69,15 +69,22 @@
 | T-030 | [Perf 5/6] HTTP javob keshlash (caching) | Mustaqil (axios/HttpClient'dan qat'i nazar) | 📝 Draft (`tasks/`) |
 | T-031 | [Perf 6/6] Server-side pagination — faqat API sirtini tayyorlash | T-027, T-028 tugagandan keyin | 📝 Draft (`tasks/`) |
 
-## 6. Umumiy holat
+## 6. Auth UX — alohida so'rov (T-032)
 
-- **Jami:** 31 ta task.
-- **Tugagan:** 19 ta (T-001..T-019).
-- **Draft, hali dispatch qilinmagan:** 12 ta (T-020..T-031).
+| Task | Sarlavha | Bog'liqlik | Holat |
+|---|---|---|---|
+| T-032 | `/auth/login` → `/sign` + bitta sahifada Login/Register animatsiyali switch-form | Mustaqil (Fayzillo to'g'ridan-to'g'ri so'ragan, 2026-07-25) | 📝 Draft (`tasks/`) |
+
+## 7. Umumiy holat
+
+- **Jami:** 32 ta task.
+- **Tugagan:** 20 ta (T-001..T-020).
+- **Draft, hali dispatch qilinmagan:** 12 ta (T-021..T-032).
 - **`task_pending/`da (jarayonda):** hozircha yo'q.
 
-## 7. Muhim ochiq savollar (keyingi tasklarga bog'liq)
+## 8. Muhim ochiq savollar (keyingi tasklarga bog'liq)
 
 - T-016 (Tailwind) tavsiyasi hali amalga oshirilmagan (agar "o'tish kerak" desa, alohida implementatsiya taski kerak bo'ladi — bu jadvalda yo'q, kelajakda qo'shiladi).
 - T-024 (axios) qaysi variantni (kam-ta'sirli/katta-ta'sirli) tavsiya qilishi T-025 va T-030 ning bajarilish tartibiga ta'sir qiladi.
 - T-031 ataylab to'liq server-side pagination migratsiyasi EMAS — backend real bo'lganda yangi task kerak bo'ladi.
+- T-032 Register uchun backend `/auth/register` endpoint kontrakti hali tasdiqlanmagan — frontend taxmin asosida yoziladi, real backend kelganda moslashtirish kerak bo'lishi mumkin.

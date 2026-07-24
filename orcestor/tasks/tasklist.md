@@ -14,9 +14,8 @@
 
 ---
 
-### T-020 — [Docs 1/3] API+state hujjati: Core/Auth/Dashboard/Tashkiliy tuzilma
-**Bog'liqlik:** yo'q. **Fayllar:** `project_docs/api/{auth,dashboard,company,branches,departments,positions}.md` (yangi, hujjat). O'qiydi: `core/**`, shu 6 modul.
-Har bir endpoint (metod/yo'l/tip) + har bir sahifaning state (signal/property) jadval qilib yoziladi. Kod o'zgarmaydi.
+### T-020 — ✅ TUGAGAN — [Docs 1/3] API+state hujjati: Core/Auth/Dashboard/Tashkiliy tuzilma
+`project_docs/api/{auth,dashboard,company,branches,departments,positions}.md` yaratildi, `orcestor/task_compliete/`ga ko'chirildi.
 
 ### T-021 — [Docs 2/3] API+state hujjati: Xodimlar/Davomat/Ta'til guruhi
 **Bog'liqlik:** T-020 bilan mustaqil (format bir xil). **Fayllar:** `project_docs/api/{employees,attendance,work-schedules,terminals,leaves,holidays,advances}.md` (yangi). Kod o'zgarmaydi.
@@ -50,6 +49,9 @@ Har bir endpoint (metod/yo'l/tip) + har bir sahifaning state (signal/property) j
 
 ### T-031 — [Perf 6/6] Server-side pagination — FAQAT API kontrakt
 **Bog'liqlik:** T-027 VA T-028 tugagandan keyin. **Fayllar:** `data-table.{ts,html}`, (ixtiyoriy) `project_docs/api/README.md`. **Hech qanday feature service o'zgarmaydi** — backend yo'qligi sababli faqat Input/Output kontrakt qo'shiladi, haqiqiy ulash keyingi (hali yozilmagan) taskka qoladi.
+
+### T-032 — Auth: `/auth/login` → `/sign`, bitta sahifada Login/Register switch-form
+**Bog'liqlik:** yo'q, mustaqil (Fayzillo to'g'ridan-to'g'ri so'ragan, 2026-07-25). **Fayllar:** `app.routes.ts`, `features/auth/auth-routing-module.ts`, `features/auth/pages/login/` → yangi birlashtirilgan `sign` sahifasi, `core/services/auth.ts` (`register()`), `core/models/user.ts` (Register DTO'lar), `core/guards/{auth,role}-guard.ts` (redirect `/sign`). URL `/auth/login`dan `/sign`ga o'zgaradi, bitta komponentda animatsiyali login/register switch, Register uchun backend kontrakti taxmin sifatida yoziladi (hali tasdiqlanmagan).
 
 ---
 
