@@ -63,7 +63,7 @@
 | Task | Sarlavha | Bog'liqlik | Holat |
 |---|---|---|---|
 | T-026 | [Perf 1/6] Skeleton/bubble loading — shared komponent | — | ✅ Tugagan |
-| T-027 | [Perf 2/6] DataTable — qidiruv/filter | T-026dan keyin (bir xil faylga tegadi) | 📝 Draft (`tasks/`) |
+| T-027 | [Perf 2/6] DataTable — qidiruv/filter | T-026dan keyin (bir xil faylga tegadi) | ✅ Tugagan (+ Claude Code hardcoded rang/dead CSS tuzatishi) |
 | T-028 | [Perf 3/6] DataTable — DOM virtualization (`@angular/cdk`) | T-027 tugagandan keyin | 📝 Draft (`tasks/`) |
 | T-029 | [Perf 4/6] Lazy loading — `@defer` + rasm lazy-load | Mustaqil | 📝 Draft (`tasks/`) |
 | T-030 | [Perf 5/6] HTTP javob keshlash (caching) | Mustaqil (axios/HttpClient'dan qat'i nazar) | 📝 Draft (`tasks/`) |
@@ -78,8 +78,8 @@
 ## 7. Umumiy holat
 
 - **Jami:** 32 ta task.
-- **Tugagan:** 26 ta (T-001..T-026).
-- **Draft, hali dispatch qilinmagan:** 6 ta (T-027..T-032).
+- **Tugagan:** 27 ta (T-001..T-027).
+- **Draft, hali dispatch qilinmagan:** 5 ta (T-028..T-032).
 - **API/state docs seriyasi (T-020..T-022) TO'LIQ TUGADI** —
   `project_docs/api/README.md` 17 modulga havola beruvchi indeks. Bundan
   buyon yangilab borish qoidasi: `orcestor/requirements.MD` 7-bo'lim.

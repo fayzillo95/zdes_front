@@ -1,5 +1,9 @@
 <div class="data-table-container">
-  <table class="data-table" *ngIf="!loading && data.length > 0">
+  <div class="data-table-toolbar" *ngIf="filterable">
+    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)" [placeholder]="filterPlaceholder" class="data-table-search">
+  </div>
+
+  <table class="data-table" *ngIf="!loading && processedData.length > 0">
     <thead>
       <tr>
         <th *ngFor="let col of columns" 
@@ -21,15 +25,15 @@
     </tbody>
   </table>
 
-  <div class="loading-state" *ngIf="loading" style="padding: 0; display: block;">
+  <div class="loading-state" *ngIf="loading">
     <app-skeleton-loader [rows]="pageSize" [columns]="columns.length"></app-skeleton-loader>
   </div>
 
-  <div class="empty-state" *ngIf="!loading && (!data || data.length === 0)">
+  <div class="empty-state" *ngIf="!loading && (!processedData || processedData.length === 0)">
     <p>{{ emptyMessage }}</p>
   </div>
 
-  <div class="pagination" *ngIf="!loading && data.length > pageSize">
+  <div class="pagination" *ngIf="!loading && processedData.length > pageSize">
     <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Oldingi</button>
     <span class="page-info">Sahifa {{ currentPage }} / {{ totalPages }}</span>
     <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Keyingi</button>

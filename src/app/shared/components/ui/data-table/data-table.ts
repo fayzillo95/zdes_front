@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader';
 
 export interface Column {
@@ -11,7 +12,7 @@ export interface Column {
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule, SkeletonLoaderComponent],
+  imports: [CommonModule, SkeletonLoaderComponent, FormsModule],
   templateUrl: './data-table.html',
   styleUrls: ['./data-table.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -22,6 +23,8 @@ export class DataTableComponent<T> implements OnChanges {
   @Input() loading: boolean = false;
   @Input() pageSize: number = 10;
   @Input() emptyMessage: string = 'Ma\'lumot topilmadi';
+  @Input() filterable: boolean = true;
+  @Input() filterPlaceholder: string = 'Qidirish...';
 
   @Output() rowClick = new EventEmitter<T>();
   @Output() sortChange = new EventEmitter<{ key: string, direction: 'asc' | 'desc' }>();
@@ -29,6 +32,7 @@ export class DataTableComponent<T> implements OnChanges {
   currentPage: number = 1;
   sortKey: string | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
+  searchTerm: string = '';
   
   processedData: T[] = [];
   paginatedData: T[] = [];
@@ -55,12 +59,28 @@ export class DataTableComponent<T> implements OnChanges {
     this.processData();
   }
 
+  onSearchChange(value: string): void {
+    this.searchTerm = value;
+    this.currentPage = 1;
+    this.processData();
+  }
+
   processData(): void {
     if (!this.data) return;
 
     let result = [...this.data];
 
-    // Sorting
+    // 1. Filtering
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
+      result = result.filter(item => {
+        return Object.values(item as any).some(val => 
+          val !== null && val !== undefined && String(val).toLowerCase().includes(term)
+        );
+      });
+    }
+
+    // 2. Sorting
     if (this.sortKey) {
       result.sort((a: any, b: any) => {
         const valA = a[this.sortKey!];
