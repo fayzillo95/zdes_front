@@ -155,6 +155,44 @@ Batafsil topilmalar va real misollar: Claude Code xotirasidagi
 
 ---
 
+## 7. `project_docs/api/` — hujjatlarni doimiy yangilab borish qoidasi (2026-07-25)
+
+T-020/T-021/T-022 orqali `project_docs/api/` ichida har bir modul uchun
+API endpoint + tip + state hujjati yaratildi (`README.md` — yakuniy
+indeks). Bu hujjat **bir martalik snapshot emas** — loyiha davom etar
+ekan, quyidagi holatlarda **shu hujjatlar ham majburiy yangilanadi**:
+
+1. **Yangi endpoint qo'shilsa yoki mavjudi o'zgarsa** (metod, yo'l, so'rov/
+   javob tipi) — tegishli `project_docs/api/<modul>.md` faylidagi
+   "Endpoint'lar" jadvali darhol yangilanadi.
+2. **Yangi model/tip qo'shilsa yoki mavjudi o'zgarsa**
+   (`src/app/core/models/*.ts` yoki feature ichidagi tiplar) — "Tiplar"
+   bo'limi shu bilan sinxron tutiladi.
+3. **Sahifa/komponentning state boshqaruvi o'zgarsa** (masalan oddiy
+   propertydan `signal()`ga o'tilsa, yoki yangi state o'zgaruvchi
+   qo'shilsa) — "State" jadvali yangilanadi.
+4. **Butunlay yangi modul/feature qo'shilsa** (masalan T-032 — Auth
+   `/sign` sahifasi) — o'sha modul uchun **yangi** `project_docs/api/
+   <modul>.md` yozilishi va `project_docs/api/README.md` indeksiga
+   qo'shilishi shart.
+5. **Kim yangilaydi:** hujjat yangilanishi tegishli task/AGY-dispatchning
+   **Definition of Done** qismiga aniq band sifatida kiritiladi — ya'ni
+   kod o'zgarishini bajaruvchi task (masalan T-025 Axios, T-032 Auth
+   `/sign`) o'z DoD'ida "tegishli `project_docs/api/*.md` fayli(lari) ham
+   yangilangan" shartini o'z ichiga oladi. Claude Code yangi task
+   yozayotganda buni unutmasligi kerak.
+6. **Review paytida tekshiriladi:** Claude Code kod o'zgarishini
+   `task_compliete/`ga yopishdan oldin, agar o'zgarish API/tip/state'ga
+   tegsa, mos `project_docs/api/*.md` fayli ham yangilanganini
+   tasdiqlaydi — aks holda task `NEEDS_REVISION` deb qaytariladi (4-bo'lim,
+   Eskalatsiya qoidasi ruhida).
+
+Maqsad: `project_docs/api/` doim kodning **haqiqiy joriy holatini**
+aks ettirsin — vaqt o'tishi bilan eskirib, chalg'ituvchi hujjatga
+aylanmasin.
+
+---
+
 *Ushbu hujjat `orcestor/` tizimining barcha ishtirokchilari uchun
 majburiydir. O'zgartirish faqat Claude Code tomonidan, Fayzillo bilan
 kelishilgan holda amalga oshiriladi.*

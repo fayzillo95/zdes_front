@@ -23,6 +23,13 @@ jo'natildi, har birida `npm run build` (nafaqat `tsc --noEmit`) bilan
 tekshirildi; Flash model kvotasi tugaganda `gemini-3.1-pro-low`ga
 o'tildi. Batafsil: xotira (`agy-cli-dispatch-reliability`,
 `machine-resources`).
+- **API/state hujjatlari (`project_docs/api/`):** T-020/T-021/T-022 orqali
+  har bir modul uchun endpoint+tip+state hujjati yaratildi (indeks:
+  [`project_docs/api/README.md`](./project_docs/api/README.md)). **Bu
+  bir martalik ish emas** — kod o'zgargan sari (yangi endpoint, tip,
+  state, yoki butunlay yangi modul, masalan T-032) shu hujjatlar ham
+  MAJBURIY yangilanadi. To'liq qoida:
+  [`orcestor/requirements.MD`](./orcestor/requirements.MD), 7-bo'lim.
 - **Terminal orqali kashfiyot:** Claude Code `agy` CLI buyrug'ini (`agy --print "..." --add-dir <loyiha> --mode accept-edits --dangerously-skip-permissions`) to'g'ridan-to'g'ri terminaldan chaqira oladi. Bu — **bitta-yo'nalishli (fire-and-forget) dispatch**, interaktiv suhbat emas: Claude Code to'liq, o'z-o'zidan yetarli vazifa matnini yuboradi, AGY uni mustaqil bajarib tugatadi va natija qaytadi. Ishlash jarayonida real vaqtda qo'shimcha ko'rsatma berib bo'lmaydi — shuning uchun har bir vazifa oldindan to'liq va aniq ta'riflangan bo'lishi shart (pastdagi rolga qarang).
 
 Rollar:
@@ -81,6 +88,7 @@ Har bir bosqich o'zidan oldingisiga tayanadi: sessiya loglari tarixga aylanadi, 
 ## 3. Havolalar (References)
 
 - **Orkestratsiya tizimi:** [`./orcestor/`](./orcestor/) — barcha operatsion qoidalar, prompt shablonlari va vazifa navbatlari shu yerda.
+- **API/state hujjatlari:** [`./project_docs/api/`](./project_docs/api/) — har bir modul uchun endpoint+tip+state hujjati, [`README.md`](./project_docs/api/README.md) orqali indekslangan. Yangilab borish qoidasi: `orcestor/requirements.MD` 7-bo'lim.
 - **agency-agents (integratsiya qilingan):** https://github.com/msitarzewski/agency-agents — 230+ qayta ishlatiladigan AI agent persona ta'riflari kutubxonasi. Loyihaga tegishli qismi (T-001 orqali) [`./agents/skills/`](./agents/skills/) ichiga olib kelingan — `MANIFEST.md` ga qarang. Har bir modul uchun step yozishda shu persona fayllardan (masalan `engineering/`, `project-management/`) uslub va workflow sifatida foydalaniladi.
 - **`./README.md`** — bu **ROOT.MD emas**! Bu Angular loyihasining original, oldindan mavjud bo'lgan readme fayli (Angular CLI tomonidan yaratilgan standart hujjat: build, serve, test buyruqlari haqida). Ikkalasini bir-biriga aralashtirmaslik kerak.
 

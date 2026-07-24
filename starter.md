@@ -87,10 +87,14 @@ so'radi — u qaytib tasdiqlagunicha commit'lar local'da kutadi). Batafsil:
 - **Bosqich 1 (T-003–T-012, 10 asosiy modul):** ✅ TUGAGAN.
 - **Bosqich 2 (T-013–T-019, sifat auditi):** ✅ TUGAGAN.
 - **Bosqich 3 (T-020–T-031, docs/error-handling/axios/performance):**
-  dispatch boshlandi — **T-020 ✅ TUGAGAN**, **T-021 ✅ TUGAGAN**.
-  Navbatdagi: **T-022** (Docs 3/3, T-020+T-021 tugagach bajarilishi
-  kerak edi — endi ikkalasi ham tugagani uchun dispatch qilsa bo'ladi).
-  T-023–T-031 hali `orcestor/tasks/`da draft.
+  dispatch boshlandi — **Docs seriyasi (T-020, T-021, T-022) TO'LIQ
+  TUGADI** — `project_docs/api/README.md` 17 modulga havola beruvchi
+  indeks bilan tayyor. **YANGI qoida (Fayzillo, 2026-07-25):**
+  `project_docs/api/` endi bir martalik snapshot emas — kod o'zgargan
+  sari (yangi endpoint/tip/state/modul) shu hujjatlar ham majburiy
+  yangilanadi; qoida to'liq yozildi: `orcestor/requirements.MD` 7-bo'lim,
+  `ROOT.MD`da ham havola qo'shildi. Navbatdagi: **T-023** (error handling
+  auditi, mustaqil). T-024–T-031 hali `orcestor/tasks/`da draft.
 - **T-032 (Auth `/sign` + Login/Register switch, mustaqil, navbatdan
   tashqari Fayzillo so'rovi bilan qo'shilgan):** hali draft,
   `orcestor/tasks/T-032.md`.

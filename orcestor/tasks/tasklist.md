@@ -20,8 +20,8 @@
 ### T-021 — ✅ TUGAGAN — [Docs 2/3] API+state hujjati: Xodimlar/Davomat/Ta'til guruhi
 `project_docs/api/{employees,attendance,work-schedules,terminals,leaves,holidays,advances}.md` yaratildi, `orcestor/task_compliete/`ga ko'chirildi.
 
-### T-022 — [Docs 3/3] API+state hujjati: Payroll/Admin + yakuniy indeks
-**Bog'liqlik:** T-020 VA T-021 tugagandan keyin. **Fayllar:** `project_docs/api/{payroll,salary-adjustments,settings,notifications,README}.md` (yangi). `README.md` — barcha 17 modulga havola + state-boshqaruv xulosasi. Kod o'zgarmaydi.
+### T-022 — ✅ TUGAGAN — [Docs 3/3] API+state hujjati: Payroll/Admin + yakuniy indeks
+`project_docs/api/{payroll,salary-adjustments,settings,notifications,README}.md` yaratildi, `orcestor/task_compliete/`ga ko'chirildi. Docs seriyasi (T-020..T-022) to'liq tugadi.
 
 ### T-023 — Error handling darajasi auditi
 **Bog'liqlik:** yo'q. **Fayllar:** `orcestor/analysis/T-023-error-handling-analysis.md` (yangi). O'qiydi: `core/interceptors/**`, barcha `features/**/services|pages`. Global (`error-interceptor.ts`) va component-darajasidagi xato handling qay darajada ekanini tahlil qiladi, aniq tavsiya yozadi. Kod o'zgarmaydi.

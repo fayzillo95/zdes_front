@@ -48,7 +48,7 @@
 |---|---|---|---|
 | T-020 | [Docs 1/3] Core/Auth/Dashboard/Tashkiliy tuzilma — API + state hujjati | — | ✅ Tugagan |
 | T-021 | [Docs 2/3] Xodimlar/Davomat/Ta'til guruhi — API + state hujjati | — | ✅ Tugagan |
-| T-022 | [Docs 3/3] Payroll/Admin + yakuniy indeks (`project_docs/api/README.md`) | T-020, T-021 tugagandan keyin | 📝 Draft (`tasks/`) |
+| T-022 | [Docs 3/3] Payroll/Admin + yakuniy indeks (`project_docs/api/README.md`) | T-020, T-021 tugagandan keyin | ✅ Tugagan |
 
 ## 4. Error handling + Axios seriyasi (T-023..T-025)
 
@@ -78,8 +78,11 @@
 ## 7. Umumiy holat
 
 - **Jami:** 32 ta task.
-- **Tugagan:** 21 ta (T-001..T-021).
-- **Draft, hali dispatch qilinmagan:** 11 ta (T-022..T-032).
+- **Tugagan:** 22 ta (T-001..T-022).
+- **Draft, hali dispatch qilinmagan:** 10 ta (T-023..T-032).
+- **API/state docs seriyasi (T-020..T-022) TO'LIQ TUGADI** —
+  `project_docs/api/README.md` 17 modulga havola beruvchi indeks. Bundan
+  buyon yangilab borish qoidasi: `orcestor/requirements.MD` 7-bo'lim.
 - **`task_pending/`da (jarayonda):** hozircha yo'q.
 
 ## 8. Muhim ochiq savollar (keyingi tasklarga bog'liq)
