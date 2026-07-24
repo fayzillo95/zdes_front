@@ -17,8 +17,8 @@
 ### T-020 — ✅ TUGAGAN — [Docs 1/3] API+state hujjati: Core/Auth/Dashboard/Tashkiliy tuzilma
 `project_docs/api/{auth,dashboard,company,branches,departments,positions}.md` yaratildi, `orcestor/task_compliete/`ga ko'chirildi.
 
-### T-021 — [Docs 2/3] API+state hujjati: Xodimlar/Davomat/Ta'til guruhi
-**Bog'liqlik:** T-020 bilan mustaqil (format bir xil). **Fayllar:** `project_docs/api/{employees,attendance,work-schedules,terminals,leaves,holidays,advances}.md` (yangi). Kod o'zgarmaydi.
+### T-021 — ✅ TUGAGAN — [Docs 2/3] API+state hujjati: Xodimlar/Davomat/Ta'til guruhi
+`project_docs/api/{employees,attendance,work-schedules,terminals,leaves,holidays,advances}.md` yaratildi, `orcestor/task_compliete/`ga ko'chirildi.
 
 ### T-022 — [Docs 3/3] API+state hujjati: Payroll/Admin + yakuniy indeks
 **Bog'liqlik:** T-020 VA T-021 tugagandan keyin. **Fayllar:** `project_docs/api/{payroll,salary-adjustments,settings,notifications,README}.md` (yangi). `README.md` — barcha 17 modulga havola + state-boshqaruv xulosasi. Kod o'zgarmaydi.

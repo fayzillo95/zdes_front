@@ -47,7 +47,7 @@
 | Task | Sarlavha | Bog'liqlik | Holat |
 |---|---|---|---|
 | T-020 | [Docs 1/3] Core/Auth/Dashboard/Tashkiliy tuzilma — API + state hujjati | — | ✅ Tugagan |
-| T-021 | [Docs 2/3] Xodimlar/Davomat/Ta'til guruhi — API + state hujjati | — | 📝 Draft (`tasks/`) |
+| T-021 | [Docs 2/3] Xodimlar/Davomat/Ta'til guruhi — API + state hujjati | — | ✅ Tugagan |
 | T-022 | [Docs 3/3] Payroll/Admin + yakuniy indeks (`project_docs/api/README.md`) | T-020, T-021 tugagandan keyin | 📝 Draft (`tasks/`) |
 
 ## 4. Error handling + Axios seriyasi (T-023..T-025)
@@ -78,8 +78,8 @@
 ## 7. Umumiy holat
 
 - **Jami:** 32 ta task.
-- **Tugagan:** 20 ta (T-001..T-020).
-- **Draft, hali dispatch qilinmagan:** 12 ta (T-021..T-032).
+- **Tugagan:** 21 ta (T-001..T-021).
+- **Draft, hali dispatch qilinmagan:** 11 ta (T-022..T-032).
 - **`task_pending/`da (jarayonda):** hozircha yo'q.
 
 ## 8. Muhim ochiq savollar (keyingi tasklarga bog'liq)
