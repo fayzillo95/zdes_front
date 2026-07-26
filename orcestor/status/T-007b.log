@@ -1,0 +1,16 @@
+## T-007b — btn-edit/btn-delete/alert ranglarini tokenlashtirish (2-guruh, 7 fayl)
+
+**Holat:** ACCEPTED
+
+**Tekshiruv:** `git diff` orqali barcha 7 fayl tasdiqlandi — faqat
+`.btn-edit`/`.btn-delete`/`.alert-success`/`.alert-error` qoidalari
+tokenlarga o'tkazilgan, `.page-header-card` va `.status-badge`
+o'zgarishsiz. Stray fayl yo'q. `npm run build` xatosiz o'tdi.
+
+**Ma'lum qoldiq (keyingi navbatda, doiradan tashqarida qoldirilgan):**
+`leave-list.html`da hali ham inline hardcoded
+`style="background: #ffebee; color: #c62828;..."` bor (T-007b ataylab
+faqat CSS fayllarga cheklangan edi) — keyingi kichik tozalashda
+tuzatiladi.
+
+**Sana:** 2026-07-26
