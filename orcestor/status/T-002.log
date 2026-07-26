@@ -1,0 +1,21 @@
+## T-002 — Sidebar va header'ni Darken uslubiga moslashtirish
+
+**Holat:** ACCEPTED
+
+**Tekshiruv (Claude Code):**
+- `git diff` orqali tasdiqlandi — faqat `sidebar.css` va `header.css`
+  o'zgargan, HTML/TS fayllarga tegilmagan.
+- Barcha hardcoded hex ranglar (`#6366f1`, `#8b5cf6`, `#ef4444` va h.k.)
+  tegishli tokenlarga (`var(--color-primary)`, `var(--color-danger)`)
+  almashtirilgan.
+- `.nav-link.active` chapdan aksent chiziq (`border-left-color:
+  var(--color-primary)`) + fon highlight bilan ta'minlangan.
+- `.nav-category` shrift/letter-spacing yangilangan, token orqali.
+- `find ... -newer` orqali stray/yangi fayl yaratilmaganligi tasdiqlandi.
+- `npm run build` xatosiz o'tdi.
+
+**Izoh:** Oldingi aktiv-band uslubi (yorqin binafsha gradient fon, oq
+matn) endi bosilgan/muloyimroq uslubga (fon highlight + chapdan chiziq)
+almashtirildi — bu T-002 talabiga mos (dizayn qarori, xato emas).
+
+**Sana:** 2026-07-26

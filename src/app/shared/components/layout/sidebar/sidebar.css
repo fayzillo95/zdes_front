@@ -124,10 +124,10 @@
 
 /* Category Headers */
 .nav-category {
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 1.2px;
-  color: var(--color-text-secondary, #94a3b8);
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   padding: 16px 14px 6px;
   user-select: none;
@@ -144,13 +144,13 @@
   gap: 12px;
   padding: 10px 14px;
   border-radius: 10px;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  border: 1px solid transparent;
+  border-left: 2px solid transparent;
 }
 
 .nav-icon {
@@ -170,30 +170,30 @@
 
 /* Hover state: Modern Glassmorphic Effect */
 .nav-link:hover:not(.active) {
-  background: rgba(99, 102, 241, 0.08);
-  color: var(--color-primary, #6366f1);
+  background: var(--color-bg-secondary);
+  color: var(--color-primary);
   transform: translateX(4px);
-  border-color: rgba(99, 102, 241, 0.15);
+  border-left-color: var(--color-border);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
 
 .nav-link:hover:not(.active) .nav-icon {
-  color: var(--color-primary, #6366f1);
+  color: var(--color-primary);
   transform: scale(1.1);
 }
 
 /* Active State: Rich Star Admin 2 Gradient & Micro Glow */
 .nav-link.active {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.38);
+  background: var(--color-bg-secondary);
+  color: var(--color-primary);
+  box-shadow: 0 4px 14px 0 var(--shadow-color);
   font-weight: 600;
-  border-color: transparent;
+  border-left-color: var(--color-primary);
 }
 
 .nav-link.active .nav-icon {
-  color: #ffffff;
+  color: var(--color-primary);
   stroke-width: 2.3;
   transform: scale(1.05);
 }
