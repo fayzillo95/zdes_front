@@ -26,6 +26,18 @@
 
   <!-- Content Table Card -->
   <div class="table-card">
+    @if (loading) {
+      <div class="loading-state">
+        <app-skeleton-loader [rows]="5" [columns]="7"></app-skeleton-loader>
+      </div>
+    }
+    @if (!loading && positions.length === 0) {
+      <div class="empty-state-box">
+        <span class="empty-icon">📁</span>
+        <p class="empty-text">Hozircha hech qanday lavozim qo'shilmagan</p>
+      </div>
+    }
+    @if (!loading && positions.length > 0) {
     <div class="table-responsive">
       <table class="modern-table">
         <thead>
@@ -69,18 +81,9 @@
               </td>
             </tr>
           }
-          @if (positions.length === 0) {
-            <tr>
-              <td colspan="7" class="empty-state-cell">
-                <div class="empty-state-box">
-                  <span class="empty-icon">📁</span>
-                  <p class="empty-text">Hozircha hech qanday lavozim qo'shilmagan</p>
-                </div>
-              </td>
-            </tr>
-          }
         </tbody>
       </table>
     </div>
+    }
   </div>
 </div>

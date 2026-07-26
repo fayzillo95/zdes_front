@@ -3,10 +3,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { NotificationService } from '../../services/notification';
 import { Notification } from '../../../../core/models/notification';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-notification-list',
-  imports: [],
+  imports: [SkeletonLoaderComponent],
   templateUrl: './notification-list.html',
   styleUrl: './notification-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

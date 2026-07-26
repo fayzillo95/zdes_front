@@ -8,11 +8,12 @@ import { AttendanceService } from '../../services/attendance';
 import { EmployeeService } from '../../../employees/services/employee';
 import { Attendance } from '../../../../core/models/attendance';
 import { Employee } from '../../../../core/models/employee';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-attendance-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './attendance-list.html',
   styleUrl: './attendance-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -25,12 +26,14 @@ export class AttendanceList implements OnInit {
 
   attendances: Attendance[] = [];
   employees: Employee[] = [];
+  loading = true;
 
   ngOnInit(): void {
     this.loadData();
   }
 
   loadData(): void {
+    this.loading = true;
     forkJoin({
       employees: this.employeeService.getAll({ limit: 100 }),
       attendances: this.attendanceService.getAll()
@@ -38,9 +41,14 @@ export class AttendanceList implements OnInit {
       next: (res) => {
         this.employees = res.employees;
         this.attendances = res.attendances;
+        this.loading = false;
         this.cdr.markForCheck();
       },
-      error: (err) => console.error('Ma\'lumotlarni yuklashda xatolik', err)
+      error: (err) => {
+        console.error('Ma\'lumotlarni yuklashda xatolik', err);
+        this.loading = false;
+        this.cdr.markForCheck();
+      }
     });
   }
 

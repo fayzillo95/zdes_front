@@ -34,7 +34,11 @@
 
   <!-- Table Card -->
   <div class="table-card">
-    @if (companies().length > 0) {
+    @if (loading()) {
+      <div class="loading-state">
+        <app-skeleton-loader [rows]="5" [columns]="7"></app-skeleton-loader>
+      </div>
+    } @else if (companies().length > 0) {
       <div class="table-responsive">
       <table class="data-table">
         <thead>

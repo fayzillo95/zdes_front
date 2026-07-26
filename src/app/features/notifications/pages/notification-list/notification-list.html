@@ -2,7 +2,7 @@
   <h1 class="notification-list__title">Bildirishnomalar</h1>
 
   @if (loading()) {
-    <p class="notification-list__status">Yuklanmoqda...</p>
+    <app-skeleton-loader [rows]="5" [columns]="1"></app-skeleton-loader>
   } @else if (notifications().length === 0) {
     <p class="notification-list__status">Bildirishnomalar yo'q.</p>
   } @else {

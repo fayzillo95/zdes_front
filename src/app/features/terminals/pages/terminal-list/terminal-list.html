@@ -23,7 +23,10 @@
   </div>
 
   <div class="table-card">
-    <div class="table-responsive">
+    <div class="loading-state" *ngIf="loading">
+      <app-skeleton-loader [rows]="5" [columns]="5"></app-skeleton-loader>
+    </div>
+    <div class="table-responsive" *ngIf="!loading && terminals.length > 0">
       <table class="modern-table">
         <thead>
           <tr>
@@ -47,16 +50,12 @@
               </div>
             </td>
           </tr>
-          <tr *ngIf="terminals.length === 0">
-            <td colspan="5" class="empty-state-cell">
-              <div class="empty-state-box">
-                <span class="empty-icon">📁</span>
-                <p class="empty-text">Hozircha hech qanday terminal topilmadi</p>
-              </div>
-            </td>
-          </tr>
         </tbody>
       </table>
+    </div>
+    <div class="empty-state-box" *ngIf="!loading && terminals.length === 0">
+      <span class="empty-icon">📁</span>
+      <p class="empty-text">Hozircha hech qanday terminal topilmadi</p>
     </div>
   </div>
 </div>

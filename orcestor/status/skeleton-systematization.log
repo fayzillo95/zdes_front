@@ -1,0 +1,37 @@
+## Skeleton loading'ni 14 ta list sahifasida tizimlashtirish
+
+**Holat:** ACCEPTED (Claude Code tomonidan to'g'ridan-to'g'ri bajarildi, AGY ishlatilmadi)
+
+**Sabab:** Barcha 14 ta CRUD list sahifasida (advances, attendance,
+branches, company, departments, employees, holidays, leaves,
+notifications, payroll, positions, salary-adjustments, terminals,
+work-schedules) loading holati umuman yo'q edi — faqat
+`@if (data.length > 0) {jadval} @else {bo'sh holat}`. Bu sahifa ochilganda
+data hali kelmasdan turib SOXTA "hech narsa topilmadi" xabari milt etib
+ko'rinib, keyin jadvalga almashishiga olib kelardi.
+
+**Nima qilindi (har bir modulda bir xil pattern):**
+- Har bir `*-list.ts`ga `loading` bayrog'i qo'shildi (signal yoki plain
+  property — mavjud fayl uslubiga mos holda), `loadX()` boshida `true`,
+  `next`/`error` ikkalasida ham `false` qilinadi.
+- Har bir `*-list.html`da 3 holatli boshqaruv: `loading` → mavjud
+  `SkeletonLoaderComponent` (`app-skeleton-loader`, allaqachon loyihada
+  bor edi, faqat DataTable'da ishlatilar edi), keyin `data.length > 0` →
+  jadval, aks holda → bo'sh holat. DOM chizilishi bloklanmaydi (Angular
+  reaktiv, `loading` boshida `true` bo'lgani uchun darhol skeleton
+  ko'rsatiladi, data kelgach avtomatik almashadi).
+- `payroll-list`: eski `payrolls$ | async` pattern signal-asosli
+  (`payrolls`/`loading` signal + manual subscribe)ga o'tkazildi — chunki
+  async pipe bilan loading/empty holatlarni distinctionlash qiyin edi va
+  bu yerda umuman empty-state/error handling yo'q edi.
+
+**Tekshiruv:**
+- `npm run build` — bir marta `terminal-list.html`da ortiqcha `</div>`
+  (NG5002) topildi va tuzatildi, undan keyin xatosiz o'tdi.
+- IDE diagnostika hook'i bir necha marta (branch-list, leave-list,
+  work-schedule-list) haqiqiy modelga mos kelmaydigan "Property does not
+  exist" xatolarini ko'rsatdi — har birida model faylini o'qib
+  tasdiqlandiki, bular ESKIRGAN/vaqtinchalik til-server holati edi (real
+  `ng build` xatosiz o'tdi), tuzatish talab qilinmadi.
+
+**Sana:** 2026-07-26

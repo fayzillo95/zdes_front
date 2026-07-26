@@ -6,11 +6,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CompanyService } from '../../services/company';
 import { Company } from '../../../../core/models/company';
 import { ScopeFilterService, ScopeFilterState } from '../../../../core/services/scope-filter';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-company-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './company-list.html',
   styleUrl: './company-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +23,7 @@ export class CompanyList implements OnInit {
   private readonly router = inject(Router);
 
   companies = signal<Company[]>([]);
+  loading = signal<boolean>(true);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
@@ -45,6 +47,7 @@ export class CompanyList implements OnInit {
 
     if (currentFilter.searchQuery?.trim()) params['search'] = currentFilter.searchQuery.trim();
 
+    this.loading.set(true);
     this.companyService.getAll(params).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         let list = data;
@@ -53,10 +56,12 @@ export class CompanyList implements OnInit {
           list = list.filter(c => c.name?.toLowerCase().includes(q) || c.legalName?.toLowerCase().includes(q));
         }
         this.companies.set(list);
+        this.loading.set(false);
       },
       error: (err: any) => {
         console.error('Company list load error:', err);
         this.companies.set([]);
+        this.loading.set(false);
       },
     });
   }

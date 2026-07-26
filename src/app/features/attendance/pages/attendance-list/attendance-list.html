@@ -27,7 +27,11 @@
 
   <!-- Table Card -->
   <div class="table-card">
-    @if (attendances.length > 0) {
+    @if (loading) {
+      <div class="loading-state">
+        <app-skeleton-loader [rows]="5" [columns]="8"></app-skeleton-loader>
+      </div>
+    } @else if (attendances.length > 0) {
       <div class="table-responsive">
       <table class="data-table">
         <thead>

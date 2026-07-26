@@ -26,7 +26,11 @@
 
   <!-- Table Card -->
   <div class="table-card">
-    @if (workSchedules.length > 0) {
+    @if (loading) {
+      <div class="loading-state">
+        <app-skeleton-loader [rows]="5" [columns]="6"></app-skeleton-loader>
+      </div>
+    } @else if (workSchedules.length > 0) {
       <div class="table-responsive">
       <table class="data-table">
         <thead>

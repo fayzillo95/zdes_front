@@ -8,11 +8,12 @@ import { LeaveService } from '../../services/leave';
 import { EmployeeService } from '../../../employees/services/employee';
 import { EmployeeLeave } from '../../../../core/models/employee-leave';
 import { Employee } from '../../../../core/models/employee';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-leave-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './leave-list.html',
   styleUrls: ['./leave-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,12 +27,14 @@ export class LeaveList implements OnInit {
   leaves: EmployeeLeave[] = [];
   employees: Employee[] = [];
   selectedReason = signal<string | null>(null);
+  loading = true;
 
   ngOnInit(): void {
     this.loadData();
   }
 
   loadData(): void {
+    this.loading = true;
     forkJoin({
       leaves: this.leaveService.getAll(),
       employees: this.employeeService.getAll({ limit: 100 })
@@ -42,9 +45,14 @@ export class LeaveList implements OnInit {
           ? res.leaves
           : (res.leaves?.items ?? res.leaves?.data ?? []);
         this.employees = res.employees;
+        this.loading = false;
         this.cdr.markForCheck();
       },
-      error: (err) => console.error('Ma\'lumot yuklashda xatolik', err)
+      error: (err) => {
+        console.error('Ma\'lumot yuklashda xatolik', err);
+        this.loading = false;
+        this.cdr.markForCheck();
+      }
     });
   }
 

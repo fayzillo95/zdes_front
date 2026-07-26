@@ -7,11 +7,12 @@ import { EmployeeService } from '../../services/employee';
 import { Employee } from '../../../../core/models/employee';
 import { ScopeFilterService, ScopeFilterState } from '../../../../core/services/scope-filter';
 import { Auth } from '../../../../core/services/auth';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './employee-list.html',
   styleUrls: ['./employee-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,6 +24,7 @@ export class EmployeeList implements OnInit {
   private readonly auth = inject(Auth);
 
   employees = signal<Employee[]>([]);
+  loading = signal<boolean>(true);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
@@ -59,6 +61,7 @@ export class EmployeeList implements OnInit {
     if (currentFilter.departmentId) params['departmentId'] = currentFilter.departmentId;
     if (currentFilter.searchQuery?.trim()) params['search'] = currentFilter.searchQuery.trim();
 
+    this.loading.set(true);
     this.employeeService.getAll(params).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         let list = data;
@@ -79,10 +82,12 @@ export class EmployeeList implements OnInit {
           );
         }
         this.employees.set(list);
+        this.loading.set(false);
       },
       error: (err: any) => {
         console.error('Employee list load error:', err);
         this.employees.set([]);
+        this.loading.set(false);
       },
     });
   }

@@ -6,11 +6,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DepartmentService } from '../../services/department';
 import { Department } from '../../../../core/models/department';
 import { ScopeFilterService, ScopeFilterState } from '../../../../core/services/scope-filter';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-department-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './department-list.html',
   styleUrl: './department-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +23,7 @@ export class DepartmentList implements OnInit {
   private readonly router = inject(Router);
 
   departments = signal<Department[]>([]);
+  loading = signal<boolean>(true);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
@@ -47,6 +49,7 @@ export class DepartmentList implements OnInit {
     if (currentFilter.branchId) params['branchId'] = currentFilter.branchId;
     if (currentFilter.searchQuery?.trim()) params['search'] = currentFilter.searchQuery.trim();
 
+    this.loading.set(true);
     this.departmentService.getAll(params).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         let list = data;
@@ -58,10 +61,12 @@ export class DepartmentList implements OnInit {
           list = list.filter(d => d.name?.toLowerCase().includes(q));
         }
         this.departments.set(list);
+        this.loading.set(false);
       },
       error: (err: any) => {
         console.error('Departments load error:', err);
         this.departments.set([]);
+        this.loading.set(false);
       },
     });
   }

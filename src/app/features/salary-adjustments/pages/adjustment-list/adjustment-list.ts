@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { SalaryAdjustmentService } from '../../services/salary-adjustment';
 import { SalaryAdjustment } from '../../../../core/models/salary-adjustment';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-adjustment-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './adjustment-list.html',
   styleUrls: ['./adjustment-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -17,6 +18,7 @@ export class AdjustmentList implements OnInit {
   private destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   adjustments: SalaryAdjustment[] = [];
+  loading = true;
 
   constructor(private service: SalaryAdjustmentService) {}
 
@@ -29,8 +31,15 @@ export class AdjustmentList implements OnInit {
   }
 
   loadAdjustments(): void {
-    this.service.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(data => {
-      this.adjustments = data;
+    this.loading = true;
+    this.service.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (data) => {
+        this.adjustments = data;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      },
     });
   }
 

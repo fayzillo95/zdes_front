@@ -15,7 +15,10 @@
   </div>
 
   <div class="table-card">
-    <div class="table-responsive">
+    <div class="loading-state" *ngIf="loading()">
+      <app-skeleton-loader [rows]="5" [columns]="6"></app-skeleton-loader>
+    </div>
+    <div class="table-responsive" *ngIf="!loading() && payrolls().length > 0">
       <table class="modern-table">
         <thead>
           <tr>
@@ -28,7 +31,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let payroll of payrolls$ | async" class="table-row" (click)="onRowClick(payroll.id)">
+          <tr *ngFor="let payroll of payrolls()" class="table-row" (click)="onRowClick(payroll.id)">
             <td>{{ payroll.employeeId }}</td>
             <td class="text-muted">{{ payroll.month }}</td>
             <td class="amount">{{ payroll.baseSalary | currency }}</td>
@@ -42,6 +45,10 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="empty-state-box" *ngIf="!loading() && payrolls().length === 0">
+      <span class="empty-icon">📁</span>
+      <p class="empty-text">Hozircha hech qanday ish haqi yozuvi mavjud emas</p>
     </div>
   </div>
 </div>

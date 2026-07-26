@@ -6,11 +6,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BranchService } from '../../services/branch';
 import { Branch } from '../../../../core/models/branch';
 import { ScopeFilterService, ScopeFilterState } from '../../../../core/services/scope-filter';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-branch-list',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './branch-list.html',
   styleUrl: './branch-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +23,7 @@ export class BranchList implements OnInit {
   private readonly router = inject(Router);
 
   branches = signal<Branch[]>([]);
+  loading = signal<boolean>(true);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
@@ -46,6 +48,7 @@ export class BranchList implements OnInit {
     if (currentFilter.companyId) params['companyId'] = currentFilter.companyId;
     if (currentFilter.searchQuery?.trim()) params['search'] = currentFilter.searchQuery.trim();
 
+    this.loading.set(true);
     this.branchService.getAll(params).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         let list = data;
@@ -57,10 +60,12 @@ export class BranchList implements OnInit {
           list = list.filter(b => b.name?.toLowerCase().includes(q) || b.address?.toLowerCase().includes(q));
         }
         this.branches.set(list);
+        this.loading.set(false);
       },
       error: (err: any) => {
         console.error('Branch list load error:', err);
         this.branches.set([]);
+        this.loading.set(false);
       },
     });
   }

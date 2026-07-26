@@ -11,11 +11,12 @@ import { BranchService } from '../../../branches/services/branch';
 import { WorkSchedule } from '../../../../core/models/work-schedule';
 import { Company } from '../../../../core/models/company';
 import { Branch } from '../../../../core/models/branch';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-work-schedule-list',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SkeletonLoaderComponent],
   templateUrl: './work-schedule-list.html',
   styleUrl: './work-schedule-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -24,6 +25,7 @@ export class WorkScheduleList implements OnInit {
   workSchedules: WorkSchedule[] = [];
   companies: Company[] = [];
   branches: Branch[] = [];
+  loading = true;
 
   private readonly workScheduleService = inject(WorkScheduleService);
   private readonly companyService = inject(CompanyService);
@@ -36,6 +38,7 @@ export class WorkScheduleList implements OnInit {
   }
 
   loadWorkSchedules(): void {
+    this.loading = true;
     forkJoin({
       companies: this.companyService.getAll({ limit: 100 }),
       branches: this.branchService.getAll({ limit: 100 }),
@@ -45,9 +48,14 @@ export class WorkScheduleList implements OnInit {
         this.companies = res.companies;
         this.branches = res.branches;
         this.workSchedules = res.schedules;
+        this.loading = false;
         this.cdr.markForCheck();
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.markForCheck();
+      }
     });
   }
 

@@ -13,10 +13,11 @@ import { Position } from '../../../../core/models/position';
 import { Company } from '../../../../core/models/company';
 import { Branch } from '../../../../core/models/branch';
 import { Department } from '../../../../core/models/department';
+import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skeleton-loader/skeleton-loader';
 
 @Component({
   selector: 'app-position-list',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './position-list.html',
   styleUrl: './position-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,12 +35,14 @@ export class PositionList implements OnInit {
   companies: Company[] = [];
   branches: Branch[] = [];
   departments: Department[] = [];
+  loading = true;
 
   ngOnInit(): void {
     this.loadPositions();
   }
 
   loadPositions(): void {
+    this.loading = true;
     forkJoin({
       companies: this.companyService.getAll({ limit: 100 }),
       branches: this.branchService.getAll({ limit: 100 }),
@@ -51,9 +54,14 @@ export class PositionList implements OnInit {
         this.branches = res.branches;
         this.departments = res.departments;
         this.positions = res.positions;
+        this.loading = false;
         this.cdr.markForCheck();
       },
-      error: (err) => console.error(err),
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
     });
   }
 

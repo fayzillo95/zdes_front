@@ -23,7 +23,10 @@
   </div>
 
   <div class="table-card">
-    <div class="table-responsive">
+    <div class="loading-state" *ngIf="loading">
+      <app-skeleton-loader [rows]="5" [columns]="6"></app-skeleton-loader>
+    </div>
+    <div class="table-responsive" *ngIf="!loading && advances.length > 0">
       <table class="modern-table">
         <thead>
           <tr>
@@ -49,16 +52,12 @@
               </div>
             </td>
           </tr>
-          <tr *ngIf="advances.length === 0">
-            <td colspan="6" class="empty-state-cell">
-              <div class="empty-state-box">
-                <span class="empty-icon">📁</span>
-                <p class="empty-text">Hozircha hech qanday avans topilmadi</p>
-              </div>
-            </td>
-          </tr>
         </tbody>
       </table>
+    </div>
+    <div class="empty-state-box" *ngIf="!loading && advances.length === 0">
+      <span class="empty-icon">📁</span>
+      <p class="empty-text">Hozircha hech qanday avans topilmadi</p>
     </div>
   </div>
 </div>
