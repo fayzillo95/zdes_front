@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, inject, ChangeD
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
 import { LeaveService } from '../../services/leave';
@@ -13,7 +14,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-leave-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent, FormsModule],
   templateUrl: './leave-list.html',
   styleUrls: ['./leave-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -28,6 +29,29 @@ export class LeaveList implements OnInit {
   employees: Employee[] = [];
   selectedReason = signal<string | null>(null);
   loading = true;
+
+  employeeFilter = signal<string>('');
+  typeFilter = signal<string>('');
+  fromDateFilter = signal<string>('');
+  toDateFilter = signal<string>('');
+
+  filteredLeaves(): EmployeeLeave[] {
+    const empFilter = this.employeeFilter().trim().toLowerCase();
+    const type = this.typeFilter();
+    const fromDate = this.fromDateFilter();
+    const toDate = this.toDateFilter();
+
+    return this.leaves.filter(item => {
+      if (empFilter) {
+        const empName = this.getEmployeeName(item.employeeId).toLowerCase();
+        if (!empName.includes(empFilter)) return false;
+      }
+      if (type && item.type !== type) return false;
+      if (fromDate && item.fromDate?.toString().slice(0, 10) !== fromDate) return false;
+      if (toDate && item.toDate?.toString().slice(0, 10) !== toDate) return false;
+      return true;
+    });
+  }
 
   ngOnInit(): void {
     this.loadData();

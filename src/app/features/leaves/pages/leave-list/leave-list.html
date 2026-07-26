@@ -45,9 +45,38 @@
             <th>Sabab / Izoh</th>
             <th>Amallar</th>
           </tr>
+          <tr class="column-filter-row">
+            <th></th>
+            <th>
+              <input type="text" class="column-filter-input" placeholder="Qidirish..."
+                     [ngModel]="employeeFilter()" (ngModelChange)="employeeFilter.set($event)" (click)="$event.stopPropagation()" />
+            </th>
+            <th>
+              <select class="column-filter-select" [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event)" (click)="$event.stopPropagation()">
+                <option value="">Hammasi</option>
+                <option value="vacation">Hordiq ta'tili</option>
+                <option value="sick">Kasallik ta'tili</option>
+                <option value="unpaid">Ish haqisiz ta'til</option>
+                <option value="business_trip">Xizmat safari</option>
+                <option value="other">Boshqa</option>
+              </select>
+            </th>
+            <th>
+              <input type="date" class="column-filter-input"
+                     [ngModel]="fromDateFilter()" (ngModelChange)="fromDateFilter.set($event)" (click)="$event.stopPropagation()" />
+            </th>
+            <th>
+              <input type="date" class="column-filter-input"
+                     [ngModel]="toDateFilter()" (ngModelChange)="toDateFilter.set($event)" (click)="$event.stopPropagation()" />
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
         </thead>
         <tbody>
-          @for (item of leaves; track item.id; let i = $index) {
+          @for (item of filteredLeaves(); track item.id; let i = $index) {
             <tr class="table-row clickable-row" [routerLink]="[item.id]">
               <td class="row-index">{{ i + 1 }}</td>
               <td>
@@ -104,6 +133,16 @@
                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
                   </svg>
                 </button>
+              </td>
+            </tr>
+          }
+          @if (filteredLeaves().length === 0) {
+            <tr>
+              <td colspan="9" class="empty-state-cell">
+                <div class="empty-state-box">
+                  <span class="empty-icon">🔍</span>
+                  <p class="empty-text">Filterga mos ta'til topilmadi</p>
+                </div>
               </td>
             </tr>
           }

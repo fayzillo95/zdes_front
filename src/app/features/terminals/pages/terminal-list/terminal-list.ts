@@ -1,5 +1,6 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TerminalService } from '../../services/terminal';
 import { Terminal } from '../../../../core/models/terminal';
@@ -9,7 +10,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-terminal-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent, FormsModule],
   templateUrl: './terminal-list.html',
   styleUrl: './terminal-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,6 +21,23 @@ export class TerminalList implements OnInit {
   private readonly terminalService = inject(TerminalService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+
+  nameFilter = signal<string>('');
+  branchIdFilter = signal<string>('');
+  ipFilter = signal<string>('');
+
+  filteredTerminals(): Terminal[] {
+     const name = this.nameFilter().trim().toLowerCase();
+     const branchId = this.branchIdFilter().trim().toLowerCase();
+     const ip = this.ipFilter().trim().toLowerCase();
+
+     return this.terminals.filter(t => {
+       if (name && !t.name?.toLowerCase().includes(name)) return false;
+       if (branchId && !t.branchId?.toLowerCase().includes(branchId)) return false;
+       if (ip && !t.ipAddress?.toLowerCase().includes(ip)) return false;
+       return true;
+     });
+  }
 
   ngOnInit(): void {
     this.loadTerminals();

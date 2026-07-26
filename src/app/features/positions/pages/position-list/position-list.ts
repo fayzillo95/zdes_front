@@ -1,5 +1,6 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { forkJoin } from 'rxjs';
@@ -17,7 +18,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 
 @Component({
   selector: 'app-position-list',
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent, FormsModule],
   templateUrl: './position-list.html',
   styleUrl: './position-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +37,35 @@ export class PositionList implements OnInit {
   branches: Branch[] = [];
   departments: Department[] = [];
   loading = true;
+
+  nameFilter = signal<string>('');
+  companyFilter = signal<string>('');
+  branchFilter = signal<string>('');
+  departmentFilter = signal<string>('');
+
+  filteredPositions(): Position[] {
+    const name = this.nameFilter().trim().toLowerCase();
+    const company = this.companyFilter().trim().toLowerCase();
+    const branch = this.branchFilter().trim().toLowerCase();
+    const department = this.departmentFilter().trim().toLowerCase();
+
+    return this.positions.filter(pos => {
+      if (name && !pos.name?.toLowerCase().includes(name)) return false;
+      if (company) {
+         const compName = this.getCompanyName(pos.companyId).toLowerCase();
+         if (!compName.includes(company)) return false;
+      }
+      if (branch) {
+         const branchName = this.getBranchName(pos.departmentId).toLowerCase();
+         if (!branchName.includes(branch)) return false;
+      }
+      if (department) {
+         const deptName = this.getDepartmentName(pos.departmentId).toLowerCase();
+         if (!deptName.includes(department)) return false;
+      }
+      return true;
+    });
+  }
 
   ngOnInit(): void {
     this.loadPositions();

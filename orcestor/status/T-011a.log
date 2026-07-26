@@ -1,0 +1,17 @@
+## T-011a — Column-level filter, 2-guruh (leaves, positions, terminals)
+
+**Holat:** ACCEPTED
+
+**Tekshiruv:** AGY 3 sahifaga (`leave-list`, `position-list`, `terminal-list`)
+filter qatorini `design-reference.md` bo'lim 3.2 bo'yicha qo'shdi. Har
+biri uchun tekshirildi:
+- Faqat `.ts`/`.html` fayllar o'zgargan (CSS'ga tegilmagan — talab qilingan).
+- "Amallar" (actions-cell) ustuni va delete tugmalari `git diff`da
+  ko'rinmadi — talab qilinganidek tegilmagan.
+- "Filterga mos topilmadi" bo'sh holat qo'shilgan.
+- `npm run build` xatosiz o'tdi (faqat oldindan mavjud CSS budget
+  warning'lari, ular bu taskka aloqador emas).
+
+`npm run build` yakuniy holatda xatosiz.
+
+**Sana:** 2026-07-26
