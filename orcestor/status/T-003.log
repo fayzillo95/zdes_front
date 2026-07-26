@@ -1,0 +1,19 @@
+## T-003 — Dashboard'dagi 4 ta mavjud stat-kartani Darken uslubiga moslashtirish
+
+**Holat:** ACCEPTED (bitta og'ish tuzatilgan holda)
+
+**Tekshiruv (Claude Code):**
+- `git diff` — faqat `dashboard.css` o'zgargan, `dashboard.ts`/`.html`ga
+  tegilmagan, hech qanday yangi data/badge/chart qo'shilmagan (MUHIM
+  CHEKLOVga rioya qilingan).
+- Har bir kartaga `nth-child` orqali 4 xil `--color-chart-*` aksent rang
+  berilgan, "shisha karta" (`backdrop-blur`) effekti qo'shilgan.
+- `npm run build` xatosiz o'tdi.
+
+**Og'ish va tuzatish:** AGY `orcestor/task_complete/` (to'g'ri imlo bilan,
+YANGI papka) yaratib, natija fayllarini shu yerga qo'ygan edi — loyiha
+qoidasi (`requirements.MD` band 6) ataylab noto'g'ri imlo
+`task_compliete/` ni talab qiladi. Fayllar qo'lda to'g'ri papkaga
+ko'chirildi, stray `task_complete/` o'chirildi.
+
+**Sana:** 2026-07-26
