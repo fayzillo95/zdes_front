@@ -1,0 +1,37 @@
+<div class="payroll-detail-container" *ngIf="payroll$ | async as payroll; else loading">
+  <div class="header-section">
+    <h2>Ish haqi tafsilotlari</h2>
+  </div>
+  
+  <div class="detail-card">
+    <div class="detail-row">
+      <span class="label">Xodim ID</span>
+      <span class="value">{{ payroll.employeeId }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Davr</span>
+      <span class="value">{{ payroll.month }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Asosiy summa</span>
+      <span class="value amount">{{ payroll.baseSalary | currency }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Ushlab qolingan</span>
+      <span class="value deduction">{{ payroll.totalPenalty | currency }}</span>
+    </div>
+    <div class="detail-row total-row">
+      <span class="label">Yakuniy summa</span>
+      <span class="value total">{{ payroll.netSalary | currency }}</span>
+    </div>
+    
+    <div class="action-buttons">
+      <a routerLink="../" class="btn-back">Ortga</a>
+    </div>
+  </div>
+</div>
+<ng-template #loading>
+  <div class="loading-state">
+    <p>Ma'lumot yuklanmoqda...</p>
+  </div>
+</ng-template>

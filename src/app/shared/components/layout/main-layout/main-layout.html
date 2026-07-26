@@ -1,0 +1,16 @@
+<div class="layout-container">
+  <app-sidebar></app-sidebar>
+  <div class="layout-body">
+    <app-header></app-header>
+    <app-main-filter-header></app-main-filter-header>
+    <app-breadcrumb></app-breadcrumb>
+    @if (currentUser() && currentUser()?.role === 'admin' && !currentUser()?.companyId) {
+      <div class="scope-warning-banner">
+        ⚠️ <strong>Diqqat:</strong> Akkauntingizga hali kompaniya (`companyId`) biriktirilmagan. Ba'zi ma'lumotlar ko'rinmasligi yoki 403 taqiq berilishi mumkin.
+      </div>
+    }
+    <main class="layout-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

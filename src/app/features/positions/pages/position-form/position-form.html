@@ -1,0 +1,76 @@
+<div class="form-page">
+  <div class="form-card">
+    <div class="form-header">
+      <div class="form-header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <div>
+        <h2 class="form-title">{{ isEditMode ? 'Lavozimni Tahrirlash' : 'Yangi Lavozim' }}</h2>
+        <p class="form-subtitle">Lavozim nomi, kompaniya, filial va tegishli bo'limni kiriting</p>
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error" style="margin: 1.5rem 2rem 0; padding: 0.75rem 1rem; border-left: 4px solid var(--color-danger); border-radius: 8px; font-size: 0.875rem;">
+        <span>⚠️ {{ errorMessage() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">
+      <div class="form-group">
+        <label for="name" class="form-label">Lavozim Nomi <span class="required-star">*</span></label>
+        <input id="name" type="text" formControlName="name" class="form-input" placeholder="Backend Developer" />
+      </div>
+
+      <div class="form-group">
+        <label for="companyId" class="form-label">Kompaniya (Company) <span class="required-star">*</span></label>
+        <select id="companyId" formControlName="companyId" class="form-select">
+          <option value="">-- Kompaniyani tanlang --</option>
+          @for (c of companies(); track c.id) {
+            <option [value]="c.id">{{ c.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="branchId" class="form-label">Filial (Branch)</label>
+        <select id="branchId" formControlName="branchId" class="form-select">
+          <option value="">-- Filialni tanlang --</option>
+          @for (b of filteredBranches(); track b.id) {
+            <option [value]="b.id">{{ b.name }}</option>
+          }
+        </select>
+        @if (branchError()) {
+          <span class="field-error-hint">⚠️ {{ branchError() }}</span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="departmentId" class="form-label">Bo'lim (Department)</label>
+        <select id="departmentId" formControlName="departmentId" class="form-select">
+          <option value="">-- Bo'limni tanlang --</option>
+          @for (d of filteredDepartments(); track d.id) {
+            <option [value]="d.id">{{ d.name }}</option>
+          }
+        </select>
+        @if (departmentError()) {
+          <span class="field-error-hint">⚠️ {{ departmentError() }}</span>
+        }
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="form.invalid" class="btn btn-gradient-submit">
+          💾 Saqlash
+        </button>
+        <a routerLink="/positions" class="btn btn-secondary-cancel">
+          Bekor qilish
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

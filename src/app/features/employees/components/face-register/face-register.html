@@ -1,0 +1,8 @@
+<div class="face-register-container">
+  <h3>Yuzni ro'yxatga olish</h3>
+  @defer (on interaction) {
+    <app-camera-capture (photoCaptured)="onPhotoCaptured($event)"></app-camera-capture>
+  } @placeholder {
+    <button class="btn btn-secondary">Kamerani ochish</button>
+  }
+</div>

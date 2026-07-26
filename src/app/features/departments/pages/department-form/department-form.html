@@ -1,0 +1,59 @@
+<div class="form-page">
+  <div class="form-card">
+    <div class="form-header">
+      <div class="form-header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <div>
+        <h2 class="form-title">{{ isEditMode ? "Bo'limni Tahrirlash" : "Yangi Bo'lim Qo'shish" }}</h2>
+        <p class="form-subtitle">Bo'lim ma'lumotlarini va filial biriktirishni kiriting</p>
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        <span>⚠️ {{ errorMessage() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">
+      @if (companies().length > 0 || currentUser()?.role === 'superadmin') {
+        <div class="form-group">
+          <label class="form-label">Tegishli Kompaniya</label>
+          <select formControlName="companyId" class="form-select">
+            <option value="">-- Kompaniyani tanlang --</option>
+            @for (c of companies(); track c.id) {
+              <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </div>
+      }
+
+      <div class="form-group">
+        <label for="name" class="form-label">Bo'lim Nomi <span class="required-star">*</span></label>
+        <input id="name" type="text" formControlName="name" class="form-input" placeholder="Masalan: Axborot Texnologiyalari (IT)" />
+      </div>
+
+      <div class="form-group">
+        <label for="branchId" class="form-label">Tegishli Filial (Ixtiyoriy)</label>
+        <select id="branchId" formControlName="branchId" class="form-select">
+          <option value="">-- Filialni tanlang --</option>
+          @for (b of branches(); track b.id) {
+            <option [value]="b.id">{{ b.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="form.invalid" class="btn btn-gradient-submit">
+          💾 Saqlash
+        </button>
+        <a routerLink="/departments" class="btn btn-secondary-cancel">
+          Bekor qilish
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

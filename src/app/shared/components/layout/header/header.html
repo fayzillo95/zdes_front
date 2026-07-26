@@ -1,0 +1,70 @@
+<header class="header">
+  <div class="header-left">
+    <button class="sidebar-toggle-btn" (click)="sidebarState.toggle()" title="Menyu" aria-label="Sidebar menyu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+    <div class="logo">ZDES</div>
+  </div>
+
+  <div class="user-actions">
+    <button class="theme-toggle-btn" (click)="toggleTheme()" title="Mavzuni almashtirish">
+      {{ theme() === 'light' ? '🌙' : '☀️' }}
+    </button>
+    @if (currentUser()) {
+      <button class="user-profile-btn" (click)="openProfileModal()">
+        <span class="user-avatar-circle">
+          {{ (currentUser()?.firstName || currentUser()?.login || 'U')[0].toUpperCase() }}
+        </span>
+        <span class="user-name">{{ displayName() }}</span>
+      </button>
+      <button class="logout-btn" (click)="logout()" title="Chiqish">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Chiqish</span>
+      </button>
+    }
+  </div>
+
+  <button class="mobile-menu-trigger" (click)="toggleMobileMenu()" title="Menyu" aria-label="Menyu">
+    <span class="user-avatar-circle">
+      {{ (currentUser()?.firstName || currentUser()?.login || 'U')[0].toUpperCase() }}
+    </span>
+  </button>
+
+  @if (showMobileMenu()) {
+    <div class="mobile-menu-backdrop" (click)="closeMobileMenu()"></div>
+    <div class="mobile-menu-dropdown">
+      <button class="mobile-menu-item" (click)="toggleTheme()">
+        <span>{{ theme() === 'light' ? '🌙' : '☀️' }}</span>
+        <span>Mavzuni almashtirish</span>
+      </button>
+      @if (currentUser()) {
+        <button class="mobile-menu-item" (click)="openProfileModal()">
+          <span class="user-avatar-circle small">
+            {{ (currentUser()?.firstName || currentUser()?.login || 'U')[0].toUpperCase() }}
+          </span>
+          <span class="user-name">{{ displayName() }}</span>
+        </button>
+        <button class="mobile-menu-item logout" (click)="logout()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Chiqish</span>
+        </button>
+      }
+    </div>
+  }
+</header>
+
+@if (showProfileModal()) {
+  <app-profile-modal [user]="currentUser()" (close)="closeProfileModal()"></app-profile-modal>
+}

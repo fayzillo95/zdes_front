@@ -1,0 +1,263 @@
+/* Sidebar Container */
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background-color: var(--color-bg-primary, #ffffff);
+  color: var(--color-text-primary, #1e293b);
+  border-right: 1px solid var(--color-border, rgba(226, 232, 240, 0.8));
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 4px 0 24px 0 var(--shadow-color, rgba(0, 0, 0, 0.04));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  /* Firefox Custom Scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+}
+
+/* Sidebar Webkit Scrollbar Styling (Slim 5px, rounded thumb, hover transition) */
+.sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 10px;
+  transition: background 0.3s ease, width 0.3s ease;
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.4);
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+}
+
+/* Header Section */
+.sidebar-header {
+  padding: 24px 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border, rgba(226, 232, 240, 0.6));
+  background: transparent;
+}
+
+.sidebar-close-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+
+.sidebar-close-btn:hover {
+  background-color: var(--color-border);
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  letter-spacing: -0.5px;
+}
+
+.brand-text {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Navigation Section */
+.sidebar-nav {
+  padding: 16px 12px;
+  flex: 1;
+}
+
+.nav-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Category Headers */
+.nav-category {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--color-text-secondary, #94a3b8);
+  text-transform: uppercase;
+  padding: 16px 14px 6px;
+  user-select: none;
+}
+
+.nav-category:first-child {
+  padding-top: 4px;
+}
+
+/* Navigation Link Items */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: var(--color-text-secondary, #64748b);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-text-secondary, #64748b);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Hover state: Modern Glassmorphic Effect */
+.nav-link:hover:not(.active) {
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--color-primary, #6366f1);
+  transform: translateX(4px);
+  border-color: rgba(99, 102, 241, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-link:hover:not(.active) .nav-icon {
+  color: var(--color-primary, #6366f1);
+  transform: scale(1.1);
+}
+
+/* Active State: Rich Star Admin 2 Gradient & Micro Glow */
+.nav-link.active {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.38);
+  font-weight: 600;
+  border-color: transparent;
+}
+
+.nav-link.active .nav-icon {
+  color: #ffffff;
+  stroke-width: 2.3;
+  transform: scale(1.05);
+}
+
+/* Active subtle indicator dot */
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+/* Mobile backdrop, shown only while the sidebar is expanded (.open) */
+.sidebar-backdrop {
+  display: none;
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+@media (max-width: 768px) {
+  /* Closed (default): compact icon-only rail */
+  .sidebar {
+    width: 70px;
+  }
+  .brand-text, .nav-text, .nav-category {
+    display: none;
+  }
+  .nav-link {
+    justify-content: center;
+    padding: 12px;
+  }
+  .nav-link.active::after {
+    display: none;
+  }
+
+  /* Open: expands over the content into a full labeled drawer */
+  .sidebar.open {
+    width: 260px;
+  }
+  .sidebar.open .brand-text,
+  .sidebar.open .nav-text,
+  .sidebar.open .nav-category {
+    display: block;
+  }
+  .sidebar.open .nav-link {
+    justify-content: flex-start;
+    padding: 10px 16px;
+  }
+  .sidebar.open .nav-link.active::after {
+    display: block;
+  }
+  .sidebar.open .sidebar-close-btn {
+    display: flex;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    z-index: 99;
+  }
+}
+

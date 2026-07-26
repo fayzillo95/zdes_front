@@ -1,0 +1,108 @@
+<div class="employees-page">
+  <!-- Header -->
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Xodimlar</h1>
+        <p class="page-subtitle">Tashkilot xodimlarini boshqarish</p>
+      </div>
+    </div>
+    <a routerLink="/employees/new" class="btn-add-new">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Yangi Xodim
+    </a>
+  </div>
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <span>✅ {{ successMessage() }}</span>
+    </div>
+  }
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <span>⚠️ {{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Table Card -->
+  <div class="table-card">
+    @if (employees().length > 0) {
+      <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Xodim Nomi</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>Holat</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (emp of employees(); track emp.id; let i = $index) {
+            <tr class="table-row clickable-row" [routerLink]="['/employees', emp.id]">
+              <td class="row-index">{{ i + 1 }}</td>
+              <td>
+                <div class="emp-name-cell">
+                  <div class="emp-avatar">
+                    {{ (emp.firstName || emp.fullName || emp.login || 'X').charAt(0).toUpperCase() }}
+                  </div>
+                  <div class="emp-details">
+                    <span class="emp-name">{{ emp.firstName ? emp.firstName + ' ' + (emp.lastName || '') : (emp.fullName || emp.login || 'Xodim') }}</span>
+                    @if (emp.login) {
+                      <span class="emp-sub text-muted">&#64;{{ emp.login }}</span>
+                    }
+                  </div>
+                </div>
+              </td>
+              <td class="text-muted">{{ emp.phone || '—' }}</td>
+              <td class="text-muted">{{ emp.email || '—' }}</td>
+              <td>
+                <span class="status-badge" [class.active]="emp.isActive !== false" [class.inactive]="emp.isActive === false">
+                  {{ emp.isActive !== false ? 'Faol' : 'Nofaol' }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <button (click)="$event.stopPropagation(); deleteEmployee(emp.id, emp.login)" 
+                        class="btn-action btn-delete" 
+                        [disabled]="isCurrentUser(emp.id, emp.login)"
+                        [title]="isCurrentUser(emp.id, emp.login) ? 'O\'zingizni o\'chira olmaysiz' : 'O\'chirish'"
+                        style="border: none; cursor: pointer;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                    <path d="M10 11v6M14 11v6"></path>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+        </svg>
+        <p>Hozircha hech qanday xodim mavjud emas</p>
+        <a routerLink="/employees/new" class="btn-add-new" style="display:inline-flex; margin-top: 0.5rem;">
+          Birinchi xodimni qo'shish
+        </a>
+      </div>
+    }
+  </div>
+</div>

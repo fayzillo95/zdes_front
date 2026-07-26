@@ -1,0 +1,65 @@
+<div class="data-table-container">
+  <div class="data-table-toolbar" *ngIf="filterable">
+    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)" [placeholder]="filterPlaceholder" class="data-table-search">
+  </div>
+
+  <table class="data-table" *ngIf="!loading && processedData.length > 0 && !virtualScroll">
+    <thead>
+      <tr>
+        <th *ngFor="let col of columns" 
+            (click)="handleSort(col)"
+            [class.sortable]="col.sortable">
+          {{ col.label }}
+          <span *ngIf="col.sortable && sortKey === col.key" class="sort-icon">
+            {{ sortDirection === 'asc' ? '↑' : '↓' }}
+          </span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of paginatedData" (click)="onRowClick(row)" class="clickable-row">
+        <td *ngFor="let col of columns">
+          {{ getCellValue(row, col.key) }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <cdk-virtual-scroll-viewport itemSize="45" class="virtual-scroll-viewport" *ngIf="!loading && processedData.length > 0 && virtualScroll">
+    <table class="data-table virtual-table">
+      <thead>
+        <tr>
+          <th *ngFor="let col of columns" 
+              (click)="handleSort(col)"
+              [class.sortable]="col.sortable">
+            {{ col.label }}
+            <span *ngIf="col.sortable && sortKey === col.key" class="sort-icon">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *cdkVirtualFor="let row of processedData" (click)="onRowClick(row)" class="clickable-row">
+          <td *ngFor="let col of columns">
+            {{ getCellValue(row, col.key) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </cdk-virtual-scroll-viewport>
+
+  <div class="loading-state" *ngIf="loading">
+    <app-skeleton-loader [rows]="pageSize" [columns]="columns.length"></app-skeleton-loader>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && (!processedData || processedData.length === 0)">
+    <p>{{ emptyMessage }}</p>
+  </div>
+
+  <div class="pagination" *ngIf="showPagination">
+    <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">Oldingi</button>
+    <span class="page-info">Sahifa {{ currentPage }} / {{ totalPages }}</span>
+    <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Keyingi</button>
+  </div>
+</div>

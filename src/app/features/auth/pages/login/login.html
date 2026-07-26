@@ -1,0 +1,54 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-logo">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="12" fill="url(#logo-gradient)"/>
+          <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="logo-gradient" x1="0" y1="0" x2="40" y2="40">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#8b5cf6"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <h1 class="login-title">Welcome back</h1>
+      <p class="login-subtitle">Sign in to your account to continue</p>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error" role="alert">
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+    @if (successMessage()) {
+      <div class="alert alert-success" role="alert">
+        <span>{{ successMessage() }}</span>
+      </div>
+    }
+
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="username">Login (Username)</label>
+        <div class="input-wrapper">
+          <input id="username" type="text" class="form-input" formControlName="username" placeholder="Loginni kiriting" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <div class="input-wrapper">
+          <input id="password" [type]="showPassword() ? 'text' : 'password'" class="form-input password-input" formControlName="password" placeholder="Parolni kiriting" />
+          <button type="button" class="password-toggle-btn" (click)="togglePassword()">
+            {{ showPassword() ? '👁️' : '🙈' }}
+          </button>
+        </div>
+      </div>
+
+      <button id="login-submit-btn" type="submit" class="btn-submit" [disabled]="isLoading()">
+        @if (isLoading()) { <span>Signing in...</span> } @else { <span>Sign in</span> }
+      </button>
+    </form>
+  </div>
+</div>

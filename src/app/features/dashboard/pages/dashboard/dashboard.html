@@ -1,0 +1,12 @@
+<div class="dashboard">
+  <h1 class="dashboard__title">Boshqaruv paneli</h1>
+
+  <div class="dashboard__stats">
+    @for (stat of stats; track stat.label) {
+      <div class="stat-card">
+        <span class="stat-card__value">{{ stat.value }}</span>
+        <span class="stat-card__label">{{ stat.label }}</span>
+      </div>
+    }
+  </div>
+</div>

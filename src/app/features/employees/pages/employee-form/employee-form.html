@@ -1,0 +1,118 @@
+<div class="form-page">
+  <div class="form-card">
+    <div class="form-header">
+      <div class="form-header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <div>
+        <h2 class="form-title">{{ isEditMode ? 'Xodimni Tahrirlash' : "Yangi Xodim Qo'shish" }}</h2>
+        <p class="form-subtitle">Xodim shaxsiy va tashkiliy ma'lumotlarini kiriting</p>
+      </div>
+    </div>
+
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        <span>⚠️ {{ errorMessage() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="firstName" class="form-label">Ism <span class="required-star">*</span></label>
+          <input id="firstName" type="text" formControlName="firstName" class="form-input" placeholder="Ali" />
+        </div>
+
+        <div class="form-group">
+          <label for="lastName" class="form-label">Familiya <span class="required-star">*</span></label>
+          <input id="lastName" type="text" formControlName="lastName" class="form-input" placeholder="Valiyev" />
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="form-label">Telefon Raqami</label>
+          <input id="phone" type="text" formControlName="phone" class="form-input" placeholder="+998901234567" />
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email Pochta</label>
+          <input id="email" type="email" formControlName="email" class="form-input" placeholder="ali@zdes.uz" />
+        </div>
+
+        <div class="form-group">
+          <label for="login" class="form-label">Login (Foydalanuvchi nomi) <span class="required-star">*</span></label>
+          <input id="login" type="text" formControlName="login" class="form-input" placeholder="aliv1" />
+        </div>
+
+        @if (!isEditMode) {
+          <div class="form-group">
+            <label for="password" class="form-label">Parol <span class="required-star">*</span></label>
+            <input id="password" type="password" formControlName="password" class="form-input" placeholder="••••••••" />
+          </div>
+        }
+
+        <div class="form-group">
+          <label class="form-label">Kompaniya (Company) <span class="required-star">*</span></label>
+          <select formControlName="companyId" class="form-select">
+            <option value="">-- Kompaniyani tanlang --</option>
+            @for (c of companies(); track c.id) {
+              <option [value]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Filial (Branch)</label>
+          <select formControlName="branchId" class="form-select">
+            <option value="">-- Filialni tanlang --</option>
+            @for (b of filteredBranches(); track b.id) {
+              <option [value]="b.id">{{ b.name }}</option>
+            }
+          </select>
+          @if (branchError()) {
+            <span class="field-error-hint">⚠️ {{ branchError() }}</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Bo'lim (Department)</label>
+          <select formControlName="departmentId" class="form-select">
+            <option value="">-- Bo'limni tanlang --</option>
+            @for (d of filteredDepartments(); track d.id) {
+              <option [value]="d.id">{{ d.name }}</option>
+            }
+          </select>
+          @if (departmentError()) {
+            <span class="field-error-hint">⚠️ {{ departmentError() }}</span>
+          }
+        </div>
+
+        <div class="form-group col-span-2">
+          <label class="form-label">Lavozim (Position)</label>
+          <select formControlName="positionId" class="form-select">
+            <option value="">-- Lavozimni tanlang --</option>
+            @for (p of filteredPositions(); track p.id) {
+              <option [value]="p.id">{{ p.name }}</option>
+            }
+          </select>
+          @if (positionError()) {
+            <span class="field-error-hint">⚠️ {{ positionError() }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-gradient-submit" [disabled]="form.invalid">
+          💾 Saqlash
+        </button>
+        <a routerLink="/employees" class="btn btn-secondary-cancel">
+          Bekor qilish
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,116 @@
+<div class="branches-page">
+  <!-- Header -->
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="6" y1="3" x2="6" y2="15"></line>
+          <circle cx="18" cy="6" r="3"></circle>
+          <circle cx="6" cy="18" r="3"></circle>
+          <path d="M18 9a9 9 0 0 1-9 9"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Filiallar</h1>
+        <p class="page-subtitle">Barcha filiallarni boshqarish va xarita sozlamalari</p>
+      </div>
+    </div>
+    <a routerLink="/branches/new" class="btn-add-new">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Yangi Filial
+    </a>
+  </div>
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <span>✅ {{ successMessage() }}</span>
+    </div>
+  }
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <span>⚠️ {{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Table Card -->
+  <div class="table-card">
+    @if (branches().length > 0) {
+      <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Filial Nomi</th>
+            <th>Manzil</th>
+            <th>Koordinatalar & Qamrov</th>
+            <th>Holat</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (branch of branches(); track branch.id; let i = $index) {
+            <tr class="table-row" (click)="onRowClick(branch.id)">
+              <td class="row-index">{{ i + 1 }}</td>
+              <td>
+                <div class="branch-name-cell">
+                  <div class="branch-avatar">{{ branch.name.charAt(0).toUpperCase() }}</div>
+                  <span class="branch-name">{{ branch.name }}</span>
+                </div>
+              </td>
+              <td class="text-muted">{{ branch.address || '—' }}</td>
+              <td>
+                @if (branch.latitude && branch.longitude) {
+                  <div class="geo-badge" title="Kenglik, Uzunlik">
+                    📍 {{ branch.latitude.toFixed(4) }}, {{ branch.longitude.toFixed(4) }}
+                    @if (branch.radius) {
+                      <span class="radius-tag">({{ branch.radius }}m)</span>
+                    }
+                  </div>
+                } @else {
+                  <span class="text-muted">—</span>
+                }
+              </td>
+              <td>
+                <span class="status-badge" [class.active]="branch.isActive !== false" [class.inactive]="branch.isActive === false">
+                  {{ branch.isActive !== false ? 'Faol' : 'Nofaol' }}
+                </span>
+              </td>
+              <td class="actions-cell" (click)="$event.stopPropagation()">
+                <a [routerLink]="['/branches', branch.id, 'edit']" class="btn-action btn-edit" title="Tahrirlash">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </a>
+                <button (click)="deleteBranch(branch.id)" class="btn-action btn-delete" title="O'chirish">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                    <path d="M10 11v6M14 11v6"></path>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3">
+          <line x1="6" y1="3" x2="6" y2="15"></line>
+          <circle cx="18" cy="6" r="3"></circle>
+          <circle cx="6" cy="18" r="3"></circle>
+          <path d="M18 9a9 9 0 0 1-9 9"></path>
+        </svg>
+        <p>Hozircha hech qanday filial mavjud emas</p>
+        <a routerLink="/branches/new" class="btn-add-new" style="display:inline-flex; margin-top: 0.5rem;">
+          Birinchi filialni qo'shish
+        </a>
+      </div>
+    }
+  </div>
+</div>
