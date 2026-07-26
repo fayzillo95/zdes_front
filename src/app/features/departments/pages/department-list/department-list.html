@@ -54,9 +54,17 @@
             <th>ID</th>
             <th class="text-right">Amallar</th>
           </tr>
+          <tr class="column-filter-row">
+            <th>
+              <input type="text" class="column-filter-input" placeholder="Qidirish..."
+                     [ngModel]="nameFilter()" (ngModelChange)="nameFilter.set($event)" (click)="$event.stopPropagation()" />
+            </th>
+            <th></th>
+            <th></th>
+          </tr>
         </thead>
         <tbody>
-          @for (department of departments(); track department.id) {
+          @for (department of filteredDepartments(); track department.id) {
             <tr class="table-row" (click)="onRowClick(department.id)">
               <td>
                 <div class="department-name-cell">
@@ -77,6 +85,16 @@
                   <button (click)="deleteDepartment(department.id)" class="btn-action delete-btn" title="O'chirish">
                     🗑️ O'chirish
                   </button>
+                </div>
+              </td>
+            </tr>
+          }
+          @if (filteredDepartments().length === 0) {
+            <tr>
+              <td colspan="3" class="empty-state-cell">
+                <div class="empty-state-box">
+                  <span class="empty-icon">🔍</span>
+                  <p class="empty-text">Filterga mos bo'lim topilmadi</p>
                 </div>
               </td>
             </tr>

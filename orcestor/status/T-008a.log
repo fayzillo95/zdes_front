@@ -1,0 +1,16 @@
+## T-008a — Column-level jadval filter, 1-guruh (company, employees, departments)
+
+**Holat:** ACCEPTED (bitta bug tuzatilgan holda)
+
+**Tekshiruv:** `git diff` orqali barcha 6 fayl tasdiqlandi, faqat
+belgilangan ustunlarga filter qo'shilgan, jadvaldagi ustun-filter
+moslikka rioya qilingan.
+
+**Topilgan va tuzatilgan bug:** `company-list.ts` `computed()`
+ishlatgan, lekin uni `@angular/core`dan import qilmagan edi — `ng
+build` TS2304 bilan yiqilgan. Import qatoriga `computed` qo'shildi.
+Qolgan 5 faylda bunday xato yo'q edi.
+
+`npm run build` endi xatosiz o'tadi.
+
+**Sana:** 2026-07-26

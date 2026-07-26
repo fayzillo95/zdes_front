@@ -1,6 +1,7 @@
-import { Component, inject, signal, OnInit, ChangeDetectionStrategy, DestroyRef, effect } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy, DestroyRef, effect } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { EmployeeService } from '../../services/employee';
@@ -12,7 +13,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-employee-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, FormsModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './employee-list.html',
   styleUrls: ['./employee-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,6 +28,32 @@ export class EmployeeList implements OnInit {
   loading = signal<boolean>(true);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
+
+  nameFilter = signal<string>('');
+  phoneFilter = signal<string>('');
+  emailFilter = signal<string>('');
+  statusFilter = signal<'' | 'active' | 'inactive'>('');
+
+  filteredEmployees = computed(() => {
+    const name = this.nameFilter().trim().toLowerCase();
+    const phone = this.phoneFilter().trim().toLowerCase();
+    const email = this.emailFilter().trim().toLowerCase();
+    const status = this.statusFilter();
+
+    return this.employees().filter(e => {
+      if (name) {
+        const matchName = (e.firstName?.toLowerCase().includes(name)) ||
+                          (e.lastName?.toLowerCase().includes(name)) ||
+                          (e.fullName?.toLowerCase().includes(name));
+        if (!matchName) return false;
+      }
+      if (phone && !e.phone?.toLowerCase().includes(phone)) return false;
+      if (email && !e.email?.toLowerCase().includes(email)) return false;
+      if (status === 'active' && e.isActive === false) return false;
+      if (status === 'inactive' && e.isActive !== false) return false;
+      return true;
+    });
+  });
 
   constructor() {
     effect(() => {

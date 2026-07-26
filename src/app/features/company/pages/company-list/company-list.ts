@@ -1,5 +1,6 @@
-import { Component, inject, signal, OnInit, ChangeDetectionStrategy, DestroyRef, effect } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy, DestroyRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -11,7 +12,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-company-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, FormsModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './company-list.html',
   styleUrl: './company-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +27,30 @@ export class CompanyList implements OnInit {
   loading = signal<boolean>(true);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
+
+  nameFilter = signal<string>('');
+  legalNameFilter = signal<string>('');
+  phoneFilter = signal<string>('');
+  emailFilter = signal<string>('');
+  statusFilter = signal<'' | 'active' | 'inactive'>('');
+
+  filteredCompanies = computed(() => {
+    const name = this.nameFilter().trim().toLowerCase();
+    const legalName = this.legalNameFilter().trim().toLowerCase();
+    const phone = this.phoneFilter().trim().toLowerCase();
+    const email = this.emailFilter().trim().toLowerCase();
+    const status = this.statusFilter();
+
+    return this.companies().filter(c => {
+      if (name && !c.name?.toLowerCase().includes(name)) return false;
+      if (legalName && !c.legalName?.toLowerCase().includes(legalName)) return false;
+      if (phone && !c.phone?.toLowerCase().includes(phone)) return false;
+      if (email && !c.email?.toLowerCase().includes(email)) return false;
+      if (status === 'active' && c.isActive === false) return false;
+      if (status === 'inactive' && c.isActive !== false) return false;
+      return true;
+    });
+  });
 
   constructor() {
     effect(() => {

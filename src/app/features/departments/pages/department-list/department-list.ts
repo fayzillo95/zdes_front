@@ -1,5 +1,6 @@
-import { Component, inject, signal, OnInit, ChangeDetectionStrategy, DestroyRef, effect } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy, DestroyRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -11,7 +12,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-department-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, FormsModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './department-list.html',
   styleUrl: './department-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +27,17 @@ export class DepartmentList implements OnInit {
   loading = signal<boolean>(true);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
+
+  nameFilter = signal<string>('');
+
+  filteredDepartments = computed(() => {
+    const name = this.nameFilter().trim().toLowerCase();
+
+    return this.departments().filter(d => {
+      if (name && !d.name?.toLowerCase().includes(name)) return false;
+      return true;
+    });
+  });
 
   constructor() {
     effect(() => {
