@@ -1,12 +1,41 @@
-<div class="attendance-detail-container" *ngIf="attendance">
-  <h2>Attendance Detail</h2>
-  <p><strong>ID:</strong> {{ attendance.id }}</p>
-  <p><strong>Employee ID:</strong> {{ attendance.employeeId }}</p>
-  <p><strong>Date:</strong> {{ attendance.date }}</p>
-  <p><strong>Check In:</strong> {{ attendance.checkIn }}</p>
-  <p><strong>Check Out:</strong> {{ attendance.checkOut }}</p>
-  <p><strong>Status:</strong> {{ attendance.status }}</p>
+<div class="attendance-detail-container" *ngIf="attendance; else loading">
+  <div class="header-section">
+    <h2>Davomat tafsilotlari</h2>
+  </div>
+  
+  <div class="detail-card">
+    <div class="detail-row">
+      <span class="label">Xodim</span>
+      <span class="value">{{ attendance.employeeId }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Sana</span>
+      <span class="value">{{ formatDate(attendance.date) }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Kirish vaqti</span>
+      <span class="value">{{ formatTime(attendance.checkIn) }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Chiqish vaqti</span>
+      <span class="value">{{ formatTime(attendance.checkOut) }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Ishlangan daqiqa</span>
+      <span class="value">{{ attendance.workedMinutes != null ? attendance.workedMinutes : '—' }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Kechikish</span>
+      <span class="value">{{ attendance.lateMinutes != null ? attendance.lateMinutes + ' daqiqa' : '—' }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Holat</span>
+      <span class="value">{{ attendance.status }}</span>
+    </div>
+  </div>
 </div>
-<div *ngIf="!attendance">
-  Loading...
-</div>
+<ng-template #loading>
+  <div class="loading-state">
+    <p>Yuklanmoqda...</p>
+  </div>
+</ng-template>

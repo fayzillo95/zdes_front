@@ -28,4 +28,18 @@ export class AttendanceDetail implements OnInit {
       });
     }
   }
+
+  formatTime(timeStr?: string | Date | null): string {
+    if (!timeStr) return '—';
+    const date = new Date(timeStr);
+    if (isNaN(date.getTime())) return String(timeStr);
+    return date.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  formatDate(dateStr?: string | Date | null): string {
+    if (!dateStr) return '—';
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return String(dateStr);
+    return date.toLocaleDateString('uz-UZ', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  }
 }

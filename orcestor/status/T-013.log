@@ -1,0 +1,19 @@
+## T-013 — Detail sahifalarni kanonik detail-card strukturasiga o'tkazish
+
+**Holat:** ACCEPTED
+
+**Tekshiruv:** AGY `employee-detail` va `attendance-detail` sahifalarini
+`design-reference.md` bo'lim 3.5 (`payroll-detail` namunasi) bo'yicha
+qayta stillashtirdi. Tekshirildi:
+- `payroll-detail` (namuna) fayllariga tegilmagan.
+- `employee-detail.html/.css` — `.detail-card`/`.detail-row` strukturasiga
+  o'tkazilgan, "Tahrirlash" tugmasi (`[routerLink]="['edit']"`) saqlangan,
+  hardcoded hex ranglar tokenlarga almashtirilgan. `.ts` fayl tegilmagan
+  (talab qilinganidek).
+- `attendance-detail.html/.css/.ts` — to'liq o'zbek tiliga o'tkazilgan
+  ("Davomat tafsilotlari" sarlavha, "Yuklanmoqda..."), `formatDate`/
+  `formatTime` metodlari `.ts`ga qo'shilgan, faqat real `Attendance`
+  model maydonlari ko'rsatilgan (o'ylab topilgan maydon yo'q).
+- `npm run build` xatosiz o'tdi.
+
+**Sana:** 2026-07-27

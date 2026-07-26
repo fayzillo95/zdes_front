@@ -1,13 +1,30 @@
-<div class="employee-detail-container" *ngIf="employee$ | async as employee">
-  <div class="header">
+<div class="employee-detail-container" *ngIf="employee$ | async as employee; else loading">
+  <div class="header-section">
     <h2>Xodim ma'lumotlari</h2>
     <a [routerLink]="['edit']" class="edit-btn">Tahrirlash</a>
   </div>
 
-  <div class="info-card">
-    <p><strong>FIO:</strong> {{ employee.fullName || (employee.firstName + ' ' + employee.lastName) }}</p>
-    <p><strong>Telefon:</strong> {{ employee.phone }}</p>
-    <p><strong>Status:</strong> {{ employee.isActive !== false ? 'Faol' : 'Nofaol' }}</p>
-    <p><strong>Qabul qilingan sana:</strong> {{ employee.createdAt | date }}</p>
+  <div class="detail-card">
+    <div class="detail-row">
+      <span class="label">FIO</span>
+      <span class="value">{{ employee.fullName || (employee.firstName + ' ' + employee.lastName) }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Telefon</span>
+      <span class="value">{{ employee.phone }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Status</span>
+      <span class="value">{{ employee.isActive !== false ? 'Faol' : 'Nofaol' }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Qabul qilingan sana</span>
+      <span class="value">{{ employee.createdAt | date }}</span>
+    </div>
   </div>
 </div>
+<ng-template #loading>
+  <div class="loading-state">
+    <p>Yuklanmoqda...</p>
+  </div>
+</ng-template>
