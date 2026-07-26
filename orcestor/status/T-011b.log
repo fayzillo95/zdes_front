@@ -1,0 +1,18 @@
+## T-011b — Column-level filter, 3-guruh (work-schedules, attendance, payroll)
+
+**Holat:** ACCEPTED
+
+**Tekshiruv:** AGY 3 sahifaga (`work-schedule-list`, `attendance-list`,
+`payroll-list`) filter qatorini `design-reference.md` bo'lim 3.2
+bo'yicha qo'shdi. Tekshirildi:
+- Faqat `.ts`/`.html` fayllar o'zgargan (CSS'ga tegilmagan).
+- `work-schedule-list`dagi mavjud actions-cell `git diff`da ko'rinmadi
+  — tegilmagan.
+- `attendance-list`/`payroll-list`da Amallar ustuni qo'shilmagan
+  (talab qilinganidek).
+- `attendance-list`da filter-th sonlari header ustunlari soniga (8 ta)
+  mos keladi.
+- "Filterga mos topilmadi" bo'sh holat har uchalasida ham qo'shilgan.
+- `npm run build` xatosiz o'tdi.
+
+**Sana:** 2026-07-26

@@ -1,5 +1,6 @@
-import { Component, inject, ChangeDetectionStrategy, OnInit, DestroyRef, signal } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, OnInit, DestroyRef, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PayrollService } from '../../services/payroll';
@@ -9,7 +10,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-payroll-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, FormsModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './payroll-list.html',
   styleUrl: './payroll-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -21,6 +22,20 @@ export class PayrollList implements OnInit {
 
   payrolls = signal<Payroll[]>([]);
   loading = signal<boolean>(true);
+
+  employeeIdFilter = signal<string>('');
+  monthFilter = signal<string>('');
+
+  filteredPayrolls = computed(() => {
+    const empId = this.employeeIdFilter().trim().toLowerCase();
+    const month = this.monthFilter().trim().toLowerCase();
+
+    return this.payrolls().filter(p => {
+      if (empId && !p.employeeId?.toLowerCase().includes(empId)) return false;
+      if (month && !p.month?.toLowerCase().includes(month)) return false;
+      return true;
+    });
+  });
 
   ngOnInit(): void {
     this.loading.set(true);

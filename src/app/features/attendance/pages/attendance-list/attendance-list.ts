@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -13,7 +14,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-attendance-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent, FormsModule],
   templateUrl: './attendance-list.html',
   styleUrl: './attendance-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,6 +28,26 @@ export class AttendanceList implements OnInit {
   attendances: Attendance[] = [];
   employees: Employee[] = [];
   loading = true;
+
+  employeeFilter = signal<string>('');
+  dateFilter = signal<string>('');
+  statusFilter = signal<'' | 'present' | 'absent' | 'late'>('');
+
+  filteredAttendances(): Attendance[] {
+    const emp = this.employeeFilter().trim().toLowerCase();
+    const date = this.dateFilter();
+    const status = this.statusFilter();
+
+    return this.attendances.filter(a => {
+      if (emp) {
+        const eName = this.getEmployeeName(a.employeeId).toLowerCase();
+        if (!eName.includes(emp)) return false;
+      }
+      if (date && a.date?.toString().slice(0, 10) !== date) return false;
+      if (status && a.status !== status) return false;
+      return true;
+    });
+  }
 
   ngOnInit(): void {
     this.loadData();

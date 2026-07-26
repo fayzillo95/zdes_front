@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -16,7 +17,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-work-schedule-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, SkeletonLoaderComponent],
+  imports: [CommonModule, RouterLink, SkeletonLoaderComponent, FormsModule],
   templateUrl: './work-schedule-list.html',
   styleUrl: './work-schedule-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,6 +27,33 @@ export class WorkScheduleList implements OnInit {
   companies: Company[] = [];
   branches: Branch[] = [];
   loading = true;
+
+  nameFilter = signal<string>('');
+  companyFilter = signal<string>('');
+  branchFilter = signal<string>('');
+  isDefaultFilter = signal<'' | 'yes' | 'no'>('');
+
+  filteredWorkSchedules(): WorkSchedule[] {
+    const name = this.nameFilter().trim().toLowerCase();
+    const comp = this.companyFilter().trim().toLowerCase();
+    const branch = this.branchFilter().trim().toLowerCase();
+    const isDef = this.isDefaultFilter();
+
+    return this.workSchedules.filter(s => {
+      if (name && !s.name?.toLowerCase().includes(name)) return false;
+      if (comp) {
+        const cName = this.getCompanyName(s.companyId).toLowerCase();
+        if (!cName.includes(comp)) return false;
+      }
+      if (branch) {
+        const bName = this.getBranchName(s.branchId).toLowerCase();
+        if (!bName.includes(branch)) return false;
+      }
+      if (isDef === 'yes' && s.isDefault !== true) return false;
+      if (isDef === 'no' && s.isDefault === true) return false;
+      return true;
+    });
+  }
 
   private readonly workScheduleService = inject(WorkScheduleService);
   private readonly companyService = inject(CompanyService);

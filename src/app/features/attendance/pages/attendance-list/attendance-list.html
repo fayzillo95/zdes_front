@@ -45,9 +45,26 @@
             <th>Kechikish (Daq)</th>
             <th>Holat</th>
           </tr>
+          <tr class="column-filter-row">
+            <th></th>
+            <th><input type="text" class="column-filter-input" placeholder="Qidirish..." [ngModel]="employeeFilter()" (ngModelChange)="employeeFilter.set($event)" (click)="$event.stopPropagation()" /></th>
+            <th><input type="date" class="column-filter-input" [ngModel]="dateFilter()" (ngModelChange)="dateFilter.set($event)" (click)="$event.stopPropagation()" /></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>
+              <select class="column-filter-select" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" (click)="$event.stopPropagation()">
+                <option value="">Hammasi</option>
+                <option value="present">Kelgan</option>
+                <option value="absent">Kelmagan</option>
+                <option value="late">Kechikkan</option>
+              </select>
+            </th>
+          </tr>
         </thead>
         <tbody>
-          @for (record of attendances; track record.id; let i = $index) {
+          @for (record of filteredAttendances(); track record.id; let i = $index) {
             <tr class="table-row clickable-row" [routerLink]="[record.id]">
               <td class="row-index">{{ i + 1 }}</td>
               <td>
@@ -90,6 +107,16 @@
                       [style.color]="record.status === 'late' ? 'var(--color-chart-yellow)' : null">
                   {{ record.status === 'present' ? 'Kelgan' : (record.status === 'absent' ? 'Kelmagan' : record.status) }}
                 </span>
+              </td>
+            </tr>
+          }
+          @if (filteredAttendances().length === 0) {
+            <tr>
+              <td colspan="8" class="empty-state-cell">
+                <div class="empty-state-box">
+                  <span class="empty-icon">🔍</span>
+                  <p class="empty-text">Filterga mos davomat topilmadi</p>
+                </div>
               </td>
             </tr>
           }

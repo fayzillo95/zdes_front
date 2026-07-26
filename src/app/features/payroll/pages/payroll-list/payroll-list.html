@@ -28,14 +28,29 @@
             <th>Ushlab qolingan</th>
             <th>Yakuniy summa</th>
           </tr>
+          <tr class="column-filter-row">
+            <th><input type="text" class="column-filter-input" placeholder="Qidirish..." [ngModel]="employeeIdFilter()" (ngModelChange)="employeeIdFilter.set($event)" (click)="$event.stopPropagation()" /></th>
+            <th><input type="text" class="column-filter-input" placeholder="Qidirish..." [ngModel]="monthFilter()" (ngModelChange)="monthFilter.set($event)" (click)="$event.stopPropagation()" /></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let payroll of payrolls()" class="table-row" (click)="onRowClick(payroll.id)">
+          <tr *ngFor="let payroll of filteredPayrolls()" class="table-row" (click)="onRowClick(payroll.id)">
             <td>{{ payroll.employeeId }}</td>
             <td class="text-muted">{{ payroll.month }}</td>
             <td class="amount">{{ payroll.baseSalary | currency }}</td>
             <td class="deduction">{{ payroll.totalPenalty | currency }}</td>
             <td class="total">{{ payroll.netSalary | currency }}</td>
+          </tr>
+          <tr *ngIf="filteredPayrolls().length === 0">
+            <td colspan="5" class="empty-state-cell">
+              <div class="empty-state-box">
+                <span class="empty-icon">🔍</span>
+                <p class="empty-text">Filterga mos ish haqi topilmadi</p>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
