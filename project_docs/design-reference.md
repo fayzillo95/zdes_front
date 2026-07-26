@@ -127,6 +127,82 @@ mumkin, yaqin variantlar ham shu tokenga tushadi):
 qasddan rangli brend-aksent, status/semantik rang emas, alohida
 muhokama qilinmaguncha tegilmaydi.
 
+## 3.2. Column-level jadval filter patterni (2026-07-26, T-008)
+
+**Qoida:** filter FAQAT jadval (`<table>`) chiqadigan sahifalarda bo'ladi
+(notification-list kabi list-based, jadvalsiz sahifalarda YO'Q).
+Filter client-side ishlaydi — sahifa allaqachon to'liq datani yuklab
+signal/property'da saqlaydi, filter shu datani `computed()` orqali
+toraytiradi, yangi backend so'rov YO'Q.
+
+**Namuna (to'liq ishlaydigan, nusxa oling):**
+`src/app/features/branches/pages/branch-list/branch-list.ts` va
+`.html` — `nameFilter`/`addressFilter` (matn) + `statusFilter` (select)
++ `filteredBranches` computed.
+
+**Har bir ustun turi uchun pattern:**
+
+1. **Matn ustuni** — `.ts`da `xFilter = signal<string>('')`, `.html`da:
+   ```html
+   <th><input type="text" class="column-filter-input" placeholder="Qidirish..."
+       [ngModel]="xFilter()" (ngModelChange)="xFilter.set($event)" (click)="$event.stopPropagation()" /></th>
+   ```
+   `computed()` ichida: `if (x && !item.field?.toLowerCase().includes(x)) return false;`
+
+2. **Boolean/status ustuni (Holat: Faol/Nofaol)** — `.ts`da
+   `statusFilter = signal<'' | 'active' | 'inactive'>('')`, `.html`da:
+   ```html
+   <th><select class="column-filter-select" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" (click)="$event.stopPropagation()">
+     <option value="">Hammasi</option>
+     <option value="active">Faol</option>
+     <option value="inactive">Nofaol</option>
+   </select></th>
+   ```
+
+3. **Enum/turi ustuni (masalan leave turi)** — xuddi boolean kabi
+   `<select>`, lekin option'lar shu maydonning haqiqiy enum
+   qiymatlariga mos (masalan `vacation`/`sick`/`unpaid`/`business_trip`/
+   `other`), label sifatida mavjud `get*Label()` metodidan foydalaning
+   (agar bor bo'lsa).
+
+4. **Sana ustuni** — `.ts`da `xDateFilter = signal<string>('')` (bo'sh
+   yoki `YYYY-MM-DD`), `.html`da:
+   ```html
+   <th><input type="date" class="column-filter-input"
+       [ngModel]="xDateFilter()" (ngModelChange)="xDateFilter.set($event)" (click)="$event.stopPropagation()" /></th>
+   ```
+   `computed()`da: sana maydonini `YYYY-MM-DD`ga qisqartirib solishtiring
+   (`item.date?.toString().slice(0,10) === xDateFilter()`).
+
+5. **Filtrlanmaydigan ustunlar** (`#`, `ID`, raqamli summalar, vaqt,
+   "Amallar"/actions) — filter qatorida bo'sh `<th></th>`.
+
+**Shablon (thead ichida, header qatoridan keyin):**
+```html
+<tr class="column-filter-row">
+  <th></th> <!-- filtrlanmaydigan ustun -->
+  <th><input ...></th> <!-- matn -->
+  ...
+</tr>
+```
+
+**Bo'sh natija holati:** tashqi `@else if (data().length > 0)` RAW
+dataga (filtrlanmagan) tekshiriladi — bu o'zgarmaydi. `tbody` ichida,
+`@for` tugagach, QO'SHIMCHA holat qo'shiladi:
+```html
+@if (filteredData().length === 0) {
+  <tr><td [attr.colspan]="N" class="empty-state-cell">
+    <div class="empty-state-box"><span class="empty-icon">🔍</span>
+    <p class="empty-text">Filterga mos {{'...'}} topilmadi</p></div>
+  </td></tr>
+}
+```
+Bu "filterga mos yo'q" holatini asosiy "umuman ma'lumot yo'q" holatidan
+ajratadi.
+
+**`FormsModule` import qilinishi shart** (`ngModel` uchun), `@Component`
+`imports` massiviga qo'shiladi.
+
 ## 4. Amalga oshirish tartibi (Tailwind, mavjud token tizimi ustida)
 
 1. `src/styles.css`dagi `@theme` va `:root[data-theme="dark"]` bloklariga
