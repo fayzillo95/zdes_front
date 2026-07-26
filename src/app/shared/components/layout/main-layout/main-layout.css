@@ -22,9 +22,9 @@
 }
 
 .scope-warning-banner {
-  background-color: rgba(234, 179, 8, 0.15);
-  border: 1px solid rgba(234, 179, 8, 0.4);
-  color: #eab308;
+  background-color: color-mix(in srgb, var(--color-chart-yellow) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-chart-yellow) 40%, transparent);
+  color: var(--color-chart-yellow);
   padding: 0.75rem 1.5rem;
   margin: 1rem 1.5rem 0 1.5rem;
   border-radius: 8px;
