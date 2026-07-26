@@ -1,32 +1,141 @@
-<div class="leave-list-container">
-  <h2>Leaves</h2>
-  <button class="btn btn-primary" routerLink="new">Create New</button>
-  
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Employee ID</th>
-        <th>Type</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let leave of leaves">
-        <td>{{ leave.id }}</td>
-        <td>{{ leave.employeeId }}</td>
-        <td>{{ leave.type }}</td>
-        <td>{{ leave.startDate }}</td>
-        <td>{{ leave.endDate }}</td>
-        <td>{{ leave.status }}</td>
-        <td>
-          <button class="btn btn-sm btn-info" [routerLink]="[leave.id]">Edit</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteLeave(leave.id)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="employees-page">
+  <!-- Header -->
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Xodimlar Ta'tillari</h1>
+        <p class="page-subtitle">Ta'til yozuvlari, kasallik ta'tillari va xizmat safarlari ro'yxati</p>
+      </div>
+    </div>
+    <a routerLink="new" class="btn-add-new">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Ta'til Qo'shish
+    </a>
+  </div>
+
+  <!-- Table Card -->
+  <div class="table-card">
+    @if (leaves.length > 0) {
+      <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Xodim</th>
+            <th>Turi</th>
+            <th>Boshlanish sanasi</th>
+            <th>Tugash sanasi</th>
+            <th>Kunlar</th>
+            <th>Ish haqiga ta'sir</th>
+            <th>Sabab / Izoh</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of leaves; track item.id; let i = $index) {
+            <tr class="table-row clickable-row" [routerLink]="[item.id]">
+              <td class="row-index">{{ i + 1 }}</td>
+              <td>
+                <div class="emp-name-cell">
+                  <div class="emp-avatar">
+                    {{ getEmployeeAvatar(item.employeeId) }}
+                  </div>
+                  <div class="emp-details">
+                    <span class="emp-name">{{ getEmployeeName(item.employeeId) }}</span>
+                    @if (item.employeeId) {
+                      <span class="emp-sub text-muted">{{ getEmployeeLogin(item.employeeId) }}</span>
+                    }
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="status-badge" 
+                      [class.active]="item.type === 'vacation'" 
+                      [class.inactive]="item.type === 'sick'"
+                      [style.background-color]="item.type === 'unpaid' ? '#f3e8ff' : (item.type === 'business_trip' ? '#e0f2fe' : null)"
+                      [style.color]="item.type === 'unpaid' ? '#6b21a8' : (item.type === 'business_trip' ? '#0369a1' : null)">
+                  {{ getLeaveTypeLabel(item.type) }}
+                </span>
+              </td>
+              <td class="text-muted">{{ formatDate(item.fromDate) }}</td>
+              <td class="text-muted">{{ formatDate(item.toDate) }}</td>
+              <td>
+                <span class="radius-tag">{{ item.days }} kun</span>
+              </td>
+              <td>
+                @if (item.affectsSalary) {
+                  <span class="status-badge inactive" style="font-size: 0.7rem; padding: 0.15rem 0.5rem;">Ha</span>
+                } @else {
+                  <span class="status-badge active" style="font-size: 0.7rem; padding: 0.15rem 0.5rem;">Yo'q</span>
+                }
+              </td>
+              <td>
+                @if (item.reason) {
+                  <span class="reason-cell-click" (click)="$event.stopPropagation(); openReasonModal(item.reason)">
+                    {{ getFirstWord(item.reason) }}
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="info-bubble-icon">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </span>
+                } @else {
+                  <span class="text-muted">—</span>
+                }
+              </td>
+              <td class="actions-cell">
+                <button (click)="$event.stopPropagation(); deleteLeave(item.id)" class="btn-action btn-delete" title="O'chirish" style="background: #ffebee; color: #c62828; border: none; cursor: pointer;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+        </svg>
+        <p>Hozircha hech qanday ta'til yozuvi mavjud emas</p>
+        <a routerLink="new" class="btn-add-new" style="display:inline-flex; margin-top: 0.5rem;">
+          Birinchi ta'tilni qo'shish
+        </a>
+      </div>
+    }
+  </div>
 </div>
+
+<!-- Reason Detail Modal -->
+@if (selectedReason()) {
+  <div class="modal-backdrop" (click)="closeReasonModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">Batafsil Izoh</h3>
+        <button class="modal-close-btn" (click)="closeReasonModal()">&times;</button>
+      </div>
+      <div class="modal-body-content">
+        {{ selectedReason() }}
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeReasonModal()" class="btn-modal-close">Yopish</button>
+      </div>
+    </div>
+  </div>
+}

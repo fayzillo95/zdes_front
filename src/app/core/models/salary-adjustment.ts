@@ -1,8 +1,15 @@
 export interface SalaryAdjustment {
-  id: number;
-  employeeId: number;
+  id: string;
+  companyId: string;
+  employeeId: string;
+  type: string;
+  category: string;
   amount: number;
-  type: 'bonus' | 'penalty';
-  reason?: string;
   date: string;
+  month: string;
+  reason?: string;
+  createdById?: string;
+  updatedById?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

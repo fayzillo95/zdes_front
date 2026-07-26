@@ -5,8 +5,8 @@ import { PositionForm } from './pages/position-form/position-form';
 
 const routes: Routes = [
   { path: '', component: PositionList },
-  { path: 'new', component: PositionForm },
-  { path: ':id/edit', component: PositionForm },
+  { path: 'new', component: PositionForm, data: { breadcrumb: 'Yangi lavozim' } },
+  { path: ':id/edit', component: PositionForm, data: { breadcrumb: 'Tahrirlash' } },
 ];
 
 @NgModule({

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, Chang
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SkeletonLoaderComponent } from '../skeleton-loader/skeleton-loader';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 export interface Column {
   key: string;
@@ -12,7 +13,7 @@ export interface Column {
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [CommonModule, SkeletonLoaderComponent, FormsModule],
+  imports: [CommonModule, SkeletonLoaderComponent, FormsModule, ScrollingModule],
   templateUrl: './data-table.html',
   styleUrls: ['./data-table.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -25,9 +26,19 @@ export class DataTableComponent<T> implements OnChanges {
   @Input() emptyMessage: string = 'Ma\'lumot topilmadi';
   @Input() filterable: boolean = true;
   @Input() filterPlaceholder: string = 'Qidirish...';
+  @Input() virtualScroll: boolean = false;
+
+  // Server-side API surface
+  @Input() serverSide: boolean = false;
+  @Input() totalCount?: number;
 
   @Output() rowClick = new EventEmitter<T>();
   @Output() sortChange = new EventEmitter<{ key: string, direction: 'asc' | 'desc' }>();
+  
+  // Server-side events
+  @Output() serverPageChange = new EventEmitter<{ page: number, pageSize: number }>();
+  @Output() serverSortChange = new EventEmitter<{ key: string, direction: 'asc' | 'desc' }>();
+  @Output() serverFilterChange = new EventEmitter<string>();
 
   currentPage: number = 1;
   sortKey: string | null = null;
@@ -39,10 +50,41 @@ export class DataTableComponent<T> implements OnChanges {
   totalPages: number = 1;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['data'] || changes['pageSize']) {
-      this.currentPage = 1;
-      this.processData();
+    if (changes['pageSize']) {
+      // Backend @Max(100) limit enforcement
+      this.pageSize = Math.min(this.pageSize, 100);
     }
+
+    if (changes['data'] || changes['pageSize']) {
+      if (this.serverSide) {
+        this.processedData = this.data || [];
+        this.paginatedData = this.data || [];
+        this.updateServerPagination();
+      } else {
+        this.currentPage = 1;
+        this.processData();
+      }
+    }
+
+    if (changes['totalCount'] && this.serverSide) {
+      this.updateServerPagination();
+    }
+  }
+
+  updateServerPagination(): void {
+    if (this.totalCount !== undefined) {
+      this.totalPages = Math.ceil(this.totalCount / this.pageSize) || 1;
+    } else {
+      this.totalPages = 1;
+    }
+  }
+
+  get showPagination(): boolean {
+    if (this.loading || this.virtualScroll) return false;
+    if (this.serverSide) {
+      return (this.totalCount || 0) > this.pageSize;
+    }
+    return this.processedData.length > this.pageSize;
   }
 
   handleSort(column: Column): void {
@@ -55,14 +97,22 @@ export class DataTableComponent<T> implements OnChanges {
       this.sortDirection = 'asc';
     }
 
-    this.sortChange.emit({ key: this.sortKey, direction: this.sortDirection });
-    this.processData();
+    if (this.serverSide) {
+      this.serverSortChange.emit({ key: this.sortKey, direction: this.sortDirection });
+    } else {
+      this.sortChange.emit({ key: this.sortKey, direction: this.sortDirection });
+      this.processData();
+    }
   }
 
   onSearchChange(value: string): void {
     this.searchTerm = value;
-    this.currentPage = 1;
-    this.processData();
+    if (this.serverSide) {
+      this.serverFilterChange.emit(this.searchTerm);
+    } else {
+      this.currentPage = 1;
+      this.processData();
+    }
   }
 
   processData(): void {
@@ -106,7 +156,11 @@ export class DataTableComponent<T> implements OnChanges {
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.updatePagination();
+      if (this.serverSide) {
+        this.serverPageChange.emit({ page: this.currentPage, pageSize: Math.min(this.pageSize, 100) });
+      } else {
+        this.updatePagination();
+      }
     }
   }
 

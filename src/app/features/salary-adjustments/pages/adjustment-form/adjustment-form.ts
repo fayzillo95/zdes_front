@@ -16,7 +16,7 @@ import { SalaryAdjustmentService } from '../../services/salary-adjustment';
 export class AdjustmentForm implements OnInit {
   private destroyRef = inject(DestroyRef);
   form: FormGroup;
-  id: number | null = null;
+  id: string | null = null;
   isEdit = false;
 
   constructor(
@@ -37,7 +37,7 @@ export class AdjustmentForm implements OnInit {
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
-      this.id = +idParam;
+      this.id = idParam;
       this.isEdit = true;
       this.service.getById(this.id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(data => {
         this.form.patchValue(data);

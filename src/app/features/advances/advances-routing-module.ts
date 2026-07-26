@@ -5,8 +5,8 @@ import { AdvanceForm } from './pages/advance-form/advance-form';
 
 const routes: Routes = [
   { path: '', component: AdvanceList },
-  { path: 'new', component: AdvanceForm },
-  { path: 'edit/:id', component: AdvanceForm },
+  { path: 'new', component: AdvanceForm, data: { breadcrumb: 'Yangi avans' } },
+  { path: 'edit/:id', component: AdvanceForm, data: { breadcrumb: 'Tahrirlash' } },
 ];
 
 @NgModule({

@@ -1,0 +1,94 @@
+<div class="modal-backdrop" (click)="onClose()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="user-avatar-badge">
+        <span>{{ (user?.firstName || user?.login || 'U')[0].toUpperCase() }}</span>
+      </div>
+      <div class="user-header-info">
+        <h3 class="user-name-title">{{ user?.firstName }} {{ user?.lastName }}</h3>
+        <span class="user-role-badge">{{ user?.role || 'user' }}</span>
+      </div>
+      <button class="btn-close" (click)="onClose()">✕</button>
+    </div>
+
+    <!-- Alert messages -->
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        <span>{{ successMessage() }}</span>
+      </div>
+    }
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        <span>{{ errorMessage() }}</span>
+      </div>
+    }
+
+    <!-- View Mode -->
+    @if (!isEditing()) {
+      <div class="modal-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Foydalanuvchi nomi (Login)</span>
+            <span class="info-value">{{ user?.login || '—' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Ism</span>
+            <span class="info-value">{{ user?.firstName || '—' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Familiya</span>
+            <span class="info-value">{{ user?.lastName || '—' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ user?.email || '—' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Rol</span>
+            <span class="info-value uppercase">{{ user?.role || '—' }}</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-gradient-edit" (click)="openEditMode()">
+            ✏️ Profilni Tahrirlash
+          </button>
+        </div>
+      </div>
+    } @else {
+      <!-- Edit Mode -->
+      <form [formGroup]="editForm" (ngSubmit)="saveProfile()" class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Ism</label>
+            <input type="text" formControlName="firstName" class="form-input" placeholder="Ismingizni kiriting" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Familiya</label>
+            <input type="text" formControlName="lastName" class="form-input" placeholder="Familiyangizni kiriting" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" formControlName="email" class="form-input" placeholder="example@domain.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefon</label>
+            <input type="text" formControlName="phone" class="form-input" placeholder="+998901234567" />
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-gradient-save" [disabled]="isSaving()">
+            @if (isSaving()) {
+              <span>Saqlanmoqda...</span>
+            } @else {
+              <span>💾 Saqlash</span>
+            }
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Bekor qilish</button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

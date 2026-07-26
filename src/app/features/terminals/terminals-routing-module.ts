@@ -10,11 +10,13 @@ const routes: Routes = [
   },
   {
     path: 'new',
-    component: TerminalForm
+    component: TerminalForm,
+    data: { breadcrumb: 'Yangi terminal' }
   },
   {
     path: ':id',
-    component: TerminalForm
+    component: TerminalForm,
+    data: { breadcrumb: 'Tahrirlash' }
   }
 ];
 

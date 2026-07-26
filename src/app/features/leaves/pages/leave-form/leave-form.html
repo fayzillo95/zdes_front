@@ -1,40 +1,155 @@
-<div class="leave-form-container">
-  <h2>{{ isEditMode ? 'Edit' : 'Create' }} Leave</h2>
-  <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label>Employee ID:</label>
-      <input type="number" formControlName="employeeId" class="form-control" />
-    </div>
-    
-    <div class="form-group">
-      <label>Start Date:</label>
-      <input type="date" formControlName="startDate" class="form-control" />
-    </div>
-
-    <div class="form-group">
-      <label>End Date:</label>
-      <input type="date" formControlName="endDate" class="form-control" />
-    </div>
-
-    <div class="form-group">
-      <label>Type:</label>
-      <select formControlName="type" class="form-control">
-        <option value="vacation">Vacation</option>
-        <option value="sick">Sick</option>
-        <option value="unpaid">Unpaid</option>
-      </select>
+<div class="form-page">
+  <div class="form-card">
+    <!-- Form Header -->
+    <div class="form-header">
+      <div class="form-header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <div>
+        <h2 class="form-title">{{ isEditMode ? 'Ta\'tilni Tahrirlash' : 'Yangi Ta\'til Qo\'shish' }}</h2>
+        <p class="form-subtitle">Xodim uchun ta'til, kasallik varaqasi yoki xizmat safarini rasmiylashtirish</p>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Status:</label>
-      <select formControlName="status" class="form-control">
-        <option value="pending">Pending</option>
-        <option value="approved">Approved</option>
-        <option value="rejected">Rejected</option>
-      </select>
-    </div>
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        <span>⚠️ {{ errorMessage() }}</span>
+      </div>
+    }
 
-    <button type="submit" class="btn btn-primary" [disabled]="leaveForm.invalid">Save</button>
-    <button type="button" class="btn btn-secondary" routerLink="/leaves">Cancel</button>
-  </form>
+    <!-- Form Body -->
+    <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()" class="form-body">
+      <div class="form-grid">
+        
+        <!-- Company Select -->
+        <div class="form-group">
+          <label class="form-label">Kompaniya <span class="required-star">*</span></label>
+          <select formControlName="companyId" class="form-select">
+            <option value="" disabled selected>Kompaniyani tanlang</option>
+            @for (comp of companies(); track comp.id) {
+              <option [value]="comp.id">{{ comp.name }}</option>
+            }
+          </select>
+          @if (leaveForm.controls.companyId.touched && leaveForm.controls.companyId.invalid) {
+            <span class="field-error-hint">⚠️ Kompaniyani tanlash majburiy!</span>
+          }
+        </div>
+
+        <!-- Branch Select -->
+        <div class="form-group">
+          <label class="form-label">Filial</label>
+          <select formControlName="branchId" class="form-select">
+            <option value="">Barchasi (Filial tanlanmagan)</option>
+            @for (br of filteredBranches(); track br.id) {
+              <option [value]="br.id">{{ br.name }}</option>
+            }
+          </select>
+          @if (branchError()) {
+            <span class="field-error-hint">⚠️ {{ branchError() }}</span>
+          }
+        </div>
+
+        <!-- Employee Select -->
+        <div class="form-group col-span-2">
+          <label class="form-label">Xodim <span class="required-star">*</span></label>
+          <select formControlName="employeeId" class="form-select">
+            <option value="" disabled selected>Xodimni tanlang</option>
+            @for (emp of filteredEmployees(); track emp.id) {
+              <option [value]="emp.id">
+                {{ emp.firstName ? emp.firstName + ' ' + (emp.lastName || '') : (emp.fullName || emp.login) }}
+              </option>
+            }
+          </select>
+          @if (leaveForm.controls.employeeId.touched && leaveForm.controls.employeeId.invalid) {
+            <span class="field-error-hint">⚠️ Xodimni tanlash majburiy!</span>
+          }
+          @if (employeeError()) {
+            <span class="field-error-hint">⚠️ {{ employeeError() }}</span>
+          }
+        </div>
+
+        <!-- Leave Type Select -->
+        <div class="form-group col-span-2">
+          <label class="form-label">Ta'til turi <span class="required-star">*</span></label>
+          <select formControlName="type" class="form-select">
+            <option value="vacation">Hordiq ta'tili (Vacation)</option>
+            <option value="sick">Kasallik ta'tili (Sick Leave)</option>
+            <option value="unpaid">Ish haqisiz ta'til (Unpaid Leave)</option>
+            <option value="business_trip">Xizmat safari (Business Trip)</option>
+            <option value="other">Boshqa (Other)</option>
+          </select>
+          @if (leaveForm.controls.type.touched && leaveForm.controls.type.invalid) {
+            <span class="field-error-hint">⚠️ Ta'til turini tanlash majburiy!</span>
+          }
+        </div>
+
+        <!-- Start Date -->
+        <div class="form-group">
+          <label class="form-label">Boshlanish sanasi <span class="required-star">*</span></label>
+          <input type="date" formControlName="fromDate" class="form-input" />
+          @if (leaveForm.controls.fromDate.touched && leaveForm.controls.fromDate.invalid) {
+            <span class="field-error-hint">⚠️ Boshlanish sanasi majburiy!</span>
+          }
+        </div>
+
+        <!-- Days Count -->
+        <div class="form-group">
+          <label class="form-label">Kunlar soni <span class="required-star">*</span></label>
+          <input type="number" formControlName="days" class="form-input" min="1" placeholder="1" />
+          @if (leaveForm.controls.days.touched && leaveForm.controls.days.invalid) {
+            <span class="field-error-hint">⚠️ Kunlar soni kamida 1 bo'lishi kerak!</span>
+          }
+        </div>
+
+        <!-- Calculated End Date Display -->
+        <div class="form-group col-span-2" style="background: #f0f7ff; border: 1px solid #bfdbfe; padding: 0.9rem 1.2rem; border-radius: 10px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem; color: #1e3a5f;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span style="font-size: 0.875rem; font-weight: 600;">Tizim hisoblagan tugash sanasi:</span>
+          </div>
+          <span style="font-size: 1.1rem; font-weight: 700; color: #1d4ed8; font-family: monospace;">
+            {{ formattedToDateString }}
+          </span>
+        </div>
+
+        <!-- Affects Salary Toggle -->
+        <div class="form-group col-span-2 checkbox-group">
+          <label class="checkbox-container">
+            <input type="checkbox" formControlName="affectsSalary" />
+            <span class="checkbox-checkmark"></span>
+            <div class="checkbox-label-block">
+              <span class="checkbox-title">Ish haqiga ta'sir qiladimi?</span>
+              <span class="checkbox-desc">Belgilansa, ushbu davr uchun ish haqi hisoblanmasligi mumkin (masalan, unpaid leave).</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Reason -->
+        <div class="form-group col-span-2">
+          <label class="form-label">Sabab / Izoh</label>
+          <textarea formControlName="reason" class="form-textarea" rows="3" placeholder="Sog'lig'i tufayli yoki boshqa sabablarni kiriting..."></textarea>
+        </div>
+
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="submit" class="btn btn-gradient-submit" [disabled]="leaveForm.invalid">
+          💾 Saqlash
+        </button>
+        <a routerLink="/leaves" class="btn btn-secondary-cancel">
+          Bekor qilish
+        </a>
+      </div>
+
+    </form>
+  </div>
 </div>

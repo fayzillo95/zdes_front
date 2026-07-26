@@ -18,6 +18,9 @@ export class SettingsPage {
 
   protected readonly saved = signal(false);
   protected readonly loading = signal(false);
+  
+  private settingId: string | null = null;
+  private readonly SETTING_KEY = 'company_settings';
 
   protected readonly form = this.fb.nonNullable.group({
     companyName: ['', Validators.required],
@@ -27,8 +30,16 @@ export class SettingsPage {
   });
 
   constructor() {
-    this.settingService.get().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (settings) => this.form.patchValue(settings),
+    this.settingService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (res) => {
+        const item = res.items.find(i => i.key === this.SETTING_KEY);
+        if (item) {
+          this.settingId = item.id;
+          if (item.value) {
+            this.form.patchValue(item.value);
+          }
+        }
+      },
       error: () => {},
     });
   }
@@ -42,8 +53,18 @@ export class SettingsPage {
     this.loading.set(true);
     this.saved.set(false);
 
-    this.settingService.update(this.form.getRawValue()).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
+    const value = this.form.getRawValue();
+    const payload = { key: this.SETTING_KEY, value };
+
+    const request$ = this.settingId 
+      ? this.settingService.update(this.settingId, payload)
+      : this.settingService.create(payload);
+
+    request$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (savedItem) => {
+        if (!this.settingId && savedItem) {
+          this.settingId = savedItem.id;
+        }
         this.loading.set(false);
         this.saved.set(true);
       },

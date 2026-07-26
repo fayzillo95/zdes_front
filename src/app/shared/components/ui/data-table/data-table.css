@@ -115,3 +115,14 @@
   font-size: 0.875rem;
   color: var(--color-text-secondary);
 }
+
+.virtual-scroll-viewport {
+  height: 400px;
+  width: 100%;
+}
+
+.data-table.virtual-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}

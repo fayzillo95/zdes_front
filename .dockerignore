@@ -1,0 +1,32 @@
+# AI/orchestration qoldiqlari va loyihaga aloqasi bo'lmagan fayllar
+agents
+history
+orcestor
+project_docs
+report
+session
+scratch
+
+# Hujjatlar (build uchun kerak emas)
+*.md
+*.MD
+
+# Skriptlar / rasmlar (build uchun kerak emas)
+*.py
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# Build artefaktlari va bog'liqliklar
+node_modules
+dist
+.angular
+
+# VCS / IDE / tool konfiglari
+.git
+.claude
+.vscode
+Dockerfile
+DockerFile
+.dockerignore

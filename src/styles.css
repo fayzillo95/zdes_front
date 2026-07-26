@@ -2,42 +2,114 @@
 
 @import 'tailwindcss';
 
+/* Tailwind CSS v4 Theme Variables & Colors Integration */
+@theme {
+  --color-brand-primary: #6366f1;
+  --color-brand-purple: #8b5cf6;
+  --color-brand-blue: #3b82f6;
+  --color-dark-card: #1e293b;
+  --color-dark-bg: #0f172a;
+}
+
 /* LIGHT THEME (Standart) */
 :root {
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f3f4f6;
+  --color-bg-primary: #fafbfc;
+  --color-bg-secondary: #f2f4f7;
   
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #6c757d;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
   
-  --color-border: #e5e7eb;
+  --color-border: #e2e8f0;
   
-  --color-primary: #007bff;
-  --color-primary-hover: #0056b3;
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
   
-  --color-danger: #dc3545;
+  --color-danger: #ef4444;
   --color-success: #10b981;
   
   --color-overlay: rgba(0, 0, 0, 0.5);
-  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.07);
 }
 
 /* DARK THEME */
 :root[data-theme="dark"] {
-  --color-bg-primary: #121212;
-  --color-bg-secondary: #1e1e1e;
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
   
-  --color-text-primary: #f3f4f6;
-  --color-text-secondary: #9ca3af;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #94a3b8;
   
-  --color-border: #374151;
+  --color-border: #334155;
   
-  --color-primary: #3b82f6;
-  --color-primary-hover: #60a5fa;
+  --color-primary: #818cf8;
+  --color-primary-hover: #a5b4fc;
   
-  --color-danger: #ef4444;
+  --color-danger: #f87171;
   --color-success: #34d399;
   
-  --color-overlay: rgba(255, 255, 255, 0.1);
-  --shadow-color: rgba(0, 0, 0, 0.5);
+  --color-overlay: rgba(0, 0, 0, 0.7);
+  --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+body {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* TAILWIND REUSABLE UTILITIES & OVERRIDES */
+@layer components {
+  .btn-gradient-primary {
+    @apply bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200;
+  }
+  .btn-gradient-secondary {
+    @apply bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-700 font-semibold py-2 px-4 rounded-xl transition-all duration-200;
+  }
+  .star-admin-card {
+    @apply bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+}
+
+/* GLOBAL TABLE & CARD THEME OVERRIDES */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--color-text-primary);
+}
+
+th, td {
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+th {
+  background-color: var(--color-bg-primary) !important;
+  color: var(--color-text-primary) !important;
+  font-weight: 600;
+}
+
+tr:nth-child(even) td {
+  background-color: var(--color-bg-secondary);
+}
+
+tr:hover td {
+  background-color: var(--color-border);
+}
+
+.card, .container, .box, .modal-content, fieldset {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+input, select, textarea {
+  background-color: var(--color-bg-primary) !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-text-secondary) !important;
 }

@@ -39,7 +39,10 @@ export class AdvanceForm implements OnInit {
       this.isEditMode = true;
       this.advanceService.getById(this.advanceId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
         next: (advance) => {
-          this.form.patchValue(advance);
+          this.form.patchValue({
+            ...advance,
+            reason: advance.note
+          });
         },
         error: (err) => {
           console.error('Error fetching advance', err);
@@ -54,7 +57,10 @@ export class AdvanceForm implements OnInit {
       return;
     }
 
-    const payload = this.form.value;
+    const payload = { ...this.form.value };
+    payload.note = payload.reason;
+    delete payload.reason;
+
     if (this.isEditMode && this.advanceId) {
       this.advanceService.update(this.advanceId, payload).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
         this.router.navigate(['/advances']);

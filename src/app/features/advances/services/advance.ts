@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Http } from '../../../core/services/http';
 import { Advance } from '../../../core/models/advance';
 
@@ -11,22 +12,32 @@ export class AdvanceService {
   private readonly path = '/advances';
 
   getAll(): Observable<Advance[]> {
-    return this.http.get<Advance[]>(this.path);
+    return this.http.get<any>(this.path).pipe(
+      map((res: any) => Array.isArray(res) ? res : (res?.items ?? res?.data ?? []))
+    );
   }
 
-  getById(id: string | number): Observable<Advance> {
-    return this.http.get<Advance>(`${this.path}/${id}`);
+  getById(id: string): Observable<Advance> {
+    return this.http.get<any>(`${this.path}/${id}`).pipe(
+      map((res: any) => res?.data ?? res)
+    );
   }
 
   create(advance: Partial<Advance>): Observable<Advance> {
-    return this.http.post<Advance>(this.path, advance);
+    return this.http.post<any>(this.path, advance).pipe(
+      map((res: any) => res?.data ?? res)
+    );
   }
 
-  update(id: string | number, advance: Partial<Advance>): Observable<Advance> {
-    return this.http.put<Advance>(`${this.path}/${id}`, advance);
+  update(id: string, advance: Partial<Advance>): Observable<Advance> {
+    return this.http.patch<any>(`${this.path}/${id}`, advance).pipe(
+      map((res: any) => res?.data ?? res)
+    );
   }
 
-  delete(id: string | number): Observable<void> {
-    return this.http.delete<void>(`${this.path}/${id}`);
+  delete(id: string): Observable<void> {
+    return this.http.delete<any>(`${this.path}/${id}`).pipe(
+      map((res: any) => res?.data ?? res)
+    );
   }
 }

@@ -5,8 +5,8 @@ import { WorkScheduleForm } from './pages/work-schedule-form/work-schedule-form'
 
 const routes: Routes = [
   { path: '', component: WorkScheduleList },
-  { path: 'new', component: WorkScheduleForm },
-  { path: ':id', component: WorkScheduleForm },
+  { path: 'new', component: WorkScheduleForm, data: { breadcrumb: 'Yangi jadval' } },
+  { path: ':id', component: WorkScheduleForm, data: { breadcrumb: 'Tahrirlash' } },
 ];
 
 @NgModule({

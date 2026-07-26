@@ -1,0 +1,107 @@
+<div class="company-page">
+  <!-- Header -->
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Kompaniyalar</h1>
+        <p class="page-subtitle">Tashkilot va kompaniyalarni boshqarish</p>
+      </div>
+    </div>
+    <a routerLink="/companies/new" class="btn-add-new">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Yangi Kompaniya
+    </a>
+  </div>
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <span>✅ {{ successMessage() }}</span>
+    </div>
+  }
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <span>⚠️ {{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Table Card -->
+  <div class="table-card">
+    @if (companies().length > 0) {
+      <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Kompaniya Nomi</th>
+            <th>Yuridik Nomi</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>Holat</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (company of companies(); track company.id; let i = $index) {
+            <tr class="table-row" (click)="onRowClick(company.id)">
+              <td class="row-index">{{ i + 1 }}</td>
+              <td>
+                <div class="company-name-cell">
+                  <div class="company-avatar">
+                    @if (company.logoUrl) {
+                      <img [src]="company.logoUrl" [alt]="company.name" class="avatar-img" />
+                    } @else {
+                      {{ company.name.charAt(0).toUpperCase() }}
+                    }
+                  </div>
+                  <span class="company-name">{{ company.name }}</span>
+                </div>
+              </td>
+              <td class="text-muted">{{ company.legalName || '—' }}</td>
+              <td class="text-muted">{{ company.phone || '—' }}</td>
+              <td class="text-muted">{{ company.email || '—' }}</td>
+              <td>
+                <span class="status-badge" [class.active]="company.isActive !== false" [class.inactive]="company.isActive === false">
+                  {{ company.isActive !== false ? 'Faol' : 'Nofaol' }}
+                </span>
+              </td>
+              <td class="actions-cell" (click)="$event.stopPropagation()">
+                <a [routerLink]="['/companies', company.id, 'edit']" class="btn-action btn-edit" title="Tahrirlash">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </a>
+                <button (click)="deleteCompany(company.id)" class="btn-action btn-delete" title="O'chirish">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                    <path d="M10 11v6M14 11v6"></path>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3">
+          <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"></path>
+        </svg>
+        <p>Hozircha hech qanday kompaniya mavjud emas</p>
+        <a routerLink="/companies/new" class="btn-add-new" style="display:inline-flex; margin-top: 0.5rem;">
+          Birinchi kompaniyani qo'shish
+        </a>
+      </div>
+    }
+  </div>
+</div>

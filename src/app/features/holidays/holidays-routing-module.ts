@@ -8,11 +8,13 @@ const routes: Routes = [
   },
   {
     path: 'new',
-    loadComponent: () => import('./pages/holiday-form/holiday-form').then(c => c.HolidayForm)
+    loadComponent: () => import('./pages/holiday-form/holiday-form').then(c => c.HolidayForm),
+    data: { breadcrumb: 'Yangi bayram' }
   },
   {
     path: ':id/edit',
-    loadComponent: () => import('./pages/holiday-form/holiday-form').then(c => c.HolidayForm)
+    loadComponent: () => import('./pages/holiday-form/holiday-form').then(c => c.HolidayForm),
+    data: { breadcrumb: 'Tahrirlash' }
   }
 ];
 

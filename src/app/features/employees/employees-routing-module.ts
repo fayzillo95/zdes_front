@@ -6,9 +6,9 @@ import { EmployeeDetail } from './pages/employee-detail/employee-detail';
 
 const routes: Routes = [
   { path: '', component: EmployeeList },
-  { path: 'new', component: EmployeeForm },
-  { path: ':id/edit', component: EmployeeForm },
-  { path: ':id', component: EmployeeDetail }
+  { path: 'new', component: EmployeeForm, data: { breadcrumb: 'Yangi xodim' } },
+  { path: ':id/edit', component: EmployeeForm, data: { breadcrumb: 'Tahrirlash' } },
+  { path: ':id', component: EmployeeDetail, data: { breadcrumb: "Ma'lumot" } }
 ];
 
 @NgModule({

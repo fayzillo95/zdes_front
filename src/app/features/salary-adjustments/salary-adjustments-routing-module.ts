@@ -5,8 +5,8 @@ import { AdjustmentForm } from './pages/adjustment-form/adjustment-form';
 
 const routes: Routes = [
   { path: '', component: AdjustmentList },
-  { path: 'new', component: AdjustmentForm },
-  { path: ':id/edit', component: AdjustmentForm }
+  { path: 'new', component: AdjustmentForm, data: { breadcrumb: "Yangi o'zgarish" } },
+  { path: ':id/edit', component: AdjustmentForm, data: { breadcrumb: 'Tahrirlash' } }
 ];
 
 @NgModule({

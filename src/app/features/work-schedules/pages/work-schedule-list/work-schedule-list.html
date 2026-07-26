@@ -1,30 +1,99 @@
-<div class="list-container">
-  <div class="header">
-    <h2>Work Schedules</h2>
-    <a routerLink="new" class="btn btn-primary">Create New</a>
+<div class="employees-page">
+  <!-- Header -->
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Ish Grafiklari</h1>
+        <p class="page-subtitle">Ish vaqti rejimlari, haftalik ish kunlari va kechikish qoidalarini boshqarish</p>
+      </div>
+    </div>
+    <a routerLink="new" class="btn-add-new">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      Yangi Grafik
+    </a>
   </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let schedule of workSchedules">
-        <td>{{ schedule.id }}</td>
-        <td>{{ schedule.name }}</td>
-        <td>{{ schedule.startTime }}</td>
-        <td>{{ schedule.endTime }}</td>
-        <td class="actions">
-          <a [routerLink]="[schedule.id]" class="btn btn-edit">Edit</a>
-          <button (click)="deleteWorkSchedule(schedule.id)" class="btn btn-delete">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Table Card -->
+  <div class="table-card">
+    @if (workSchedules.length > 0) {
+      <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Grafik Nomi</th>
+            <th>Kompaniya</th>
+            <th>Filial</th>
+            <th>Ish Vaqti</th>
+            <th>Ish Kunlari</th>
+            <th>Kechikish</th>
+            <th>Birlamchi</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (schedule of workSchedules; track schedule.id; let i = $index) {
+            <tr class="table-row clickable-row" [routerLink]="[schedule.id]">
+              <td class="row-index">{{ i + 1 }}</td>
+              <td>
+                <div class="emp-name-cell">
+                  <div class="emp-avatar">📅</div>
+                  <div class="emp-details">
+                    <span class="emp-name">{{ schedule.name }}</span>
+                    <span class="emp-sub text-muted">ID: {{ schedule.id ? schedule.id.slice(0, 8) : '' }}</span>
+                  </div>
+                </div>
+              </td>
+              <td class="text-muted">{{ getCompanyName(schedule.companyId) }}</td>
+              <td class="text-muted">{{ getBranchName(schedule.branchId) }}</td>
+              <td class="text-muted">{{ schedule.startTime }} - {{ schedule.endTime }}</td>
+              <td class="text-muted" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" [title]="getWorkDaysDisplay(schedule.workDays)">
+                {{ getWorkDaysDisplay(schedule.workDays) }}
+              </td>
+              <td class="text-muted">{{ schedule.graceMinutes || 0 }} min</td>
+              <td>
+                <span class="status-badge" [class.active]="schedule.isDefault" [class.inactive]="!schedule.isDefault">
+                  {{ schedule.isDefault ? 'Birlamchi' : 'Oddiy' }}
+                </span>
+              </td>
+              <td class="actions-cell">
+                <button (click)="$event.stopPropagation(); deleteWorkSchedule(schedule.id)" class="btn-action btn-delete" title="O'chirish" style="border: none; cursor: pointer;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                    <path d="M10 11v6M14 11v6"></path>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <p>Hozircha hech qanday ish grafigi mavjud emas</p>
+        <a routerLink="new" class="btn-add-new" style="display:inline-flex; margin-top: 0.5rem;">
+          Birinchi grafikni qo'shish
+        </a>
+      </div>
+    }
+  </div>
 </div>

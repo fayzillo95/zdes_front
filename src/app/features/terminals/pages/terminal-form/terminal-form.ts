@@ -16,7 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class TerminalForm implements OnInit {
   terminalForm: FormGroup;
   isEditMode = false;
-  terminalId: number | null = null;
+  terminalId: string | null = null;
   
   private readonly fb = inject(FormBuilder);
   private readonly terminalService = inject(TerminalService);
@@ -36,7 +36,7 @@ export class TerminalForm implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam && idParam !== 'new') {
       this.isEditMode = true;
-      this.terminalId = +idParam;
+      this.terminalId = idParam;
       this.loadTerminal();
     }
   }

@@ -11,10 +11,12 @@ const routes: Routes = [
   {
     path: 'new',
     component: DepartmentForm,
+    data: { breadcrumb: "Yangi bo'lim" },
   },
   {
     path: ':id/edit',
     component: DepartmentForm,
+    data: { breadcrumb: 'Tahrirlash' },
   },
 ];
 

@@ -1,33 +1,62 @@
 <div class="terminal-list-container">
-  <div class="header">
-    <h2>Terminals</h2>
-    <a routerLink="new" class="btn btn-primary">Create New Terminal</a>
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Terminallar</h1>
+        <p class="page-subtitle">Davomat terminallarini ko'rish va boshqarish</p>
+      </div>
+    </div>
+    <a routerLink="new" class="btn-add-new">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <span>Yangi terminal</span>
+    </a>
   </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Branch ID</th>
-        <th>IP Address</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let terminal of terminals">
-        <td>{{ terminal.id }}</td>
-        <td>{{ terminal.name }}</td>
-        <td>{{ terminal.branchId }}</td>
-        <td>{{ terminal.ipAddress }}</td>
-        <td>
-          <a [routerLink]="[terminal.id]" class="btn btn-sm btn-info">Edit</a>
-          <button (click)="deleteTerminal(terminal.id)" class="btn btn-sm btn-danger">Delete</button>
-        </td>
-      </tr>
-      <tr *ngIf="terminals.length === 0">
-        <td colspan="5" class="text-center">No terminals found.</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nomi</th>
+            <th>Filial ID</th>
+            <th>IP manzil</th>
+            <th class="text-right">Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let terminal of terminals" class="table-row" (click)="onRowClick(terminal.id)">
+            <td>{{ terminal.id }}</td>
+            <td>{{ terminal.name }}</td>
+            <td class="text-muted">{{ terminal.branchId }}</td>
+            <td class="text-muted">{{ terminal.ipAddress }}</td>
+            <td class="text-right">
+              <div class="action-buttons" (click)="$event.stopPropagation()">
+                <a [routerLink]="[terminal.id]" class="btn-action edit-btn" title="Tahrirlash">Tahrirlash</a>
+                <button (click)="deleteTerminal(terminal.id)" class="btn-action delete-btn" title="O'chirish">O'chirish</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="terminals.length === 0">
+            <td colspan="5" class="empty-state-cell">
+              <div class="empty-state-box">
+                <span class="empty-icon">📁</span>
+                <p class="empty-text">Hozircha hech qanday terminal topilmadi</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

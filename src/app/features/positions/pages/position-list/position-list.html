@@ -1,27 +1,86 @@
-<div class="container">
-  <div class="header">
-    <h2>Lavozimlar</h2>
-    <a routerLink="/positions/new" class="btn btn-primary">Yangi lavozim</a>
+<div class="positions-page">
+  <!-- Header Banner Card -->
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Lavozimlar Boshqaruvi</h1>
+        <p class="page-subtitle">Tashkilot lavozimlarini ko'rish, yangi lavozim qo'shish va tahrirlash</p>
+      </div>
+    </div>
+    <a routerLink="/positions/new" class="btn-add-new">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <span>Yangi Lavozim</span>
+    </a>
   </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Nomi</th>
-        <th>Amallar</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let position of positions">
-        <td>{{ position.name }}</td>
-        <td>
-          <a [routerLink]="['/positions', position.id, 'edit']" class="btn btn-sm btn-info">Tahrirlash</a>
-          <button (click)="deletePosition(position.id)" class="btn btn-sm btn-danger">O'chirish</button>
-        </td>
-      </tr>
-      <tr *ngIf="positions.length === 0">
-        <td colspan="2" class="text-center">Ma'lumot topilmadi</td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Content Table Card -->
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th class="row-index">#</th>
+            <th>ID</th>
+            <th>Lavozim Nomi</th>
+            <th>Kompaniya</th>
+            <th>Filial</th>
+            <th>Bo'lim</th>
+            <th class="text-right">Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (position of positions; track position.id; let i = $index) {
+            <tr class="table-row" (click)="onRowClick(position.id)">
+              <td class="row-index">{{ i + 1 }}</td>
+              <td>
+                <span class="id-badge">{{ position.id }}</span>
+              </td>
+              <td>
+                <div class="position-name-cell">
+                  <div class="pos-avatar">
+                    {{ (position.name || 'L')[0].toUpperCase() }}
+                  </div>
+                  <span class="pos-name-text">{{ position.name }}</span>
+                </div>
+              </td>
+              <td class="text-muted">{{ getCompanyName(position.companyId) }}</td>
+              <td class="text-muted">{{ getBranchName(position.departmentId) }}</td>
+              <td class="text-muted">{{ getDepartmentName(position.departmentId) }}</td>
+              <td class="text-right">
+                <div class="action-buttons" (click)="$event.stopPropagation()">
+                  <a [routerLink]="['/positions', position.id, 'edit']" class="btn-action edit-btn" title="Tahrirlash">
+                    ✏️ Tahrirlash
+                  </a>
+                  <button (click)="deletePosition(position.id)" class="btn-action delete-btn" title="O'chirish">
+                    🗑️ O'chirish
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+          @if (positions.length === 0) {
+            <tr>
+              <td colspan="7" class="empty-state-cell">
+                <div class="empty-state-box">
+                  <span class="empty-icon">📁</span>
+                  <p class="empty-text">Hozircha hech qanday lavozim qo'shilmagan</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

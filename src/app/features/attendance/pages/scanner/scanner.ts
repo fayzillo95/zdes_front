@@ -6,9 +6,11 @@ import { EmployeeService } from '../../../employees/services/employee';
 import { AttendanceService } from '../../services/attendance';
 import { Employee } from '../../../../core/models/employee';
 
+import { CameraCaptureComponent } from '../../../../shared/components/ui/camera-capture/camera-capture';
+
 @Component({
   selector: 'app-scanner',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CameraCaptureComponent],
   templateUrl: './scanner.html',
   styleUrl: './scanner.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -22,6 +24,11 @@ export class Scanner implements OnInit {
   selectedEmployeeId: string = '';
   message: string = '';
   isError: boolean = false;
+  capturedPhoto: string | null = null;
+
+  onPhotoCaptured(dataUrl: string): void {
+    this.capturedPhoto = dataUrl;
+  }
 
   ngOnInit(): void {
     this.employeeService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
@@ -39,7 +46,8 @@ export class Scanner implements OnInit {
       this.showMessage('Iltimos, xodimni tanlang', true);
       return;
     }
-    this.attendanceService.checkIn(this.selectedEmployeeId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    const photo = this.capturedPhoto || 'data:image/jpeg;base64,dummy_string_for_testing';
+    this.attendanceService.checkIn(this.selectedEmployeeId, photo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => this.showMessage('Muvaffaqiyatli kelish qayd etildi', false),
       error: () => this.showMessage('Kelishni qayd etishda xatolik', true)
     });
@@ -50,7 +58,8 @@ export class Scanner implements OnInit {
       this.showMessage('Iltimos, xodimni tanlang', true);
       return;
     }
-    this.attendanceService.checkOut(this.selectedEmployeeId).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    const photo = this.capturedPhoto || 'data:image/jpeg;base64,dummy_string_for_testing';
+    this.attendanceService.checkOut(this.selectedEmployeeId, photo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => this.showMessage('Muvaffaqiyatli ketish qayd etildi', false),
       error: () => this.showMessage('Ketishni qayd etishda xatolik', true)
     });

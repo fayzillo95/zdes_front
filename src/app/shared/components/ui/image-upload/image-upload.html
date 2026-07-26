@@ -9,7 +9,7 @@
     />
     <label for="fileInput" class="upload-label">
       @if (previewUrl()) {
-        <img [src]="previewUrl()" alt="Preview" class="image-preview" />
+        <img [src]="previewUrl()" alt="Preview" class="image-preview" loading="lazy" />
       } @else {
         <div class="upload-placeholder">
           <span class="icon">📷</span>

@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Http } from '../../../core/services/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Terminal } from '../../../core/models/terminal';
 
 @Injectable({
@@ -11,10 +12,18 @@ export class TerminalService {
   private readonly endpoint = '/terminals';
 
   getAll(): Observable<Terminal[]> {
-    return this.http.get<Terminal[]>(this.endpoint);
+    return this.http.get<any>(this.endpoint).pipe(
+      map((res: any) => {
+        if (Array.isArray(res)) return res;
+        if (Array.isArray(res?.items)) return res.items;
+        if (Array.isArray(res?.data?.items)) return res.data.items;
+        if (Array.isArray(res?.data)) return res.data;
+        return [];
+      })
+    );
   }
 
-  getById(id: number): Observable<Terminal> {
+  getById(id: string): Observable<Terminal> {
     return this.http.get<Terminal>(`${this.endpoint}/${id}`);
   }
 
@@ -22,11 +31,11 @@ export class TerminalService {
     return this.http.post<Terminal>(this.endpoint, terminal);
   }
 
-  update(id: number, terminal: Partial<Terminal>): Observable<Terminal> {
-    return this.http.put<Terminal>(`${this.endpoint}/${id}`, terminal);
+  update(id: string | number, terminal: Partial<Terminal>): Observable<Terminal> {
+    return this.http.patch<Terminal>(`${this.endpoint}/${id}`, terminal);
   }
 
-  delete(id: number): Observable<void> {
+  delete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.endpoint}/${id}`);
   }
 }

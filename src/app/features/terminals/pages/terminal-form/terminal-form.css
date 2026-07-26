@@ -16,16 +16,16 @@
 .form-control {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
 }
 
 .required {
-  color: red;
+  color: var(--color-danger);
 }
 
 .error-text {
-  color: red;
+  color: var(--color-danger);
   font-size: 0.85em;
   margin-top: 5px;
 }
@@ -44,18 +44,28 @@
 }
 
 .btn-primary {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-bg-primary);
 }
 
 .btn-primary:disabled {
-  background-color: #a0cbf8;
+  background-color: var(--color-primary);
   cursor: not-allowed;
 }
 
 .btn-secondary {
-  background-color: #6c757d;
-  color: white;
+  background-color: var(--color-text-secondary);
+  color: var(--color-bg-primary);
   text-decoration: none;
   text-align: center;
+}
+
+@media (max-width: 480px) {
+  .terminal-form-container {
+    padding: 12px;
+  }
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

@@ -1,9 +1,14 @@
 export interface Company {
-  id?: string | number;
+  id?: string;
   name: string;
-  address?: string;
-  phone?: string;
-  currency: string;
-  workDayStart: string;
-  workDayEnd: string;
+  legalName?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  address?: string | null;
+  logoUrl?: string | null;
+
+  isActive?: boolean;
+  stoppedAt?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }

@@ -18,40 +18,57 @@ export class Login {
   private readonly auth   = inject(Auth);
   private readonly router = inject(Router);
 
-  readonly form = this.fb.group({
+  readonly loginForm = this.fb.group({
     username: ['', [Validators.required]],
     password: ['', [Validators.required]],
   });
 
   readonly errorMessage = signal<string | null>(null);
+  readonly successMessage = signal<string | null>(null);
   readonly isLoading    = signal(false);
+  readonly showPassword = signal(false);
 
-  get username() { return this.form.controls.username; }
-  get password() { return this.form.controls.password; }
+  togglePassword(): void {
+    this.showPassword.update((val) => !val);
+  }
 
-  onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+  get username() { return this.loginForm.controls.username; }
+  get password() { return this.loginForm.controls.password; }
+
+  onLoginSubmit(): void {
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
       return;
     }
 
     this.isLoading.set(true);
     this.errorMessage.set(null);
+    this.successMessage.set(null);
 
-    const { username, password } = this.form.getRawValue();
+    const { username, password } = this.loginForm.getRawValue();
 
-    this.auth.login({ username: username!, password: password! }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        const msg =
-          err?.error?.message ??
-          err?.message ??
-          'Login failed. Please check your credentials.';
-        this.errorMessage.set(msg);
-      },
-    });
+    this.auth
+      .login({
+        login: username!,
+        password: password!,
+        deviceType: 'web',
+        deviceName: 'Chrome on Web',
+      })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          let msg = 'Login muvaffaqiyatsiz bo\'ldi. Ma\'lumotlarni tekshiring.';
+          if (err?.status === 404 || err?.error?.statusCode === 404 || (err?.error?.message && err.error.message.includes('not found'))) {
+            msg = 'Foydalanuvchi topilmadi! (User does not exist).';
+          } else if (err?.error?.message) {
+            msg = Array.isArray(err.error.message) ? err.error.message.join(', ') : err.error.message;
+          }
+          this.errorMessage.set(msg);
+        },
+      });
   }
 }

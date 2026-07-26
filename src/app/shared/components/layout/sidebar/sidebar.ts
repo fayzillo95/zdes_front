@@ -1,5 +1,7 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs';
+import { SidebarState } from '../../../services/sidebar-state';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,4 +11,13 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './sidebar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Sidebar {}
+export class Sidebar {
+  protected readonly sidebarState = inject(SidebarState);
+  private readonly router = inject(Router);
+
+  constructor() {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => this.sidebarState.close());
+  }
+}

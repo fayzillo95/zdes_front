@@ -1,31 +1,61 @@
 <div class="holiday-list-container">
-  <div class="header-actions">
-    <h2>Holidays</h2>
-    <a routerLink="new" class="btn btn-primary">Add New Holiday</a>
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Bayramlar</h1>
+        <p class="page-subtitle">Rasmiy bayram va dam olish kunlari kalendarini boshqarish</p>
+      </div>
+    </div>
+    <a routerLink="new" class="btn-add-new">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <span>Yangi bayram</span>
+    </a>
   </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let holiday of holidays">
-        <td>{{ holiday.id }}</td>
-        <td>{{ holiday.name }}</td>
-        <td>{{ holiday.date | date }}</td>
-        <td class="actions">
-          <a [routerLink]="[holiday.id, 'edit']" class="btn btn-sm btn-outline">Edit</a>
-          <button (click)="deleteHoliday(holiday.id)" class="btn btn-sm btn-danger">Delete</button>
-        </td>
-      </tr>
-      <tr *ngIf="holidays.length === 0">
-        <td colspan="4" class="text-center">No holidays found.</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nomi</th>
+            <th>Sana</th>
+            <th class="text-right">Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let holiday of holidays" class="table-row" (click)="onRowClick(holiday.id)">
+            <td>{{ holiday.id }}</td>
+            <td>{{ holiday.name }}</td>
+            <td class="text-muted">{{ holiday.startDate | date }}</td>
+            <td class="text-right">
+              <div class="action-buttons" (click)="$event.stopPropagation()">
+                <a [routerLink]="[holiday.id, 'edit']" class="btn-action edit-btn" title="Tahrirlash">Tahrirlash</a>
+                <button (click)="deleteHoliday(holiday.id)" class="btn-action delete-btn" title="O'chirish">O'chirish</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="holidays.length === 0">
+            <td colspan="4" class="empty-state-cell">
+              <div class="empty-state-box">
+                <span class="empty-icon">📁</span>
+                <p class="empty-text">Hozircha hech qanday bayram topilmadi</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

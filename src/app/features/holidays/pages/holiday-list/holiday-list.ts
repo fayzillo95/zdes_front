@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HolidayService } from '../../services/holiday';
 import { Holiday } from '../../../../core/models/holiday';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -17,9 +17,15 @@ export class HolidayList implements OnInit {
   holidays: Holiday[] = [];
   private holidayService = inject(HolidayService);
   private destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.loadHolidays();
+  }
+
+  onRowClick(id: string | undefined): void {
+    if (!id) return;
+    this.router.navigate(['/holidays', id, 'edit']);
   }
 
   loadHolidays(): void {
@@ -33,7 +39,7 @@ export class HolidayList implements OnInit {
     });
   }
 
-  deleteHoliday(id: string | number | undefined): void {
+  deleteHoliday(id: string | undefined): void {
     if (!id) return;
     if (confirm('Are you sure you want to delete this holiday?')) {
       this.holidayService.delete(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({

@@ -1,27 +1,86 @@
-<div class="container">
-  <div class="header">
-    <h2>Bo'limlar</h2>
-    <a routerLink="/departments/new" class="btn btn-primary">Yangi bo'lim</a>
+<div class="departments-page">
+  <!-- Header Banner Card -->
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Bo'limlar Boshqaruvi</h1>
+        <p class="page-subtitle">Tashkilot bo'limlarini ko'rish, yangi bo'lim qo'shish va tahrirlash</p>
+      </div>
+    </div>
+    <a routerLink="/departments/new" class="btn-add-new">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <span>Yangi Bo'lim</span>
+    </a>
   </div>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Nomi</th>
-        <th>Amallar</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let department of departments">
-        <td>{{ department.name }}</td>
-        <td>
-          <a [routerLink]="['/departments', department.id, 'edit']" class="btn btn-sm btn-info">Tahrirlash</a>
-          <button (click)="deleteDepartment(department.id)" class="btn btn-sm btn-danger">O'chirish</button>
-        </td>
-      </tr>
-      <tr *ngIf="departments.length === 0">
-        <td colspan="2" class="text-center">Ma'lumot topilmadi</td>
-      </tr>
-    </tbody>
-  </table>
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      <span>✅ {{ successMessage() }}</span>
+    </div>
+  }
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      <span>⚠️ {{ errorMessage() }}</span>
+    </div>
+  }
+
+  <!-- Content Table Card -->
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>Bo'lim Nomi</th>
+            <th>ID</th>
+            <th class="text-right">Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (department of departments(); track department.id) {
+            <tr class="table-row" (click)="onRowClick(department.id)">
+              <td>
+                <div class="department-name-cell">
+                  <div class="dept-avatar">
+                    {{ (department.name || 'B')[0].toUpperCase() }}
+                  </div>
+                  <span class="dept-name-text">{{ department.name }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="id-badge">{{ department.id }}</span>
+              </td>
+              <td class="text-right">
+                <div class="action-buttons" (click)="$event.stopPropagation()">
+                  <a [routerLink]="['/departments', department.id, 'edit']" class="btn-action edit-btn" title="Tahrirlash">
+                    ✏️ Tahrirlash
+                  </a>
+                  <button (click)="deleteDepartment(department.id)" class="btn-action delete-btn" title="O'chirish">
+                    🗑️ O'chirish
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+          @if (departments().length === 0) {
+            <tr>
+              <td colspan="3" class="empty-state-cell">
+                <div class="empty-state-box">
+                  <span class="empty-icon">📁</span>
+                  <p class="empty-text">Hozircha hech qanday bo'lim qo'shilmagan</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

@@ -8,23 +8,38 @@
 
 export interface User {
   id: string | number;
-  username: string;
-  email?: string;
-  /** Role string, e.g. 'admin' | 'user' | 'manager' — extend as needed */
-  role?: string;
-  /** Optional display name */
-  firstName?: string;
-  lastName?: string;
+  login: string;
+  role: string;
+  companyId?: string | null;
+  branchId?: string | null;
+  departmentId?: string | null;
+  positionId?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  middleName?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  employeeNo?: string | null;
+  faceDeviceUserId?: string | null;
+  isActive?: boolean;
+  isBlocked?: boolean;
 }
 
-/** Shape of the login API response */
+/** Shape of the login and refresh API response */
 export interface LoginResponse {
+  tokenType: string;
   accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
   user: User;
 }
 
+export type RefreshResponse = LoginResponse;
+
 /** Shape of the login request body */
 export interface LoginCredentials {
-  username: string;
+  login: string;
   password: string;
+  deviceType?: string;
+  deviceName?: string;
 }

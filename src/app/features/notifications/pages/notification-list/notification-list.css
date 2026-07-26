@@ -4,12 +4,13 @@
 
 .notification-list__title {
   margin: 0 0 1rem;
-  font-size: 1.375rem;
-  font-weight: 600;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
 }
 
 .notification-list__status {
-  color: rgba(0, 0, 0, 0.5);
+  color: var(--color-text-secondary);
 }
 
 .notification-list__items {
@@ -28,12 +29,14 @@
   gap: 1rem;
   padding: 0.875rem 1rem;
   border-radius: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
 }
 
 .notification-item--unread {
-  background: rgba(59, 130, 246, 0.06);
-  border-color: rgba(59, 130, 246, 0.25);
+  background: var(--color-bg-secondary);
+  border-color: var(--color-primary);
 }
 
 .notification-item__body {
@@ -44,20 +47,21 @@
 
 .notification-item__title {
   font-weight: 600;
+  color: var(--color-text-primary);
 }
 
 .notification-item__message {
   font-size: 0.875rem;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--color-text-secondary);
 }
 
 .notification-item__action {
   flex-shrink: 0;
   padding: 0.375rem 0.75rem;
   border-radius: 0.375rem;
-  border: 1px solid rgba(59, 130, 246, 0.4);
+  border: 1px solid var(--color-primary);
   background: transparent;
-  color: rgb(59, 130, 246);
+  color: var(--color-primary);
   cursor: pointer;
   font-size: 0.8125rem;
 }

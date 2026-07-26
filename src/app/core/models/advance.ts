@@ -1,7 +1,13 @@
 export interface Advance {
-  id: string | number;
-  employeeId: string | number;
+  id: string;
+  companyId: string;
+  employeeId: string;
   amount: number;
-  reason?: string;
   date: string;
+  month?: string;
+  note?: string;
+  createdById?: string | null;
+  updatedById?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 }

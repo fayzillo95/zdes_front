@@ -8,11 +8,13 @@ const routes: Routes = [
   },
   {
     path: 'new',
-    loadComponent: () => import('./pages/leave-form/leave-form').then(m => m.LeaveForm)
+    loadComponent: () => import('./pages/leave-form/leave-form').then(m => m.LeaveForm),
+    data: { breadcrumb: "Yangi ta'til" }
   },
   {
     path: ':id',
-    loadComponent: () => import('./pages/leave-form/leave-form').then(m => m.LeaveForm)
+    loadComponent: () => import('./pages/leave-form/leave-form').then(m => m.LeaveForm),
+    data: { breadcrumb: 'Tahrirlash' }
   }
 ];
 

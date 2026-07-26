@@ -5,7 +5,7 @@ import { PayrollDetail } from './pages/payroll-detail/payroll-detail';
 
 const routes: Routes = [
   { path: '', component: PayrollList },
-  { path: ':id', component: PayrollDetail },
+  { path: ':id', component: PayrollDetail, data: { breadcrumb: 'Batafsil' } },
 ];
 
 @NgModule({

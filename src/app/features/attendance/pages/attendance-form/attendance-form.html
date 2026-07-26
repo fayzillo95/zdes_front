@@ -1,0 +1,183 @@
+<div class="form-page">
+  <div class="form-card">
+    <div class="form-header">
+      <div class="form-header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <line x1="19" y1="8" x2="19" y2="14"></line>
+          <line x1="22" y1="11" x2="16" y2="11"></line>
+        </svg>
+      </div>
+      <div>
+        <h2 class="form-title">Yangi Davomat Yozuvi (Manual)</h2>
+        <p class="form-subtitle">Xodimning kirish (Check-In) yoki chiqish (Check-Out) vaqtlarini qo'lda qayd etish</p>
+      </div>
+    </div>
+
+    <!-- Error/Success Alerts -->
+    @if (errorMessage()) {
+      <div class="alert alert-error">
+        <span>⚠️ {{ errorMessage() }}</span>
+      </div>
+    }
+    @if (successMessage()) {
+      <div class="alert alert-success">
+        <span>✅ {{ successMessage() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">
+      <div class="form-grid">
+        
+        <!-- Type Selection -->
+        <div class="form-group">
+          <label class="form-label">Turi <span class="required-star">*</span></label>
+          <select formControlName="type" class="form-select">
+            <option value="check-in">Check-In (Kirish)</option>
+            <option value="check-out">Check-Out (Chiqish)</option>
+          </select>
+        </div>
+
+        <!-- Date & Time -->
+        <div class="form-group">
+          <label for="eventTime" class="form-label">Sana va Vaqt <span class="required-star">*</span></label>
+          <input id="eventTime" type="datetime-local" formControlName="eventTime" class="form-input" />
+          @if (form.controls.eventTime.touched && form.controls.eventTime.invalid) {
+            <span class="field-error-hint">⚠️ Sana va vaqt kiritilishi majburiy!</span>
+          }
+        </div>
+
+        <!-- Company Select -->
+        <div class="form-group">
+          <label class="form-label">Kompaniya <span class="required-star">*</span></label>
+          <select formControlName="companyId" class="form-select">
+            <option value="" disabled selected>Kompaniyani tanlang</option>
+            @for (comp of companies(); track comp.id) {
+              <option [value]="comp.id">{{ comp.name }}</option>
+            }
+          </select>
+          @if (form.controls.companyId.touched && form.controls.companyId.invalid) {
+            <span class="field-error-hint">⚠️ Kompaniyani tanlash majburiy!</span>
+          }
+        </div>
+
+        <!-- Branch Select -->
+        <div class="form-group">
+          <label class="form-label">Filial (Branch)</label>
+          <select formControlName="branchId" class="form-select">
+            <option value="">Barcha filiallar</option>
+            @for (b of filteredBranches(); track b.id) {
+              <option [value]="b.id">{{ b.name }}</option>
+            }
+          </select>
+          @if (branchError()) {
+            <span class="field-error-hint">⚠️ {{ branchError() }}</span>
+          }
+        </div>
+
+        <!-- Employee Select -->
+        <div class="form-group">
+          <label class="form-label">Xodim <span class="required-star">*</span></label>
+          <select formControlName="employeeId" class="form-select">
+            <option value="" disabled selected>Xodimni tanlang</option>
+            @for (emp of filteredEmployees(); track emp.id) {
+              <option [value]="emp.id">
+                {{ emp.firstName ? emp.firstName + ' ' + (emp.lastName || '') : (emp.fullName || emp.login) }}
+              </option>
+            }
+          </select>
+          @if (form.controls.employeeId.touched && form.controls.employeeId.invalid) {
+            <span class="field-error-hint">⚠️ Xodimni tanlash majburiy!</span>
+          }
+          @if (employeeError()) {
+            <span class="field-error-hint">⚠️ {{ employeeError() }}</span>
+          }
+          @if (employeeFaceWarning()) {
+            <span class="field-warning-hint" style="color: #d97706; font-size: 0.8rem; font-weight: 550; margin-top: 0.25rem; display: block;">{{ employeeFaceWarning() }}</span>
+          }
+        </div>
+
+        <!-- Terminal Select -->
+        <div class="form-group">
+          <label class="form-label">Terminal</label>
+          <select formControlName="terminalId" class="form-select">
+            <option value="">Terminalsiz (Virtual)</option>
+            @for (t of filteredTerminals(); track t.id) {
+              <option [value]="t.id">{{ t.name }} ({{ t.serialNumber }})</option>
+            }
+          </select>
+          @if (terminalError()) {
+            <span class="field-error-hint">⚠️ {{ terminalError() }}</span>
+          }
+        </div>
+
+        <!-- Image Upload & Capture Zone (Full Width) -->
+        <div class="form-group col-span-2 image-zone">
+          <label class="form-label">Yuz Rasmi ( AWS verifikatsiyasi uchun) <span class="required-star">*</span></label>
+          
+          <div class="image-box-container">
+            @if (imageBase64()) {
+              <!-- Image Preview -->
+              <div class="preview-box">
+                <img [src]="imageBase64()" class="face-preview" alt="Preview" />
+                <button type="button" (click)="clearImage()" class="btn-clear-image" title="Rasmni o'chirish">
+                  ❌ Rasmni O'chirish
+                </button>
+              </div>
+            } @else {
+              <!-- Image Source Selectors -->
+              <div class="source-selectors">
+                @if (useCamera()) {
+                  <!-- Camera Component -->
+                  <div class="camera-stream-wrapper">
+                    <app-camera-capture (photoCaptured)="onPhotoCaptured($event)"></app-camera-capture>
+                    <button type="button" (click)="useCamera.set(false)" class="btn-toggle-source">
+                      📁 Fayldan yuklashga o'tish
+                    </button>
+                  </div>
+                } @else {
+                  <!-- Standard File Upload -->
+                  <div class="file-uploader-box">
+                    <input type="file" (change)="onFileSelected($event)" accept="image/*" class="hidden-input" id="faceImageInput" />
+                    <label for="faceImageInput" class="upload-label">
+                      <div class="upload-icon">👤</div>
+                      <div class="upload-title">Rasm Faylini Tanlang</div>
+                      <div class="upload-desc">JPEG yoki PNG (Maks: 3MB)</div>
+                    </label>
+                    <button type="button" (click)="useCamera.set(true)" class="btn-toggle-source camera-btn">
+                      📷 Kameradan suratga olish
+                    </button>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          @if (imageError()) {
+            <span class="field-error-hint image-error">⚠️ {{ imageError() }}</span>
+          }
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group col-span-2">
+          <label for="notes" class="form-label">Izoh (Notes)</label>
+          <textarea id="notes" formControlName="notes" rows="3" class="form-textarea" placeholder="Yozuv bo'yicha qo'shimcha izohlar..."></textarea>
+          @if (form.controls.notes.touched && form.controls.notes.invalid) {
+            <span class="field-error-hint">⚠️ Izoh 1000 belgidan oshmasligi lozim!</span>
+          }
+        </div>
+
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button type="submit" class="btn btn-gradient-submit" [disabled]="form.invalid || !imageBase64()">
+          💾 Saqlash va Yuborish
+        </button>
+        <a routerLink="/attendance" class="btn btn-secondary-cancel">
+          ❌ Bekor Qilish
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

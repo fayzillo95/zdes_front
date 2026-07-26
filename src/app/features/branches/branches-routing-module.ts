@@ -5,8 +5,8 @@ import { BranchForm } from './pages/branch-form/branch-form';
 
 const routes: Routes = [
   { path: '', component: BranchList },
-  { path: 'new', component: BranchForm },
-  { path: ':id/edit', component: BranchForm },
+  { path: 'new', component: BranchForm, data: { breadcrumb: 'Yangi filial' } },
+  { path: ':id/edit', component: BranchForm, data: { breadcrumb: 'Tahrirlash' } },
 ];
 
 @NgModule({

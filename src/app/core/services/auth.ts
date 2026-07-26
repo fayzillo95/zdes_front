@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 
 import { Http } from './http';
+import { ApiResponse } from '../models/api-response';
 import { LoginCredentials, LoginResponse, User } from '../models/user';
 
 /**
@@ -24,14 +25,6 @@ const TOKEN_KEY = 'access_token';
 export class Auth {
   private readonly http = inject(Http);
 
-  /**
-   * Reactive signal holding the currently authenticated user.
-   * null  → unauthenticated / unknown
-   * User  → authenticated
-   *
-   * Initialised from the stored JWT payload so that a page-refresh keeps
-   * the user state (best-effort; see _loadUserFromToken).
-   */
   readonly currentUser = signal<User | null>(this._loadUserFromToken());
 
   // ─── Public API ──────────────────────────────────────────────────────────────
@@ -47,12 +40,18 @@ export class Auth {
    * @returns Observable<User> emitting the authenticated User on success
    */
   login(credentials: LoginCredentials): Observable<User> {
-    return this.http.post<LoginResponse>('/auth/login', credentials).pipe(
-      tap((response: LoginResponse) => {
-        localStorage.setItem(TOKEN_KEY, response.accessToken);
-        this.currentUser.set(response.user);
+    return this.http.post<ApiResponse<LoginResponse>>('/auth/login', credentials).pipe(
+      tap((response: ApiResponse<LoginResponse>) => {
+        const token = response.data.accessToken;
+        const user = response.data.user;
+        if (token) {
+          localStorage.setItem(TOKEN_KEY, token);
+        }
+        if (user) {
+          this.currentUser.set(user);
+        }
       }),
-      map((response: LoginResponse) => response.user),
+      map((response: ApiResponse<LoginResponse>) => response.data.user),
     );
   }
 
@@ -102,13 +101,30 @@ export class Auth {
       // Base64url → Base64 → JSON
       const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/'))) as Record<string, unknown>;
 
+      const id = (payload['id'] ?? payload['sub'] ?? '') as string | number;
+
+      const payloadLogin = payload['login'] as string | undefined;
+      const fallbackSub = typeof payload['sub'] === 'string' && !payload['sub'].includes('-') ? payload['sub'] : undefined;
+
+      const login = payloadLogin ?? fallbackSub;
+
       return {
-        id:        (payload['sub'] ?? payload['id'] ?? '') as string | number,
-        username:  (payload['username'] ?? payload['sub'] ?? '') as string,
-        email:     payload['email'] as string | undefined,
-        role:      payload['role'] as string | undefined,
+        id,
+        login: login ?? '',
+        role: (payload['role'] as string) ?? 'employee',
+        email: payload['email'] as string | undefined,
+        companyId: (payload['companyId'] ?? null) as string | null | undefined,
+        branchId: (payload['branchId'] ?? null) as string | null | undefined,
+        departmentId: (payload['departmentId'] ?? null) as string | null | undefined,
+        positionId: (payload['positionId'] ?? null) as string | null | undefined,
         firstName: payload['firstName'] as string | undefined,
-        lastName:  payload['lastName'] as string | undefined,
+        lastName: payload['lastName'] as string | undefined,
+        middleName: payload['middleName'] as string | undefined,
+        phone: payload['phone'] as string | undefined,
+        employeeNo: payload['employeeNo'] as string | undefined,
+        faceDeviceUserId: payload['faceDeviceUserId'] as string | undefined,
+        isActive: payload['isActive'] as boolean | undefined,
+        isBlocked: payload['isBlocked'] as boolean | undefined,
       };
     } catch {
       // Malformed token — treat as unauthenticated

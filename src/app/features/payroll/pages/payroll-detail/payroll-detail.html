@@ -10,7 +10,7 @@
     </div>
     <div class="detail-row">
       <span class="label">Davr</span>
-      <span class="value">{{ payroll.period }}</span>
+      <span class="value">{{ payroll.month }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Asosiy summa</span>
@@ -18,11 +18,11 @@
     </div>
     <div class="detail-row">
       <span class="label">Ushlab qolingan</span>
-      <span class="value deduction">{{ payroll.deductions | currency }}</span>
+      <span class="value deduction">{{ payroll.totalPenalty | currency }}</span>
     </div>
     <div class="detail-row total-row">
       <span class="label">Yakuniy summa</span>
-      <span class="value total">{{ payroll.totalAmount | currency }}</span>
+      <span class="value total">{{ payroll.netSalary | currency }}</span>
     </div>
     
     <div class="action-buttons">

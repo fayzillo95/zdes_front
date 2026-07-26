@@ -45,7 +45,7 @@ export class HolidayForm implements OnInit {
       next: (holiday) => {
         this.holidayForm.patchValue({
           name: holiday.name,
-          date: holiday.date
+          date: holiday.startDate
         });
         this.isLoading = false;
       },
@@ -65,7 +65,8 @@ export class HolidayForm implements OnInit {
     const formValue = this.holidayForm.value;
     const holidayData: Holiday = {
       name: formValue.name,
-      date: formValue.date
+      startDate: formValue.date,
+      endDate: formValue.date
     };
 
     if (this.isEditMode && this.holidayId) {

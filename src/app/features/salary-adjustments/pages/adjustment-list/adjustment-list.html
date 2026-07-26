@@ -1,32 +1,72 @@
-<div class="header">
-  <h2>Salary Adjustments</h2>
-  <button routerLink="new">New Adjustment</button>
-</div>
+<div class="adjustment-list-container">
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Maosh o'zgarishlari</h1>
+        <p class="page-subtitle">Xodimlar maoshiga kiritilgan qo'shimcha va tuzatishlarni boshqarish</p>
+      </div>
+    </div>
+    <a routerLink="new" class="btn-add-new">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <span>Yangi o'zgarish</span>
+    </a>
+  </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Employee ID</th>
-      <th>Amount</th>
-      <th>Type</th>
-      <th>Reason</th>
-      <th>Date</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of adjustments">
-      <td>{{ item.id }}</td>
-      <td>{{ item.employeeId }}</td>
-      <td>{{ item.amount }}</td>
-      <td>{{ item.type }}</td>
-      <td>{{ item.reason }}</td>
-      <td>{{ item.date }}</td>
-      <td>
-        <button [routerLink]="[item.id, 'edit']">Edit</button>
-        <button (click)="delete(item.id)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Xodim ID</th>
+            <th>Summa</th>
+            <th>Turi</th>
+            <th>Sabab</th>
+            <th>Sana</th>
+            <th class="text-right">Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of adjustments" class="table-row" (click)="onRowClick(item.id)">
+            <td>{{ item.id }}</td>
+            <td>{{ item.employeeId }}</td>
+            <td>{{ item.amount }}</td>
+            <td class="text-muted">{{ item.type }}</td>
+            <td class="text-muted">{{ item.reason }}</td>
+            <td class="text-muted">{{ item.date }}</td>
+            <td class="text-right">
+              <div class="action-buttons" (click)="$event.stopPropagation()">
+                <a [routerLink]="[item.id, 'edit']" class="btn-action edit-btn" title="Tahrirlash">Tahrirlash</a>
+                <button (click)="delete(item.id)" class="btn-action delete-btn" title="O'chirish">O'chirish</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="adjustments.length === 0">
+            <td colspan="7" class="empty-state-cell">
+              <div class="empty-state-box">
+                <span class="empty-icon">📁</span>
+                <p class="empty-text">Hozircha hech qanday o'zgarish topilmadi</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
