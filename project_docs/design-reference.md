@@ -101,6 +101,32 @@ yangi token kerak emas.
   o'pacity fon + to'liq o'pacity matn rangi — masalan
   `bg-[--color-status-completed]/15 text-[--color-status-completed]`).
 
+## 3.1. Amal tugmalari va alert ranglar xaritasi (2026-07-26, T-007)
+
+Ko'p feature'larning list/form CSS fayllarida `.btn-edit`, `.btn-delete`,
+`.alert-success`, `.alert-error` klasslari deyarli bir xil hardcoded hex
+qiymatlar bilan takrorlangan. Quyidagi xarita — mexanik almashtirish
+uchun yagona manba (har bir fayl aynan shu qiymatlarni ishlatmasligi
+mumkin, yaqin variantlar ham shu tokenga tushadi):
+
+| Element | Eski hex (variantlar) | Yangi token |
+|---|---|---|
+| `.btn-edit` background (och holat) | `#e3f2fd`, `#f0f4f8` | `color-mix(in srgb, var(--color-primary) 12%, transparent)` |
+| `.btn-edit` color / border | `#1565c0`, `#2563eb`, `#3b82f6`, `#0ea5e9` | `var(--color-primary)` |
+| `.btn-edit:hover` background | `#1565c0`, `#2563eb`, `#3b82f6` | `var(--color-primary)` |
+| `.btn-delete` background (och holat) | `#fce4ec`, `#ffebee`, `#fef2f2`, `#fee2e2` | `color-mix(in srgb, var(--color-danger) 12%, transparent)` |
+| `.btn-delete` color / border | `#c62828`, `#ef4444`, `#dc2626` | `var(--color-danger)` |
+| `.btn-delete:hover` background | `#c62828`, `#ef4444` | `var(--color-danger)` |
+| `.alert-success` background | `#e8f5e9`, `#c3e6cb` | `color-mix(in srgb, var(--color-success) 15%, transparent)` |
+| `.alert-success` color / border-left | `#2e7d32`, `#4caf50` | `var(--color-success)` |
+| `.alert-error` background | `#ffebee`, `#f5c6cb`, `#fef2f2` | `color-mix(in srgb, var(--color-danger) 15%, transparent)` |
+| `.alert-error` color / border-left | `#c62828`, `#ef5350` | `var(--color-danger)` |
+
+**Doiraga kirmaydi (o'zgartirilmaydi):** `.page-header-card` gradient fon
+(`#0ea5e9 → #2563eb`) va unga tegishli oq matn (`#fff`/`#ffffff`) — bu
+qasddan rangli brend-aksent, status/semantik rang emas, alohida
+muhokama qilinmaguncha tegilmaydi.
+
 ## 4. Amalga oshirish tartibi (Tailwind, mavjud token tizimi ustida)
 
 1. `src/styles.css`dagi `@theme` va `:root[data-theme="dark"]` bloklariga
