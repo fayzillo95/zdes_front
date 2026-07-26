@@ -13,7 +13,13 @@ export class HolidayService {
 
   getAll(): Observable<Holiday[]> {
     return this.http.get<any>(this.endpoint, { cache: true }).pipe(
-      map((res: any) => Array.isArray(res) ? res : (res?.items ?? res?.data ?? []))
+      map((res: any) => {
+        if (Array.isArray(res)) return res;
+        if (Array.isArray(res?.items)) return res.items;
+        if (Array.isArray(res?.data?.items)) return res.data.items;
+        if (Array.isArray(res?.data)) return res.data;
+        return [];
+      })
     );
   }
 

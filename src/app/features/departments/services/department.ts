@@ -10,7 +10,7 @@ import { ApiResponse, PaginatedResult } from '../../../core/models/api-response'
 })
 export class DepartmentService {
   private readonly http = inject(Http);
-  private readonly path = 'departments';
+  private readonly path = '/departments';
 
   getAll(params?: Record<string, any>): Observable<Department[]> {
     return this.http.get<ApiResponse<PaginatedResult<Department>> | PaginatedResult<Department> | Department[]>(this.path, { params, cache: true }).pipe(

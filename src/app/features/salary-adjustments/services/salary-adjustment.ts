@@ -13,7 +13,13 @@ export class SalaryAdjustmentService {
 
   getAll(): Observable<SalaryAdjustment[]> {
     return this.http.get<any>('/salary-adjustments').pipe(
-      map((res: any) => Array.isArray(res) ? res : (res?.items ?? res?.data ?? []))
+      map((res: any) => {
+        if (Array.isArray(res)) return res;
+        if (Array.isArray(res?.items)) return res.items;
+        if (Array.isArray(res?.data?.items)) return res.data.items;
+        if (Array.isArray(res?.data)) return res.data;
+        return [];
+      })
     );
   }
 
