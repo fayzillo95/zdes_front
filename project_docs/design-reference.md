@@ -69,13 +69,31 @@ yangi token kerak emas.
   ishlatish, aks holda oddiy `absolute right-0` dropdown).
 
 ### Stat karta (Dashboard)
-- 3 ustunli grid (`grid grid-cols-1 md:grid-cols-3 gap-4`).
-- Har birida: katta raqam (`text-2xl font-bold`) + foiz badge (yashil/qizil,
-  yumaloq pill) + label + pastida gradient sparkline (SVG yoki chart
-  kutubxonasi orqali, mavjud chart komponentidan foydalanish kerak bo'lsa
-  loyihada mavjudini tekshirish, yo'q bo'lsa oddiy inline SVG path bilan
-  yasash — yangi og'ir chart kutubxonasi qo'shmaslik, `package.json`ga
-  yangi dependency talab qilinadigan komponent alohida muhokama qilinadi).
+
+> **MUHIM CHEKLOV (2026-07-26):** Darken referensidagi "Total Sales",
+> "Total Accounts", "Sales & Views" bar chart, "Order Status" donut,
+> "Popular Products", "Top Vendors", "Country Sales" — bularning barchasi
+> **e-commerce domenига tegishli** va bizning backend'da (HR/davomat
+> tizimi) mos ma'lumot yo'q. Bularni **hech qachon o'ylab topilgan/soxta
+> data bilan** qayta yaratmaslik kerak — bu backend'da bo'lmagan ishni
+> talab qilib qo'yadi. Faqat loyihada **haqiqatda mavjud** bo'lgan
+> ma'lumotlar ustida ishlash kerak.
+>
+> Hozirgi haqiqiy dashboard statistikasi (`dashboard.ts`, real endpoint'lar
+> orqali hisoblanadi): **Jami xodimlar**, **Bugungi davomat %**, **Ochiq
+> ta'til so'rovlari**, **O'qilmagan bildirishnomalar** — bor-yo'g'i 4 ta
+> son, trend/tarix ma'lumoti yo'q.
+
+- Grid layout (`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4` —
+  4 ta karta uchun, Darken'dagi 3 ustunli emas).
+- Har birida: katta raqam (`text-2xl font-bold`) + label + metrikaga mos
+  aksent rang/ikonka (`--color-chart-*` tokenlaridan bittasi, dekorativ
+  chap chiziq yoki icon fon sifatida) — **foiz o'zgarish badge yoki
+  sparkline QO'SHILMAYDI**, chunki buning uchun tarixiy/trend ma'lumot
+  backend'da yo'q va uni o'ylab topish taqiqlanadi.
+- Faqat "shisha karta" fon effekti (`--color-bg-primary` + `backdrop-blur`,
+  T-001'da tayyor) va aksent rang bilan Darken vizual uslubini beriladi —
+  mazmun (raqamlar) o'zgarmaydi.
 
 ### Jadval status badge
 - Pill shakl (`rounded-full px-2 py-0.5 text-xs font-medium`), fon rangi
@@ -91,7 +109,8 @@ yangi token kerak emas.
 2. Sidebar/header/main-layout komponentlarini yangi tokenlar bilan qayta
    stillashtirish (mavjud struktura/markup saqlanadi, faqat Tailwind
    class'lari va CSS custom property qiymatlari yangilanadi).
-3. Dashboard sahifasiga stat-karta + sparkline pattern qo'shish.
+3. Dashboard'dagi 4 ta mavjud (real) stat-kartani Darken vizual uslubiga
+   moslashtirish — faqat mavjud 4 ta metrika, soxta/qo'shimcha widget yo'q.
 4. DataTable/jadval sahifalariga status-badge pattern qo'llash.
 5. Har bir bosqichdan keyin `npm run build` bilan tekshirish (CSS-only
    o'zgarishlar bo'lsa ham, template'dagi noto'g'ri Tailwind class yoki
