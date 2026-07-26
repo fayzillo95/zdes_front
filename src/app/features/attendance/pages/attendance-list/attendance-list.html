@@ -77,7 +77,7 @@
               <td class="text-muted">{{ record.workedMinutes || 0 }} min</td>
               <td>
                 @if ((record.lateMinutes ?? 0) > 0) {
-                  <span class="radius-tag" style="color: #c62828;">{{ record.lateMinutes }} min</span>
+                  <span class="radius-tag" style="color: var(--color-danger);">{{ record.lateMinutes }} min</span>
                 } @else {
                   <span class="text-muted">—</span>
                 }
@@ -86,8 +86,8 @@
                 <span class="status-badge" 
                       [class.active]="record.status === 'present'" 
                       [class.inactive]="record.status === 'absent'"
-                      [style.background-color]="record.status === 'late' ? '#fff3cd' : null"
-                      [style.color]="record.status === 'late' ? '#856404' : null">
+                      [style.background-color]="record.status === 'late' ? 'color-mix(in srgb, var(--color-chart-yellow) 20%, transparent)' : null"
+                      [style.color]="record.status === 'late' ? 'var(--color-chart-yellow)' : null">
                   {{ record.status === 'present' ? 'Kelgan' : (record.status === 'absent' ? 'Kelmagan' : record.status) }}
                 </span>
               </td>
