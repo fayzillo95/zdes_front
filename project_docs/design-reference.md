@@ -293,6 +293,91 @@ o'tish logikasi (`<tr>` darajasida) O'ZGARTIRILMAYDI — faqat
 `<td class="actions-cell">` ichidagi ortiqcha edit tugmasi olib
 tashlanadi.
 
+## 3.4. Kanonik forma sahifasi patterni (2026-07-26, T-012)
+
+**Muammo:** 15 ta forma/detail sahifasidan 8 tasi
+(`branch-form`, `company-form`, `department-form`, `employee-form`,
+`leave-form`, `position-form`, `work-schedule-form`,
+`attendance-form`) bir xil `.form-page > .form-card > .form-header` +
+`.form-body`/`.form-group`/`.form-label`/`.form-input` strukturasini
+ishlatadi. Qolgan 4 tasi (`advance-form`, `holiday-form`,
+`terminal-form`, `adjustment-form`) o'zining bespoke
+`<div class="X-form-container">` / `class="form"` strukturasini
+ishlatadi — vizual jihatdan boshqacha (karta-qobiq, icon-header yo'q).
+
+**Namuna (to'liq, nusxa oling):**
+`src/app/features/branches/pages/branch-form/branch-form.html` +
+`.css` — struktura:
+```html
+<div class="form-page">
+  <div class="form-card">
+    <div class="form-header">
+      <div class="form-header-icon"><svg>...</svg></div>
+      <div>
+        <h2 class="form-title">{{ isEditMode ? "X'ni tahrirlash" : "Yangi X qo'shish" }}</h2>
+        <p class="form-subtitle">...</p>
+      </div>
+    </div>
+    @if (errorMessage()) { <div class="alert alert-error">...</div> }
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">
+      <div class="form-group">
+        <label class="form-label">Maydon nomi</label>
+        <input class="form-input" ... />
+      </div>
+      <!-- ... -->
+    </form>
+  </div>
+</div>
+```
+CSS (`.form-page`/`.form-card`/`.form-header`/`.form-header-icon`/
+`.form-title`/`.form-subtitle`/`.form-body`/`.form-group`/
+`.form-label`/`.form-input`/`.form-select`) `branch-form.css`dan
+ko'chiriladi, token qiymatlari (`var(--color-*)`) bilan birga.
+
+**Qoida:** faqat CSS class nomlari va HTML o'rovchi struktura
+almashtiriladi — mavjud form maydonlari, `formControlName`
+bog'lanishlari, validatsiya logikasi, submit metodi O'ZGARMAYDI.
+
+## 3.5. Kanonik detail (ko'rish) sahifasi patterni (2026-07-26, T-013)
+
+**Muammo:** 3 ta detail sahifa (`employee-detail`, `payroll-detail`,
+`attendance-detail`) bir-biriga mos emas:
+- `payroll-detail` — eng to'liq: `.detail-card` > `.detail-row` >
+  `.label`/`.value` strukturasi, token-asosli ranglar.
+- `employee-detail` — o'xshash g'oya, lekin boshqa class nomi
+  (`.info-card`, `<p><strong>` shaklida, `.edit-btn` da 3 ta hardcoded
+  hex rang bor).
+- `attendance-detail` — deyarli USLUBSIZ stub: oddiy `<p><strong>`
+  qatorlari, sarlavha va "Loading..." matni **inglizcha** (loyihaning
+  qolgan qismi o'zbekcha), umuman CSS class yo'q.
+
+**Namuna (to'liq, nusxa oling):**
+`src/app/features/payroll/pages/payroll-detail/payroll-detail.html` +
+`.css` — `.detail-card` > (bir nechta) `.detail-row` > `.label` +
+`.value` strukturasi, `.header-section` sarlavha uchun.
+
+**Qoida:**
+1. `employee-detail.html`ni xuddi shu `.detail-card`/`.detail-row`/
+   `.label`/`.value` strukturasiga o'tkazish (hozirgi `.info-card`/
+   `<p><strong>` o'rniga), `.edit-btn`dagi 3 ta hardcoded hex rangni
+   `var(--color-primary)` kabi tokenlarga almashtirish. Mavjud "Tahrirlash"
+   tugmasi (`[routerLink]="['edit']"`) SAQLANADI — bu yerda "qator
+   bosilsa edit" degan holat yo'q, bu mustaqil detail sahifa, shuning
+   uchun edit tugmasi kerak (3.3-band bu yerga tegishli emas).
+2. `attendance-detail.html`ni **to'liq qayta yozish** — hozirgi
+   ingliz-tilidagi minimal stub o'rniga, `payroll-detail` patterniga mos
+   `.detail-card`/`.detail-row` bilan, o'zbek tilida, mavjud
+   `Attendance` modelidagi haqiqiy maydonlar asosida (`employeeId`,
+   `date`, `checkIn`, `checkOut`, `workedMinutes`, `lateMinutes`,
+   `status` — aniq maydon nomlari uchun `src/app/core/models/
+   attendance.ts` va `attendance-list.ts`dagi `formatDate`/`formatTime`
+   metodlaridan namuna oling, xuddi shu formatlashni qo'llang). Sarlavha
+   "Davomat tafsilotlari" (payroll-detail'dagi "Ish haqi tafsilotlari"
+   uslubida), "Loading..." o'rniga skeleton yoki oddiy "Yuklanmoqda..."
+   matni.
+3. Yangi ma'lumot/maydon o'ylab topilmaydi — faqat `Attendance` modelida
+   haqiqatda mavjud maydonlar ko'rsatiladi.
+
 ## 4. Amalga oshirish tartibi (Tailwind, mavjud token tizimi ustida)
 
 1. `src/styles.css`dagi `@theme` va `:root[data-theme="dark"]` bloklariga
