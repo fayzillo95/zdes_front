@@ -203,6 +203,98 @@ ajratadi.
 **`FormsModule` import qilinishi shart** (`ngModel` uchun), `@Component`
 `imports` massiviga qo'shiladi.
 
+## 3.3. Kanonik "Amallar" (actions) ustuni patterni (2026-07-26, T-009)
+
+**Muammo (foydalanuvchi topgan):** loyihada 4 xil actions-cell uslubi
+aralash holda ishlatilgan — (a) matnli link (`edit-btn`/`delete-btn`,
+"Tahrirlash"/"O'chirish" so'zi), (b) emoji ikonka (✏️/🗑️), (c) faqat
+SVG delete tugmasi, edit umuman yo'q, (d) to'liq SVG edit+delete
+(branch-list/company-list). Bundan tashqari ba'zi joylarda
+`.btn-delete:disabled` hali ham hardcoded och rang (`#f1f5f9` va h.k.)
+ishlatib, qorong'i temada begona yorug' chiziq ko'rinishida chiqib
+qolgan.
+
+**Qaror:** `http://localhost:4200/employees` sahifasining umumiy jadval
+tuzilishi (qator balandligi, avatar+ism katakchasi, ustun bo'shliqlari)
+yoqimli deb topilgan — lekin uning actions-katakchasi to'liq emas
+(faqat delete bor). Kanonik "Amallar" patterni sifatida
+**branch-list/company-list'dagi to'liq SVG icon edit+delete** olinadi,
+va u BARCHA jadval sahifalariga (shu jumladan employee-list'ning o'ziga
+ham) qo'llaniladi.
+
+**Kanonik HTML (nusxa oling, `x` — modelning o'zgaruvchisi):**
+```html
+<td class="actions-cell" (click)="$event.stopPropagation()">
+  <a [routerLink]="[...edit-yo'li..., x.id, 'edit']" class="btn-action btn-edit" title="Tahrirlash">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+    </svg>
+  </a>
+  <button (click)="deleteX(x.id)" class="btn-action btn-delete" title="O'chirish">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="3 6 5 6 21 6"></polyline>
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+      <path d="M10 11v6M14 11v6"></path>
+    </svg>
+  </button>
+</td>
+```
+Eski `<div class="action-buttons">` o'rovchisi OLIB TASHLANADI — `td`
+o'zi `class="actions-cell"` va `(click)="$event.stopPropagation()"`
+oladi (div kerak emas).
+
+**Kanonik CSS (fayl oxiriga yoki mos joyga qo'shiladi/almashtiriladi):**
+```css
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn-action {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-edit {
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  color: var(--color-primary);
+}
+.btn-edit:hover { background: var(--color-primary); color: #fff; }
+
+.btn-delete {
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent);
+  color: var(--color-danger);
+}
+.btn-delete:hover:not(:disabled) { background: var(--color-danger); color: #fff; }
+.btn-delete:disabled {
+  background: color-mix(in srgb, var(--color-text-secondary) 12%, transparent);
+  color: var(--color-text-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+  border: 1px solid var(--color-border);
+}
+```
+Eski `.edit-btn`/`.delete-btn`/`.action-buttons` CSS qoidalari shu
+`.btn-edit`/`.btn-delete`/`.actions-cell`ga almashtiriladi (eski
+class nomlari HTML'da ham CSS'da ham qolmasligi kerak).
+
+**Modul bo'yicha edit-yo'li (routerLink) mosligi:** har bir sahifaning
+o'z routing pattern'i bor (masalan `['/branches', id, 'edit']`,
+`[id, 'edit']` nisbiy, `[id]` faqat detail). AGY mavjud fayldagi
+eski `edit-btn`/routerLink qiymatini (agar bor bo'lsa) SAQLAB qolib,
+faqat vizual pattern (SVG ikonka, class nomi) almashtirishi kerak —
+yo'lni o'zi o'ylab topmasin.
+
 ## 4. Amalga oshirish tartibi (Tailwind, mavjud token tizimi ustida)
 
 1. `src/styles.css`dagi `@theme` va `:root[data-theme="dark"]` bloklariga
