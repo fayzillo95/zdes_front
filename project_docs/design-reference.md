@@ -378,6 +378,161 @@ bog'lanishlari, validatsiya logikasi, submit metodi O'ZGARMAYDI.
 3. Yangi ma'lumot/maydon o'ylab topilmaydi — faqat `Attendance` modelida
    haqiqatda mavjud maydonlar ko'rsatiladi.
 
+## 3.6. So'rov timeout'i va xatolik holati (error state) patterni (2026-07-27, T-014..T-020)
+
+**Muammo (foydalanuvchi topgan, `/holidays` sahifasida kuzatilgan):** agar
+backend javob bermasa yoki so'rov osilib qolsa, skeleton loading abadiy
+aylanaveradi. Ildiz sabab: `src/app/core/services/http.ts`dagi
+`axios.create({ baseURL: this.baseUrl })` chaqiruvida **`timeout`
+berilmagan** (standart — cheksiz). So'rov na `next`, na `error` chaqirmasa,
+`loading` hech qachon `false` bo'lmaydi. Bu **butun ilovaga tegishli**,
+chunki barcha servis shu bitta `Http` klassi orqali ishlaydi.
+
+Tekshiruv natijasi: barcha 14 ta list sahifasida (`branches`, `company`,
+`departments`, `employees`, `advances`, `holidays`, `salary-adjustments`,
+`leaves`, `positions`, `terminals`, `work-schedules`, `attendance`,
+`payroll`, `notifications`) `loading` `next`/`error`da to'g'ri
+`false`ga qaytariladi — lekin **xato holati alohida ko'rsatilmaydi**,
+`error` callback shunchaki `loading=false` qilib, natijada bo'sh massiv
+sabab "hech qanday X topilmadi" (empty-state) matni chiqadi — bu xato bilan
+haqiqiy bo'shlikni chalkashtiradi. `attendance-detail.ts`da esa `subscribe()`
+ichida **`error` callback umuman yo'q** — xato bo'lsa hech narsa (hatto
+console log ham) chiqmaydi, "Yuklanmoqda..." abadiy qoladi.
+
+### 1. Ildiz tuzatish — `core/services/http.ts`
+
+`axiosInstance` yaratilishiga `timeout` qo'shiladi (taxminan 15000ms):
+```ts
+private readonly axiosInstance: AxiosInstance = axios.create({
+  baseURL: this.baseUrl,
+  timeout: 15000,
+});
+```
+Bu yagona o'zgarish — endi javob bermayotgan so'rov 15 soniyadan keyin
+`ECONNABORTED` xatosi bilan `error` callbackka tushadi, `loading` `false`ga
+qaytadi.
+
+### 2. Yangi global CSS klasslar — `src/styles.css`
+
+Xatolik holati uchun (bo'sh-holatdan vizual jihatdan farqlanadigan, xavfli
+rangga asoslangan) klasslar `--color-danger` tokenidan foydalanib
+qo'shiladi (namuna, `.empty-state-box`ning yonida):
+```css
+.error-state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+.error-icon { font-size: 1.5rem; }
+.error-text {
+  color: var(--color-danger);
+  font-weight: 500;
+}
+.btn-retry {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+  color: var(--color-danger);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+.btn-retry:hover {
+  background: var(--color-danger);
+  color: #fff;
+}
+```
+
+### 3. List sahifa patterni (jadvalli va jadvalsiz, masalan `notifications`)
+
+`.ts`da mavjud `loading` bilan bir xil uslubda (plain yoki `signal`)
+qo'shimcha `loadError` qo'shiladi:
+```ts
+loading = true; // yoki signal<boolean>(true)
+loadError = false; // yoki signal<boolean>(false)
+
+loadX(): void {
+  this.loading = true;
+  this.loadError = false;
+  this.xService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    next: (data) => { this.items = data; this.loading = false; },
+    error: (err) => {
+      console.error('Error fetching X', err);
+      this.loading = false;
+      this.loadError = true;
+    }
+  });
+}
+```
+`.html`da, mavjud bo'sh-holat blokidan OLDIN, yangi shart qo'shiladi
+(bo'sh-holat shartiga `!loadError` qo'shib, ikkalasi bir vaqtda
+chiqmasligi ta'minlanadi):
+```html
+<div class="error-state-box" *ngIf="!loading && loadError">
+  <span class="error-icon">⚠️</span>
+  <p class="error-text">Ma'lumotlarni yuklashda xatolik yuz berdi.</p>
+  <button class="btn-retry" (click)="loadX()">Qayta urinib ko'rish</button>
+</div>
+<div class="empty-state-box" *ngIf="!loading && !loadError && items.length === 0">
+  <!-- mavjud bo'sh-holat, o'zgarmaydi, faqat shartga !loadError qo'shiladi -->
+</div>
+```
+(`@if`/`*ngIf` sintaksisi — mavjud faylning o'zida qaysi ishlatilgan
+bo'lsa, o'shanga mos yoziladi, aralashtirilmaydi.)
+
+### 4. Detail sahifa patterni (`employee-detail`, `payroll-detail`, `attendance-detail`)
+
+`employee-detail`/`payroll-detail` hozir `x$ | async as x; else loading`
+qolipida — bu qolipda `catchError` bilan ham xato holatini aniq
+ajratib bo'lmaydi (async pipe xato holatida shablonni yangilamay
+qotib qoladi). Shu sabab ikkalasi ham `attendance-detail`dagi kabi
+aniq `subscribe()` + signal qolipiga o'tkaziladi:
+```ts
+item = signal<X | null>(null);
+loading = signal(true);
+loadError = signal(false);
+
+ngOnInit(): void {
+  const id = this.route.snapshot.paramMap.get('id');
+  if (!id) return;
+  this.loading.set(true);
+  this.loadError.set(false);
+  this.xService.getById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    next: (data) => { this.item.set(data); this.loading.set(false); },
+    error: (err) => {
+      console.error('Error fetching X', err);
+      this.loading.set(false);
+      this.loadError.set(true);
+    }
+  });
+}
+```
+`.html`da uch holatli shart (`loading` → `loadError` → mavjud content):
+```html
+@if (loading()) {
+  <div class="loading-state"><p>Yuklanmoqda...</p></div>
+} @else if (loadError()) {
+  <div class="error-state-box">
+    <span class="error-icon">⚠️</span>
+    <p class="error-text">Ma'lumotlarni yuklashda xatolik yuz berdi.</p>
+    <button class="btn-retry" (click)="ngOnInit()">Qayta urinib ko'rish</button>
+  </div>
+} @else if (item(); as x) {
+  <!-- mavjud content, faqat x$ | async o'rniga item() ishlatiladi -->
+}
+```
+`attendance-detail.ts`da esa `ngOnInit` allaqachon shu qolipga yaqin —
+faqat yetishmayotgan `error` callback va `loadError` signali qo'shiladi,
+strukturasi qayta yozilmaydi.
+
+**Muhim:** bu bo'lim faqat **yangi** timeout/error-state qatlamini
+qo'shadi — mavjud data-fetching manzillari (`xService.getById`/`getAll`),
+filter/actions-cell/form patternlari (3.2/3.3/3.4/3.5) O'ZGARTIRILMAYDI.
+
 ## 4. Amalga oshirish tartibi (Tailwind, mavjud token tizimi ustida)
 
 1. `src/styles.css`dagi `@theme` va `:root[data-theme="dark"]` bloklariga
