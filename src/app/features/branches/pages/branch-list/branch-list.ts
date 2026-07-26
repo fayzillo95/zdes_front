@@ -1,5 +1,6 @@
-import { Component, inject, signal, OnInit, ChangeDetectionStrategy, DestroyRef, effect } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy, DestroyRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -11,7 +12,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-branch-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, FormsModule, RouterModule, SkeletonLoaderComponent],
   templateUrl: './branch-list.html',
   styleUrl: './branch-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +27,25 @@ export class BranchList implements OnInit {
   loading = signal<boolean>(true);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
+
+  // Column-level filters (jadval ustunlari bo'yicha, client-side)
+  nameFilter = signal<string>('');
+  addressFilter = signal<string>('');
+  statusFilter = signal<'' | 'active' | 'inactive'>('');
+
+  filteredBranches = computed(() => {
+    const name = this.nameFilter().trim().toLowerCase();
+    const address = this.addressFilter().trim().toLowerCase();
+    const status = this.statusFilter();
+
+    return this.branches().filter(b => {
+      if (name && !b.name?.toLowerCase().includes(name)) return false;
+      if (address && !b.address?.toLowerCase().includes(address)) return false;
+      if (status === 'active' && b.isActive === false) return false;
+      if (status === 'inactive' && b.isActive !== false) return false;
+      return true;
+    });
+  });
 
   constructor() {
     effect(() => {

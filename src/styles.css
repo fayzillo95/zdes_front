@@ -124,3 +124,35 @@ input, select, textarea {
 input::placeholder, textarea::placeholder {
   color: var(--color-text-secondary) !important;
 }
+
+/* COLUMN-LEVEL TABLE FILTERS (jadval sahifalarida, thead ichidagi filter qatori) */
+.column-filter-row th {
+  padding: 0.4rem 0.6rem !important;
+  background-color: var(--color-bg-secondary) !important;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.column-filter-input,
+.column-filter-select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  border-radius: 6px;
+  border: 1px solid var(--color-border) !important;
+  background-color: var(--color-bg-primary) !important;
+  color: var(--color-text-primary) !important;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.column-filter-input:focus,
+.column-filter-select:focus {
+  border-color: var(--color-primary) !important;
+}
+
+.column-filter-input::placeholder {
+  color: var(--color-text-secondary) !important;
+  font-weight: 400;
+}

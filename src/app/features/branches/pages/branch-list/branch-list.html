@@ -53,9 +53,29 @@
             <th>Holat</th>
             <th>Amallar</th>
           </tr>
+          <tr class="column-filter-row">
+            <th></th>
+            <th>
+              <input type="text" class="column-filter-input" placeholder="Qidirish..."
+                     [ngModel]="nameFilter()" (ngModelChange)="nameFilter.set($event)" (click)="$event.stopPropagation()" />
+            </th>
+            <th>
+              <input type="text" class="column-filter-input" placeholder="Qidirish..."
+                     [ngModel]="addressFilter()" (ngModelChange)="addressFilter.set($event)" (click)="$event.stopPropagation()" />
+            </th>
+            <th></th>
+            <th>
+              <select class="column-filter-select" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)" (click)="$event.stopPropagation()">
+                <option value="">Hammasi</option>
+                <option value="active">Faol</option>
+                <option value="inactive">Nofaol</option>
+              </select>
+            </th>
+            <th></th>
+          </tr>
         </thead>
         <tbody>
-          @for (branch of branches(); track branch.id; let i = $index) {
+          @for (branch of filteredBranches(); track branch.id; let i = $index) {
             <tr class="table-row" (click)="onRowClick(branch.id)">
               <td class="row-index">{{ i + 1 }}</td>
               <td>
@@ -96,6 +116,16 @@
                     <path d="M10 11v6M14 11v6"></path>
                   </svg>
                 </button>
+              </td>
+            </tr>
+          }
+          @if (filteredBranches().length === 0) {
+            <tr>
+              <td colspan="6" class="empty-state-cell">
+                <div class="empty-state-box">
+                  <span class="empty-icon">🔍</span>
+                  <p class="empty-text">Filterga mos filial topilmadi</p>
+                </div>
               </td>
             </tr>
           }
