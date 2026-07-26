@@ -1,5 +1,6 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HolidayService } from '../../services/holiday';
 import { Holiday } from '../../../../core/models/holiday';
@@ -9,7 +10,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 @Component({
   selector: 'app-holiday-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, SkeletonLoaderComponent],
+  imports: [CommonModule, RouterModule, SkeletonLoaderComponent, FormsModule],
   templateUrl: './holiday-list.html',
   styleUrls: ['./holiday-list.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,6 +21,20 @@ export class HolidayList implements OnInit {
   private holidayService = inject(HolidayService);
   private destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+
+  nameFilter = signal<string>('');
+  startDateFilter = signal<string>('');
+
+  filteredHolidays() {
+    const name = this.nameFilter().trim().toLowerCase();
+    const date = this.startDateFilter();
+
+    return this.holidays.filter(h => {
+      if (name && !h.name?.toLowerCase().includes(name)) return false;
+      if (date && h.startDate?.toString().slice(0,10) !== date) return false;
+      return true;
+    });
+  }
 
   ngOnInit(): void {
     this.loadHolidays();

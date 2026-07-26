@@ -1,0 +1,25 @@
+## T-010a — Actions-cell standartlashtirish + filter, 1-guruh
+
+**Holat:** ACCEPTED (dizayn qarori keyinroq TUZATILDI)
+
+**Tekshiruv:** AGY 3 sahifaga (advances, holidays, salary-adjustments)
+filter + SVG edit+delete tugmalarini to'g'ri qo'shdi, `npm run build`
+xatosiz o'tdi.
+
+**Muhim keyingi tuzatish (foydalanuvchi topgan):** T-009'da "kanonik
+actions-cell = edit+delete SVG" deb belgilangan qaror NOTO'G'RI edi.
+Foydalanuvchi aniqlashtirdi: qator (`<tr>`) allaqachon `onRowClick`
+orqali edit sahifasiga o'tadi, shuning uchun alohida edit tugmasi
+ORTIQCHA. `design-reference.md` bo'lim 3.3 tuzatildi (endi faqat
+delete tugmasi kanonik), va quyidagi barcha fayllardan edit tugmasi
+qo'lda olib tashlandi: employee-list (T-009 qo'shgan), advance-list/
+holiday-list/adjustment-list (T-010a qo'shgan), branch-list/
+company-list (avvaldan mavjud edi), department-list/position-list
+(matn/emoji'dan SVG delete-only'ga), terminal-list (matn'dan SVG
+delete-only'ga), payroll-list ("Batafsil" havolasi butunlay olib
+tashlandi, Amallar ustuni bilan birga — chunki qator bosilishi ham
+xuddi shu joyga o'tardi).
+
+`npm run build` yakuniy holatda ham xatosiz.
+
+**Sana:** 2026-07-26

@@ -228,12 +228,6 @@
   transition: all 0.15s ease;
 }
 
-.btn-edit {
-  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
-  color: var(--color-primary);
-}
-.btn-edit:hover { background: var(--color-primary); color: #fff; }
-
 .btn-delete {
   background: color-mix(in srgb, var(--color-danger) 12%, transparent);
   color: var(--color-danger);

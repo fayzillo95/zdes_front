@@ -16,7 +16,7 @@
 
   <div class="table-card">
     <div class="loading-state" *ngIf="loading()">
-      <app-skeleton-loader [rows]="5" [columns]="6"></app-skeleton-loader>
+      <app-skeleton-loader [rows]="5" [columns]="5"></app-skeleton-loader>
     </div>
     <div class="table-responsive" *ngIf="!loading() && payrolls().length > 0">
       <table class="modern-table">
@@ -27,7 +27,6 @@
             <th>Asosiy summa</th>
             <th>Ushlab qolingan</th>
             <th>Yakuniy summa</th>
-            <th class="text-right">Amallar</th>
           </tr>
         </thead>
         <tbody>
@@ -37,11 +36,6 @@
             <td class="amount">{{ payroll.baseSalary | currency }}</td>
             <td class="deduction">{{ payroll.totalPenalty | currency }}</td>
             <td class="total">{{ payroll.netSalary | currency }}</td>
-            <td class="text-right">
-              <div class="action-buttons" (click)="$event.stopPropagation()">
-                <a [routerLink]="[payroll.id]" class="btn-action edit-btn" title="Batafsil">Batafsil</a>
-              </div>
-            </td>
           </tr>
         </tbody>
       </table>
