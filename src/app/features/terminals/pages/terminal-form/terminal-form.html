@@ -1,30 +1,51 @@
-<div class="terminal-form-container">
-  <h2>{{ isEditMode ? 'Edit' : 'Create' }} Terminal</h2>
-
-  <form [formGroup]="terminalForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="name">Name <span class="required">*</span></label>
-      <input type="text" id="name" formControlName="name" class="form-control" />
-      <div *ngIf="terminalForm.get('name')?.invalid && terminalForm.get('name')?.touched" class="error-text">
-        Name is required.
+<div class="form-page">
+  <div class="form-card">
+    <div class="form-header">
+      <div class="form-header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+          <rect x="9" y="9" width="6" height="6"></rect>
+          <line x1="9" y1="1" x2="9" y2="4"></line>
+          <line x1="15" y1="1" x2="15" y2="4"></line>
+          <line x1="9" y1="20" x2="9" y2="23"></line>
+          <line x1="15" y1="20" x2="15" y2="23"></line>
+          <line x1="20" y1="9" x2="23" y2="9"></line>
+          <line x1="20" y1="14" x2="23" y2="14"></line>
+          <line x1="1" y1="9" x2="4" y2="9"></line>
+          <line x1="1" y1="14" x2="4" y2="14"></line>
+        </svg>
+      </div>
+      <div>
+        <h2 class="form-title">{{ isEditMode ? 'Edit' : 'Create' }} Terminal</h2>
+        <p class="form-subtitle">Terminal ma'lumotlarini kiriting</p>
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="branchId">Branch ID</label>
-      <input type="number" id="branchId" formControlName="branchId" class="form-control" />
-    </div>
+    <form [formGroup]="terminalForm" (ngSubmit)="onSubmit()" class="form-body">
+      <div class="form-group">
+        <label for="name" class="form-label">Name <span class="required-star">*</span></label>
+        <input type="text" id="name" formControlName="name" class="form-input" />
+        <div *ngIf="terminalForm.get('name')?.invalid && terminalForm.get('name')?.touched" class="error-text">
+          Name is required.
+        </div>
+      </div>
 
-    <div class="form-group">
-      <label for="ipAddress">IP Address</label>
-      <input type="text" id="ipAddress" formControlName="ipAddress" class="form-control" />
-    </div>
+      <div class="form-group">
+        <label for="branchId" class="form-label">Branch ID</label>
+        <input type="number" id="branchId" formControlName="branchId" class="form-input" />
+      </div>
 
-    <div class="form-actions">
-      <button type="button" class="btn btn-secondary" routerLink="/terminals">Cancel</button>
-      <button type="submit" class="btn btn-primary" [disabled]="terminalForm.invalid">
-        {{ isEditMode ? 'Update' : 'Create' }}
-      </button>
-    </div>
-  </form>
+      <div class="form-group">
+        <label for="ipAddress" class="form-label">IP Address</label>
+        <input type="text" id="ipAddress" formControlName="ipAddress" class="form-input" />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-gradient-submit" [disabled]="terminalForm.invalid">
+          {{ isEditMode ? 'Update' : 'Create' }}
+        </button>
+        <button type="button" class="btn btn-secondary-cancel" routerLink="/terminals">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>

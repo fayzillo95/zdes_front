@@ -1,0 +1,15 @@
+## T-012 — 4 ta forma sahifasini kanonik form-card strukturasiga o'tkazish
+
+**Holat:** ACCEPTED
+
+**Tekshiruv:** AGY `advance-form`, `holiday-form`, `terminal-form`,
+`adjustment-form` sahifalarini `design-reference.md` bo'lim 3.4
+(`branch-form` namunasi) bo'yicha qayta stillashtirdi. Tekshirildi:
+- Faqat `.html`/`.css` fayllar o'zgargan, `.ts` fayllarga tegilmagan.
+- `formControlName` bog'lanishlari (masalan `advance-form`da
+  `employeeId`/`amount`/`reason`/`date`) o'zgarishsiz saqlangan —
+  faqat CSS class nomlari (`form-control` → `form-input` va h.k.)
+  almashgan.
+- `npm run build` xatosiz o'tdi.
+
+**Sana:** 2026-07-27
