@@ -1,0 +1,22 @@
+## T-001 — Darken dizayn tokenlarini styles.css'ga qo'shish
+
+**Holat:** ACCEPTED
+
+**Tekshiruv (Claude Code):**
+- `git diff src/styles.css` orqali tasdiqlandi — faqat shu fayl o'zgargan.
+- 8 ta yangi token (`--color-chart-purple/pink/green/yellow/blue`,
+  `--color-status-completed/pending/canceled`) `@theme` blokiga qo'shilgan,
+  `design-reference.md` bo'lim 2 bilan mos.
+- `--color-status-completed`/`--color-status-canceled` mavjud
+  `--color-success`/`--color-danger`ga `var()` orqali havola qiladi (talab
+  qilinganidek, qiymat takrorlanmagan).
+- Dark tema: `--color-bg-primary` (loyihada karta foni sifatida
+  ishlatiladi — tasdiqlandi `grep` orqali, masalan
+  `department-form.css:.form-card`) shaffof binafshaga, `--color-bg-secondary`
+  (sahifa foni) qattiq to'q ranga o'zgartirilgan, `body`ga gradient
+  qo'shilgan — bu token semantikasiga mos, ijodiy lekin to'g'ri yechim.
+- Light tema qiymatlari o'zgarishsiz qolgan (diff tasdiqlaydi).
+- `npm run build` xatosiz o'tdi (faqat CommonJS/ESM warning'lari, ular
+  oldindan mavjud edi, T-001'ga aloqasi yo'q).
+
+**Sana:** 2026-07-26
