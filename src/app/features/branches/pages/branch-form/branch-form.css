@@ -58,9 +58,9 @@
   margin: 1.5rem 2rem 0;
   padding: 0.85rem 1rem;
   border-radius: 12px;
-  background: rgba(239, 68, 68, 0.15);
+  background: color-mix(in srgb, var(--color-danger) 15%, transparent);
   color: var(--color-danger);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid var(--color-danger);
   font-size: 0.875rem;
 }
 

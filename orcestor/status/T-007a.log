@@ -1,0 +1,12 @@
+## T-007a — btn-edit/btn-delete/alert ranglarini tokenlashtirish (1-guruh, 8 fayl)
+
+**Holat:** ACCEPTED
+
+**Tekshiruv:** `git diff` orqali barcha 8 fayl tasdiqlandi — faqat
+`.btn-edit`/`.btn-delete`/`.alert-success`/`.alert-error` (+ `:hover`)
+qoidalari `design-reference.md` bo'lim 3.1 xaritasiga mos tokenlarga
+o'tkazilgan. `.page-header-card` gradienti va `.status-badge` (T-004)
+o'zgarishsiz qoldirilgan (talab qilinganidek). Stray fayl yo'q,
+`orcestor/task_pending/` bo'sh. `npm run build` xatosiz o'tdi.
+
+**Sana:** 2026-07-26
