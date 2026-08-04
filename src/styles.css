@@ -105,9 +105,12 @@ tr:nth-child(even) td {
   background-color: var(--color-bg-secondary);
 }
 
-tr:hover td {
-  background-color: var(--color-border);
-}
+/* T-017 FIX: Removed overbroad 'tr:hover td' rule.
+   Sabab: bu qoida display:flex bo'lgan td.actions-cell da vizual artifact
+   (gorizontal chiziq) hosil qilardi — flex container ichidagi tugmalar
+   atrofida --color-border (kulrang) background ko'rinib qolardi.
+   Har bir komponent o'zining .table-row:hover qoidasi orqali hover
+   holatini to'g'ri boshqaradi. */
 
 .card, .container, .box, .modal-content, fieldset {
   background-color: var(--color-bg-primary);
@@ -189,24 +192,10 @@ input::placeholder, textarea::placeholder {
   color: #fff;
 }
 
-/* Fix for T-017: Resolve <hr>-like line effect in Actions column */
-td.actions-cell {
-  /* Prevent flex bugs on td elements */
-  display: table-cell !important;
-  white-space: nowrap;
-}
-td.actions-cell .btn-action {
-  margin-right: 0.5rem;
-  vertical-align: middle;
-  text-decoration: none !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
-  outline: none !important;
-}
-td.actions-cell .btn-action:last-child {
-  margin-right: 0;
-}
+/* T-017 FIX: Bo'sh filter th (Amallar ustuni) ning border-bottom ni o'chir.
+   Sabab: filter qatorida 'Amallar' ustuniga to'g'ri keluvchi <th></th>
+   ichida hech qanday input yo'q, shuning uchun uning border-bottom i
+   hoverstiz holatda ham gorizontal chiziq (<hr>) kabi ko'rinadi. */
 .column-filter-row th:empty {
-  /* Prevent empty filter cells from looking like a floating <hr> */
   border-bottom: none !important;
 }
