@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Auth } from '../../../../core/services/auth';
 import { ProfileModal } from '../../profile-modal/profile-modal';
 import { SidebarState } from '../../../services/sidebar-state';
@@ -12,6 +13,7 @@ import { SidebarState } from '../../../services/sidebar-state';
 })
 export class Header implements OnInit {
   private readonly auth = inject(Auth);
+  private readonly router = inject(Router);
   protected readonly sidebarState = inject(SidebarState);
 
   readonly currentUser = this.auth.currentUser;
@@ -60,5 +62,6 @@ export class Header implements OnInit {
 
   logout() {
     this.auth.logout();
+    this.router.navigate(['/auth/login']);
   }
 }
