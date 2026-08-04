@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, DestroyRef, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -18,14 +18,32 @@ export class AttendanceDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private attendanceService = inject(AttendanceService);
   
-  attendance: Attendance | null = null;
+  item = signal<Attendance | null>(null);
+  loading = signal<boolean>(true);
+  loadError = signal<boolean>(false);
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
+    this.loading.set(true);
+    this.loadError.set(false);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.attendanceService.getById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
-        this.attendance = data;
+      this.attendanceService.getById(id).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: (data) => {
+          this.item.set(data);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.loadError.set(true);
+          this.loading.set(false);
+        }
       });
+    } else {
+      this.loading.set(false);
     }
   }
 

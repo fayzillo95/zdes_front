@@ -1,4 +1,20 @@
-<div class="payroll-detail-container" *ngIf="payroll$ | async as payroll; else loading">
+@if (loading()) {
+  <div class="loading-state">
+    <p>Ma'lumot yuklanmoqda...</p>
+  </div>
+} @else if (loadError()) {
+  <div class="error-state-box">
+    <div class="error-icon">
+      <i class="fas fa-exclamation-circle"></i>
+    </div>
+    <h3>Xatolik yuz berdi</h3>
+    <p>Ma'lumotlarni yuklashda muammo yuzaga keldi. Iltimos, qayta urinib ko'ring.</p>
+    <button class="btn-retry" (click)="loadData()">
+      <i class="fas fa-sync-alt"></i> Qayta urinish
+    </button>
+  </div>
+} @else if (item()) {
+<div class="payroll-detail-container">
   <div class="header-section">
     <h2>Ish haqi tafsilotlari</h2>
   </div>
@@ -6,23 +22,23 @@
   <div class="detail-card">
     <div class="detail-row">
       <span class="label">Xodim ID</span>
-      <span class="value">{{ payroll.employeeId }}</span>
+      <span class="value">{{ item()!.employeeId }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Davr</span>
-      <span class="value">{{ payroll.month }}</span>
+      <span class="value">{{ item()!.month }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Asosiy summa</span>
-      <span class="value amount">{{ payroll.baseSalary | currency }}</span>
+      <span class="value amount">{{ item()!.baseSalary | currency }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Ushlab qolingan</span>
-      <span class="value deduction">{{ payroll.totalPenalty | currency }}</span>
+      <span class="value deduction">{{ item()!.totalPenalty | currency }}</span>
     </div>
     <div class="detail-row total-row">
       <span class="label">Yakuniy summa</span>
-      <span class="value total">{{ payroll.netSalary | currency }}</span>
+      <span class="value total">{{ item()!.netSalary | currency }}</span>
     </div>
     
     <div class="action-buttons">
@@ -30,8 +46,4 @@
     </div>
   </div>
 </div>
-<ng-template #loading>
-  <div class="loading-state">
-    <p>Ma'lumot yuklanmoqda...</p>
-  </div>
-</ng-template>
+}

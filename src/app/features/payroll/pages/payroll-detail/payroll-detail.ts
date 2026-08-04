@@ -1,8 +1,7 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PayrollService } from '../../services/payroll';
-import { Observable, switchMap } from 'rxjs';
 import { Payroll } from '../../../../core/models/payroll';
 
 @Component({
@@ -13,11 +12,36 @@ import { Payroll } from '../../../../core/models/payroll';
   styleUrl: './payroll-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PayrollDetail {
+export class PayrollDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private payrollService = inject(PayrollService);
 
-  payroll$: Observable<Payroll> = this.route.paramMap.pipe(
-    switchMap(params => this.payrollService.getById(params.get('id')!))
-  );
+  item = signal<Payroll | null>(null);
+  loading = signal<boolean>(true);
+  loadError = signal<boolean>(false);
+
+  ngOnInit() {
+    this.loadData();
+  }
+
+  loadData() {
+    this.loading.set(true);
+    this.loadError.set(false);
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.payrollService.getById(id).subscribe({
+        next: (res) => {
+          this.item.set(res);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.loadError.set(true);
+          this.loading.set(false);
+        }
+      });
+    } else {
+      this.loading.set(false);
+    }
+  }
 }

@@ -1,4 +1,20 @@
-<div class="attendance-detail-container" *ngIf="attendance; else loading">
+@if (loading()) {
+  <div class="loading-state">
+    <p>Yuklanmoqda...</p>
+  </div>
+} @else if (loadError()) {
+  <div class="error-state-box">
+    <div class="error-icon">
+      <i class="fas fa-exclamation-circle"></i>
+    </div>
+    <h3>Xatolik yuz berdi</h3>
+    <p>Ma'lumotlarni yuklashda muammo yuzaga keldi. Iltimos, qayta urinib ko'ring.</p>
+    <button class="btn-retry" (click)="loadData()">
+      <i class="fas fa-sync-alt"></i> Qayta urinish
+    </button>
+  </div>
+} @else if (item()) {
+<div class="attendance-detail-container">
   <div class="header-section">
     <h2>Davomat tafsilotlari</h2>
   </div>
@@ -6,36 +22,32 @@
   <div class="detail-card">
     <div class="detail-row">
       <span class="label">Xodim</span>
-      <span class="value">{{ attendance.employeeId }}</span>
+      <span class="value">{{ item()!.employeeId }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Sana</span>
-      <span class="value">{{ formatDate(attendance.date) }}</span>
+      <span class="value">{{ formatDate(item()!.date) }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Kirish vaqti</span>
-      <span class="value">{{ formatTime(attendance.checkIn) }}</span>
+      <span class="value">{{ formatTime(item()!.checkIn) }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Chiqish vaqti</span>
-      <span class="value">{{ formatTime(attendance.checkOut) }}</span>
+      <span class="value">{{ formatTime(item()!.checkOut) }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Ishlangan daqiqa</span>
-      <span class="value">{{ attendance.workedMinutes != null ? attendance.workedMinutes : '—' }}</span>
+      <span class="value">{{ item()!.workedMinutes != null ? item()!.workedMinutes : '—' }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Kechikish</span>
-      <span class="value">{{ attendance.lateMinutes != null ? attendance.lateMinutes + ' daqiqa' : '—' }}</span>
+      <span class="value">{{ item()!.lateMinutes != null ? item()!.lateMinutes + ' daqiqa' : '—' }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Holat</span>
-      <span class="value">{{ attendance.status }}</span>
+      <span class="value">{{ item()!.status }}</span>
     </div>
   </div>
 </div>
-<ng-template #loading>
-  <div class="loading-state">
-    <p>Yuklanmoqda...</p>
-  </div>
-</ng-template>
+}

@@ -1,0 +1,12 @@
+## T-022 — Detail sahifalarga xatolik holati (error-state) qo'shish
+
+**Holat:** COMPLETED
+
+**Tekshiruv:** Subagent quyidagi detail sahifalarida xatolik holati integratsiyasini muvaffaqiyatli amalga oshirdi:
+- `employee-detail` (Observable -> signal orqali boshqaruvga o'tkazildi)
+- `payroll-detail` (Observable -> signal orqali boshqaruvga o'tkazildi)
+- `attendance-detail` (Eski mantiq ustiga error callback qo'shilib, xato ko'rsatish ta'minlandi, silent fail muammosi tuzatildi)
+
+Barcha sahifalarda `.html` da `async` o'rniga `@if`, `@else if (loadError())` va `@else if (item())` uchlik struktura ishlatildi. Xatolik holatida error-state bloki va "Qayta urinish" tugmasi chiqadi. O'tgan T-015 vazifasi bo'yicha qilingan dizayn (var(--color-bg-primary)) o'z holida asraldi. `npm run build` komandasi muvaffaqiyatli yakunlandi.
+
+**Sana:** 2026-08-04

@@ -1,9 +1,7 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '../../services/employee';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { Employee } from '../../../../core/models/employee';
 
 @Component({
@@ -18,11 +16,32 @@ export class EmployeeDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private employeeService = inject(EmployeeService);
   
-  employee$: Observable<Employee> | null = null;
+  item = signal<Employee | null>(null);
+  loading = signal<boolean>(true);
+  loadError = signal<boolean>(false);
 
   ngOnInit() {
-    this.employee$ = this.route.paramMap.pipe(
-      switchMap(params => this.employeeService.getById(params.get('id')!))
-    );
+    this.loadData();
+  }
+
+  loadData() {
+    this.loading.set(true);
+    this.loadError.set(false);
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.employeeService.getById(id).subscribe({
+        next: (res) => {
+          this.item.set(res);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          console.error(err);
+          this.loadError.set(true);
+          this.loading.set(false);
+        }
+      });
+    } else {
+      this.loading.set(false);
+    }
   }
 }

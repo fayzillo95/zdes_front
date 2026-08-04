@@ -1,4 +1,20 @@
-<div class="employee-detail-container" *ngIf="employee$ | async as employee; else loading">
+@if (loading()) {
+  <div class="loading-state">
+    <p>Yuklanmoqda...</p>
+  </div>
+} @else if (loadError()) {
+  <div class="error-state-box">
+    <div class="error-icon">
+      <i class="fas fa-exclamation-circle"></i>
+    </div>
+    <h3>Xatolik yuz berdi</h3>
+    <p>Ma'lumotlarni yuklashda muammo yuzaga keldi. Iltimos, qayta urinib ko'ring.</p>
+    <button class="btn-retry" (click)="loadData()">
+      <i class="fas fa-sync-alt"></i> Qayta urinish
+    </button>
+  </div>
+} @else if (item()) {
+<div class="employee-detail-container">
   <div class="header-section">
     <h2>Xodim ma'lumotlari</h2>
     <a [routerLink]="['edit']" class="edit-btn">Tahrirlash</a>
@@ -7,24 +23,20 @@
   <div class="detail-card">
     <div class="detail-row">
       <span class="label">FIO</span>
-      <span class="value">{{ employee.fullName || (employee.firstName + ' ' + employee.lastName) }}</span>
+      <span class="value">{{ item()!.fullName || (item()!.firstName + ' ' + item()!.lastName) }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Telefon</span>
-      <span class="value">{{ employee.phone }}</span>
+      <span class="value">{{ item()!.phone }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Status</span>
-      <span class="value">{{ employee.isActive !== false ? 'Faol' : 'Nofaol' }}</span>
+      <span class="value">{{ item()!.isActive !== false ? 'Faol' : 'Nofaol' }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Qabul qilingan sana</span>
-      <span class="value">{{ employee.createdAt | date }}</span>
+      <span class="value">{{ item()!.createdAt | date }}</span>
     </div>
   </div>
 </div>
-<ng-template #loading>
-  <div class="loading-state">
-    <p>Yuklanmoqda...</p>
-  </div>
-</ng-template>
+}
