@@ -1,0 +1,11 @@
+## T-014 — So'rov timeout'i (ildiz tuzatish) + global error-state CSS
+
+**Holat:** ACCEPTED
+
+**Tekshiruv:** Subagent `http.ts` faylida Axios instance'ga `timeout: 15000` qo'shdi va `src/styles.css`ga `.error-state-box`, `.error-icon`, `.error-text`, `.btn-retry` hamda `.btn-retry:hover` global sinflarini kiritdi.
+Tekshirildi:
+- `http.ts` da `timeout: 15000` o'rnatilgan.
+- `styles.css` da hardcoded hex siz `--color-danger` tokenti ishlatilgan.
+- `npm run build` muvaffaqiyatli xatosiz o'tdi.
+
+**Sana:** 2026-08-04

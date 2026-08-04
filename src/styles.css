@@ -156,3 +156,32 @@ input::placeholder, textarea::placeholder {
   color: var(--color-text-secondary) !important;
   font-weight: 400;
 }
+
+.error-state-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+}
+.error-icon { font-size: 1.5rem; }
+.error-text {
+  color: var(--color-danger);
+  font-weight: 500;
+}
+.btn-retry {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-danger);
+  background: color-mix(in srgb, var(--color-danger) 10%, transparent);
+  color: var(--color-danger);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+.btn-retry:hover {
+  background: var(--color-danger);
+  color: #fff;
+}
+

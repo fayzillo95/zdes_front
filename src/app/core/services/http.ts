@@ -38,6 +38,7 @@ export class Http {
 
   private readonly axiosInstance: AxiosInstance = axios.create({
     baseURL: this.baseUrl,
+    timeout: 15000,
   });
 
   private cache = new Map<string, CacheEntry>();
