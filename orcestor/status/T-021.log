@@ -1,0 +1,11 @@
+## T-021 — Xatolik holati (error-state) 4-guruh
+
+**Holat:** COMPLETED
+
+**Tekshiruv:** Subagent quyidagi sahifalarda xatolik holati integratsiyasini muvaffaqiyatli amalga oshirdi:
+- `attendance-list`
+- `payroll-list` (signal bazasida qilingan)
+
+Barcha sahifalarga `loadError` qo'shilgan, xatolik yuz berganda `loadError` yoqilib `.error-state-box` komponentasi ko'rinadi. "Qayta urinib ko'rish" tugmasi yuklash metodini qayta ishga tushiradi. Bo'sh ro'yxat ekrani faqat ma'lumot ro'stan yo'q bo'lsa va xatolik yo'q bo'lsagina ko'rinadi. Jadvallardagi amallar ustunlari o'z joyida o'zgarishsiz saqlanib qoldi. `npm run build` muvaffaqiyatli xatosiz o'tdi.
+
+**Sana:** 2026-08-04

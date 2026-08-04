@@ -22,6 +22,7 @@ export class PayrollList implements OnInit {
 
   payrolls = signal<Payroll[]>([]);
   loading = signal<boolean>(true);
+  loadError = signal<boolean>(false);
 
   employeeIdFilter = signal<string>('');
   monthFilter = signal<string>('');
@@ -38,7 +39,12 @@ export class PayrollList implements OnInit {
   });
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData(): void {
     this.loading.set(true);
+    this.loadError.set(false);
     this.payrollService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         this.payrolls.set(data);
@@ -48,6 +54,7 @@ export class PayrollList implements OnInit {
         console.error('Payroll list load error:', err);
         this.payrolls.set([]);
         this.loading.set(false);
+        this.loadError.set(true);
       },
     });
   }

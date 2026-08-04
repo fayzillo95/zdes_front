@@ -55,7 +55,13 @@
         </tbody>
       </table>
     </div>
-    <div class="empty-state-box" *ngIf="!loading() && payrolls().length === 0">
+    <div class="error-state-box empty-state-box" *ngIf="loadError()" style="padding: 2rem; text-align: center; color: var(--color-danger);">
+      <p>Ma'lumotlarni yuklashda xatolik yuz berdi</p>
+      <button class="btn-add-new" style="display:inline-flex; margin-top: 0.5rem; border: none; cursor: pointer;" (click)="loadData()">
+        Qayta urinib ko'rish
+      </button>
+    </div>
+    <div class="empty-state-box" *ngIf="!loading() && !loadError() && payrolls().length === 0">
       <span class="empty-icon">📁</span>
       <p class="empty-text">Hozircha hech qanday ish haqi yozuvi mavjud emas</p>
     </div>

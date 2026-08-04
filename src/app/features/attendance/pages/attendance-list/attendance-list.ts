@@ -28,6 +28,7 @@ export class AttendanceList implements OnInit {
   attendances: Attendance[] = [];
   employees: Employee[] = [];
   loading = true;
+  loadError = false;
 
   employeeFilter = signal<string>('');
   dateFilter = signal<string>('');
@@ -55,6 +56,7 @@ export class AttendanceList implements OnInit {
 
   loadData(): void {
     this.loading = true;
+    this.loadError = false;
     forkJoin({
       employees: this.employeeService.getAll({ limit: 100 }),
       attendances: this.attendanceService.getAll()
@@ -68,6 +70,7 @@ export class AttendanceList implements OnInit {
       error: (err) => {
         console.error('Ma\'lumotlarni yuklashda xatolik', err);
         this.loading = false;
+        this.loadError = true;
         this.cdr.markForCheck();
       }
     });
