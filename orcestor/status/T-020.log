@@ -1,0 +1,13 @@
+## T-020 — Xatolik holati (error-state) 3-guruh
+
+**Holat:** COMPLETED
+
+**Tekshiruv:** Subagent quyidagi sahifalarda xatolik holati integratsiyasini muvaffaqiyatli amalga oshirdi:
+- `position-list`
+- `terminal-list`
+- `work-schedule-list`
+- `notification-list`
+
+Barcha jadval sahifalarda bo'sh holat bloki oldidan `.error-state-box` qo'shildi va `!loadError` sharti bilan boyitildi. Maxsus `@if` strukturali `notification-list` da esa `@else if (loadError())` bloki to'g'ri joylashtirildi. "Qayta urinib ko'rish" tugmalari mos funksiyalarni qayta ishga tushirmoqda. `npm run build` muvaffaqiyatli xatosiz o'tdi.
+
+**Sana:** 2026-08-04

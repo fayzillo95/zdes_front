@@ -27,6 +27,7 @@ export class WorkScheduleList implements OnInit {
   companies: Company[] = [];
   branches: Branch[] = [];
   loading = true;
+  loadError = signal<boolean>(false);
 
   nameFilter = signal<string>('');
   companyFilter = signal<string>('');
@@ -66,6 +67,7 @@ export class WorkScheduleList implements OnInit {
   }
 
   loadWorkSchedules(): void {
+    this.loadError.set(false);
     this.loading = true;
     forkJoin({
       companies: this.companyService.getAll({ limit: 100 }),
@@ -81,6 +83,7 @@ export class WorkScheduleList implements OnInit {
       },
       error: (err) => {
         console.error(err);
+        this.loadError.set(true);
         this.loading = false;
         this.cdr.markForCheck();
       }

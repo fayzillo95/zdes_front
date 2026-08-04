@@ -30,6 +30,11 @@
       <div class="loading-state">
         <app-skeleton-loader [rows]="5" [columns]="6"></app-skeleton-loader>
       </div>
+    } @else if (loadError()) {
+      <div class="error-state-box">
+        <p>Malumotlarni yuklashda xatolik yuz berdi</p>
+        <button class="btn-retry" (click)="loadWorkSchedules()">Qayta urinish</button>
+      </div>
     } @else if (workSchedules.length > 0) {
       <div class="table-responsive">
       <table class="data-table">

@@ -18,6 +18,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 export class TerminalList implements OnInit {
   terminals: Terminal[] = [];
   loading = true;
+  loadError = signal<boolean>(false);
   private readonly terminalService = inject(TerminalService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
@@ -48,6 +49,7 @@ export class TerminalList implements OnInit {
   }
 
   loadTerminals(): void {
+    this.loadError.set(false);
     this.loading = true;
     this.terminalService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
@@ -56,6 +58,7 @@ export class TerminalList implements OnInit {
       },
       error: (err) => {
         console.error('Error loading terminals', err);
+        this.loadError.set(true);
         this.loading = false;
       }
     });

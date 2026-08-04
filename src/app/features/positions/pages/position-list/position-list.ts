@@ -37,6 +37,7 @@ export class PositionList implements OnInit {
   branches: Branch[] = [];
   departments: Department[] = [];
   loading = true;
+  loadError = signal<boolean>(false);
 
   nameFilter = signal<string>('');
   companyFilter = signal<string>('');
@@ -72,6 +73,7 @@ export class PositionList implements OnInit {
   }
 
   loadPositions(): void {
+    this.loadError.set(false);
     this.loading = true;
     forkJoin({
       companies: this.companyService.getAll({ limit: 100 }),
@@ -89,6 +91,7 @@ export class PositionList implements OnInit {
       },
       error: (err) => {
         console.error(err);
+        this.loadError.set(true);
         this.loading = false;
         this.cdr.markForCheck();
       },

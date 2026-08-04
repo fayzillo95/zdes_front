@@ -31,13 +31,19 @@
         <app-skeleton-loader [rows]="5" [columns]="7"></app-skeleton-loader>
       </div>
     }
-    @if (!loading && positions.length === 0) {
+    @if (loadError()) {
+      <div class="error-state-box">
+        <p>Malumotlarni yuklashda xatolik yuz berdi</p>
+        <button class="btn-retry" (click)="loadPositions()">Qayta urinish</button>
+      </div>
+    }
+    @if (!loading && !loadError() && positions.length === 0) {
       <div class="empty-state-box">
         <span class="empty-icon">📁</span>
         <p class="empty-text">Hozircha hech qanday lavozim qo'shilmagan</p>
       </div>
     }
-    @if (!loading && positions.length > 0) {
+    @if (!loading && !loadError() && positions.length > 0) {
     <div class="table-responsive">
       <table class="modern-table">
         <thead>

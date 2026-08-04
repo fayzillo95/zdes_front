@@ -3,6 +3,11 @@
 
   @if (loading()) {
     <app-skeleton-loader [rows]="5" [columns]="1"></app-skeleton-loader>
+  } @else if (loadError()) {
+    <div class="error-state-box">
+      <p>Malumotlarni yuklashda xatolik yuz berdi</p>
+      <button class="btn-retry" (click)="load()">Qayta urinish</button>
+    </div>
   } @else if (notifications().length === 0) {
     <p class="notification-list__status">Bildirishnomalar yo'q.</p>
   } @else {

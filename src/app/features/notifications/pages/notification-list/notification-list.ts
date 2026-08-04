@@ -18,19 +18,24 @@ export class NotificationList {
 
   protected readonly notifications = signal<Notification[]>([]);
   protected readonly loading = signal(false);
+  protected readonly loadError = signal<boolean>(false);
 
   constructor() {
     this.load();
   }
 
-  private load(): void {
+  protected load(): void {
+    this.loadError.set(false);
     this.loading.set(true);
     this.notificationService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (notifications) => {
         this.notifications.set(notifications);
         this.loading.set(false);
       },
-      error: () => this.loading.set(false),
+      error: () => {
+        this.loadError.set(true);
+        this.loading.set(false);
+      },
     });
   }
 

@@ -26,7 +26,11 @@
     <div class="loading-state" *ngIf="loading">
       <app-skeleton-loader [rows]="5" [columns]="5"></app-skeleton-loader>
     </div>
-    <div class="table-responsive" *ngIf="!loading && terminals.length > 0">
+    <div class="error-state-box" *ngIf="loadError()">
+      <p>Malumotlarni yuklashda xatolik yuz berdi</p>
+      <button class="btn-retry" (click)="loadTerminals()">Qayta urinish</button>
+    </div>
+    <div class="table-responsive" *ngIf="!loading && !loadError() && terminals.length > 0">
       <table class="modern-table">
         <thead>
           <tr>
@@ -80,7 +84,7 @@
         </tbody>
       </table>
     </div>
-    <div class="empty-state-box" *ngIf="!loading && terminals.length === 0">
+    <div class="empty-state-box" *ngIf="!loading && !loadError() && terminals.length === 0">
       <span class="empty-icon">📁</span>
       <p class="empty-text">Hozircha hech qanday terminal topilmadi</p>
     </div>
