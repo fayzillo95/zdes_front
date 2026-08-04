@@ -1,0 +1,13 @@
+## T-018 — Xatolik holati (error-state) 1-guruh
+
+**Holat:** COMPLETED
+
+**Tekshiruv:** Subagent quyidagi sahifalarda xatolik holati integratsiyasini muvaffaqiyatli amalga oshirdi:
+- `branch-list` (tasodifan T-017 commit bilan birga ketgan)
+- `company-list`
+- `department-list`
+- `employee-list`
+
+Barcha sahifalarga `loadError` qo'shilgan, error callback'da log yozilmoqda. `html` fayllarda bo'sh holat bloki oldidan `.error-state-box` qo'shildi. `npm run build` muvaffaqiyatli o'tdi.
+
+**Sana:** 2026-08-04

@@ -39,7 +39,14 @@
         <app-skeleton-loader [rows]="5" [columns]="3"></app-skeleton-loader>
       </div>
     }
-    @if (!loading() && departments().length === 0) {
+    @if (!loading() && loadError()) {
+      <div class="error-state-box">
+        <span class="error-icon">⚠️</span>
+        <p class="error-text">Ma'lumotlarni yuklashda xatolik yuz berdi.</p>
+        <button class="btn-retry" (click)="loadDepartments()">Qayta urinib ko'rish</button>
+      </div>
+    }
+    @if (!loading() && !loadError() && departments().length === 0) {
       <div class="empty-state-box">
         <span class="empty-icon">📁</span>
         <p class="empty-text">Hozircha hech qanday bo'lim qo'shilmagan</p>

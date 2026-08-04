@@ -26,6 +26,7 @@ export class EmployeeList implements OnInit {
 
   employees = signal<Employee[]>([]);
   loading = signal<boolean>(true);
+  loadError = signal<boolean>(false);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
@@ -89,6 +90,7 @@ export class EmployeeList implements OnInit {
     if (currentFilter.searchQuery?.trim()) params['search'] = currentFilter.searchQuery.trim();
 
     this.loading.set(true);
+    this.loadError.set(false);
     this.employeeService.getAll(params).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         let list = data;
@@ -115,6 +117,7 @@ export class EmployeeList implements OnInit {
         console.error('Employee list load error:', err);
         this.employees.set([]);
         this.loading.set(false);
+        this.loadError.set(true);
       },
     });
   }

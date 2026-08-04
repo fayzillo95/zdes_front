@@ -25,6 +25,7 @@ export class DepartmentList implements OnInit {
 
   departments = signal<Department[]>([]);
   loading = signal<boolean>(true);
+  loadError = signal<boolean>(false);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
@@ -62,6 +63,7 @@ export class DepartmentList implements OnInit {
     if (currentFilter.searchQuery?.trim()) params['search'] = currentFilter.searchQuery.trim();
 
     this.loading.set(true);
+    this.loadError.set(false);
     this.departmentService.getAll(params).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         let list = data;
@@ -79,6 +81,7 @@ export class DepartmentList implements OnInit {
         console.error('Departments load error:', err);
         this.departments.set([]);
         this.loading.set(false);
+        this.loadError.set(true);
       },
     });
   }

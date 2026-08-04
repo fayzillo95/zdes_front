@@ -25,6 +25,7 @@ export class CompanyList implements OnInit {
 
   companies = signal<Company[]>([]);
   loading = signal<boolean>(true);
+  loadError = signal<boolean>(false);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
@@ -73,6 +74,7 @@ export class CompanyList implements OnInit {
     if (currentFilter.searchQuery?.trim()) params['search'] = currentFilter.searchQuery.trim();
 
     this.loading.set(true);
+    this.loadError.set(false);
     this.companyService.getAll(params).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         let list = data;
@@ -87,6 +89,7 @@ export class CompanyList implements OnInit {
         console.error('Company list load error:', err);
         this.companies.set([]);
         this.loading.set(false);
+        this.loadError.set(true);
       },
     });
   }
