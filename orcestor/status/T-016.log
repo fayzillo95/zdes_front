@@ -1,0 +1,11 @@
+## T-016 — Form-card'da aniqlanmagan `--card-bg` o'zgaruvchisini tuzatish
+
+**Holat:** ACCEPTED
+
+**Tekshiruv:** Subagent `leave-form.css:13` va `work-schedule-form.css:11` fayllaridagi `.form-card` foni `var(--card-bg, #ffffff)` ni `var(--color-bg-primary)` ga almashtirdi.
+Tekshirildi:
+- Har ikkala faylda ham `.form-card` foni to'g'ri `var(--color-bg-primary)` ga o'tkazildi.
+- Qorong'i temada formaning oq fon bo'lib qolish xatosi bartaraf etildi.
+- `npm run build` muvaffaqiyatli o'tdi.
+
+**Sana:** 2026-08-04

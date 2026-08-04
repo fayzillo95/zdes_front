@@ -10,7 +10,7 @@
 .form-card {
   width: 100%;
   max-width: 750px;
-  background: var(--card-bg, #ffffff);
+  background: var(--color-bg-primary);
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   border: 1px solid var(--border-color, #e2e8f0);

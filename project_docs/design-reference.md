@@ -377,6 +377,7 @@ bog'lanishlari, validatsiya logikasi, submit metodi O'ZGARMAYDI.
    matni.
 3. Yangi ma'lumot/maydon o'ylab topilmaydi — faqat `Attendance` modelida
    haqiqatda mavjud maydonlar ko'rsatiladi.
+4. Barcha `.detail-card` elementlarida hardcoded `background: white;` emas, `background: var(--color-bg-primary);` ishlatilishi shart (tema qorong'i/yorug' rejimiga moslashish uchun).
 
 ## 3.6. So'rov timeout'i va xatolik holati (error state) patterni (2026-07-27, T-014..T-020)
 

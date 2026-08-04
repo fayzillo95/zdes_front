@@ -2,7 +2,6 @@
   padding: 24px;
   max-width: 600px;
   margin: 0 auto;
-  font-family: 'Inter', system-ui, sans-serif;
 }
 
 .header-section {
@@ -20,7 +19,7 @@
 }
 
 .detail-card {
-  background: white;
+  background: var(--color-bg-primary);
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
   padding: 24px;
