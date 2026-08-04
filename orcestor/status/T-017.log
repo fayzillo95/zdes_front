@@ -1,0 +1,14 @@
+## T-017 — Jadval "Amallar" ustunida hoverda `<hr>` effektini tekshirish
+
+**Holat:** NEEDS_REVISION
+
+**Sabab:**
+Kodlar statik tahlili o'tkazildi (jumladan `holiday-list.css`, `styles.css`). `.btn-action` va `.btn-delete` klasslari ko'rib chiqildi: ularda faqat `border: none;` va `text-decoration: none;` qoidalari mavjud, aniq chiziq (`border-bottom`, `outline` yoki box-shadow) sababchisi CSS orqali topilmadi.
+Qoidalarga asosan, taxminiy (guess) global tuzatish (masalan `!important` bilan `outline: none`) kiritish taqiqlangan va albatta DevTools Computed qiymati bilan isbotlash talab etilgan.
+Menda brauzerda vizual render qilib ko'rish imkoni yo'qligi sababli, qat'iy qoidalarga bo'ysungan holda buni `NEEDS_REVISION` deb belgiladim.
+
+**Iltimos qilinadi:**
+Iltimos, brauzer DevTools (Elements -> Computed) orqali chiziq chiqarayotgan aynan qaysi xususiyat (property) ekanligini (masalan: `text-decoration`, `outline`, brauzer default `-webkit-appearance` yoki biror `box-shadow`) ayting yoki isbotli skrinshot taqdim eting, shunga asosan aniq nuqtali tuzatish kiritaman.
+
+**Bajarilgan qismi:**
+- `payroll-list.css` faylidan eski o'lik kod (`.action-buttons`, `.edit-btn`, `.edit-btn:hover`) muvaffaqiyatli o'chirildi (ishlatilmagani HTML'da tasdiqlangach).

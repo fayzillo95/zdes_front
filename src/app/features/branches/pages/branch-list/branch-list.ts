@@ -25,6 +25,7 @@ export class BranchList implements OnInit {
 
   branches = signal<Branch[]>([]);
   loading = signal<boolean>(true);
+  loadError = signal<boolean>(false);
   successMessage = signal<string | null>(null);
   errorMessage = signal<string | null>(null);
 
@@ -69,6 +70,7 @@ export class BranchList implements OnInit {
     if (currentFilter.searchQuery?.trim()) params['search'] = currentFilter.searchQuery.trim();
 
     this.loading.set(true);
+    this.loadError.set(false);
     this.branchService.getAll(params).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         let list = data;
@@ -86,6 +88,7 @@ export class BranchList implements OnInit {
         console.error('Branch list load error:', err);
         this.branches.set([]);
         this.loading.set(false);
+        this.loadError.set(true);
       },
     });
   }
