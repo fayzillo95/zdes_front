@@ -1,0 +1,13 @@
+## T-015 — Detail-card hardcoded oq fonni tokenlashtirish
+
+**Holat:** ACCEPTED
+
+**Tekshiruv:** Subagent `payroll-detail.css`, `attendance-detail.css` va `employee-detail.css` fayllaridagi `.detail-card` foni `background: white;` ni `background: var(--color-bg-primary);` ga almashtirdi.
+Tekshirildi:
+- Uchala faylda qorong'i temaga mos `var(--color-bg-primary)` qo'llanildi.
+- `employee-detail.css`dan hardcoded `font-family` olib tashlandi.
+- `design-reference.md` fayliga tegishli eslatma qo'shildi.
+- (Izoh: Ushbu fayllar bo'yicha o'zgarishlar tasodifan T-016 bilan bitta commit'da kiritilgan, lekin to'liq va to'g'ri bajarilgan).
+- `npm run build` muvaffaqiyatli o'tdi.
+
+**Sana:** 2026-08-04
