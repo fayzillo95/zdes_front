@@ -20,6 +20,7 @@ export class AdjustmentList implements OnInit {
   private readonly router = inject(Router);
   adjustments: SalaryAdjustment[] = [];
   loading = true;
+  loadError = false;
 
   employeeIdFilter = signal<string>('');
   typeFilter = signal<string>('');
@@ -53,13 +54,16 @@ export class AdjustmentList implements OnInit {
 
   loadAdjustments(): void {
     this.loading = true;
+    this.loadError = false;
     this.service.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         this.adjustments = data;
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
+        console.error('Error fetching adjustments', err);
         this.loading = false;
+        this.loadError = true;
       },
     });
   }

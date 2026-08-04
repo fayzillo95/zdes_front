@@ -83,7 +83,12 @@
         </tbody>
       </table>
     </div>
-    <div class="empty-state-box" *ngIf="!loading && adjustments.length === 0">
+    <div class="error-state-box" *ngIf="!loading && loadError">
+      <span class="error-icon">⚠️</span>
+      <p class="error-text">Ma'lumotlarni yuklashda xatolik yuz berdi.</p>
+      <button class="btn-retry" (click)="loadAdjustments()">Qayta urinib ko'rish</button>
+    </div>
+    <div class="empty-state-box" *ngIf="!loading && !loadError && adjustments.length === 0">
       <span class="empty-icon">📁</span>
       <p class="empty-text">Hozircha hech qanday o'zgarish topilmadi</p>
     </div>

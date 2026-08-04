@@ -29,6 +29,7 @@ export class LeaveList implements OnInit {
   employees: Employee[] = [];
   selectedReason = signal<string | null>(null);
   loading = true;
+  loadError = false;
 
   employeeFilter = signal<string>('');
   typeFilter = signal<string>('');
@@ -59,6 +60,7 @@ export class LeaveList implements OnInit {
 
   loadData(): void {
     this.loading = true;
+    this.loadError = false;
     forkJoin({
       leaves: this.leaveService.getAll(),
       employees: this.employeeService.getAll({ limit: 100 })
@@ -75,6 +77,7 @@ export class LeaveList implements OnInit {
       error: (err) => {
         console.error('Ma\'lumot yuklashda xatolik', err);
         this.loading = false;
+        this.loadError = true;
         this.cdr.markForCheck();
       }
     });

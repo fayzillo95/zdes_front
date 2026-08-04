@@ -18,6 +18,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 export class HolidayList implements OnInit {
   holidays: Holiday[] = [];
   loading = true;
+  loadError = false;
   private holidayService = inject(HolidayService);
   private destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
@@ -47,6 +48,7 @@ export class HolidayList implements OnInit {
 
   loadHolidays(): void {
     this.loading = true;
+    this.loadError = false;
     this.holidayService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         this.holidays = data;
@@ -55,6 +57,7 @@ export class HolidayList implements OnInit {
       error: (err) => {
         console.error('Error fetching holidays', err);
         this.loading = false;
+        this.loadError = true;
       }
     });
   }

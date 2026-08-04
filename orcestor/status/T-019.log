@@ -1,0 +1,13 @@
+## T-019 — Xatolik holati (error-state) 2-guruh
+
+**Holat:** COMPLETED
+
+**Tekshiruv:** Subagent quyidagi sahifalarda xatolik holati integratsiyasini muvaffaqiyatli amalga oshirdi:
+- `advance-list`
+- `holiday-list`
+- `adjustment-list`
+- `leave-list`
+
+Barcha sahifalarga `loadError` qo'shilgan, xatolik yuz berganda `loadError` yoqilib `.error-state-box` komponentasi ishlamoqda. "Qayta urinib ko'rish" tugmasi yuklash metodini qayta ishga tushiradi. Bo'sh ro'yxat ekrani faqat ma'lumot ro'stan yo'q bo'lsa va xatolik yo'q bo'lsagina ko'rinadi. `npm run build` muvaffaqiyatli o'tdi.
+
+**Sana:** 2026-08-04

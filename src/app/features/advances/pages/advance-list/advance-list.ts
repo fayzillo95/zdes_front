@@ -18,6 +18,7 @@ import { SkeletonLoaderComponent } from '../../../../shared/components/ui/skelet
 export class AdvanceList implements OnInit {
   advances: (Advance & { reason?: string })[] = [];
   loading = true;
+  loadError = false;
   private readonly advanceService = inject(AdvanceService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
@@ -49,6 +50,7 @@ export class AdvanceList implements OnInit {
 
   loadAdvances(): void {
     this.loading = true;
+    this.loadError = false;
     this.advanceService.getAll().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (data) => {
         this.advances = data.map(a => ({ ...a, reason: a.note }));
@@ -57,6 +59,7 @@ export class AdvanceList implements OnInit {
       error: (err) => {
         console.error('Error fetching advances', err);
         this.loading = false;
+        this.loadError = true;
       }
     });
   }

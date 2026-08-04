@@ -30,6 +30,12 @@
       <div class="loading-state">
         <app-skeleton-loader [rows]="5" [columns]="6"></app-skeleton-loader>
       </div>
+    } @else if (loadError) {
+      <div class="error-state-box">
+        <span class="error-icon">⚠️</span>
+        <p class="error-text">Ma'lumotlarni yuklashda xatolik yuz berdi.</p>
+        <button class="btn-retry" (click)="loadData()">Qayta urinib ko'rish</button>
+      </div>
     } @else if (leaves.length > 0) {
       <div class="table-responsive">
       <table class="data-table">

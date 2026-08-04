@@ -69,7 +69,12 @@
         </tbody>
       </table>
     </div>
-    <div class="empty-state-box" *ngIf="!loading && holidays.length === 0">
+    <div class="error-state-box" *ngIf="!loading && loadError">
+      <span class="error-icon">⚠️</span>
+      <p class="error-text">Ma'lumotlarni yuklashda xatolik yuz berdi.</p>
+      <button class="btn-retry" (click)="loadHolidays()">Qayta urinib ko'rish</button>
+    </div>
+    <div class="empty-state-box" *ngIf="!loading && !loadError && holidays.length === 0">
       <span class="empty-icon">📁</span>
       <p class="empty-text">Hozircha hech qanday bayram topilmadi</p>
     </div>
