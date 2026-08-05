@@ -199,3 +199,9 @@ input::placeholder, textarea::placeholder {
 .column-filter-row th:empty {
   border-bottom: none !important;
 }
+/* T-017 FIX: Ensure actions-cell inherits row background on hover to eliminate residual line */
+
+td.actions-cell,
+tr:hover td.actions-cell {
+  background-color: inherit;
+}
