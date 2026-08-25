@@ -101,6 +101,55 @@
   overflow: hidden;
 }
 
+/* Cards Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+/* Individual Employee Card */
+.employee-card {
+  background: var(--color-bg-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.employee-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+/* Avatar inside card */
+.employee-card .emp-avatar {
+  align-self: center;
+  width: 48px;
+  height: 48px;
+  font-size: 1rem;
+  border-radius: 12px;
+}
+
+/* Details alignment */
+.employee-card .emp-details {
+  align-self: center;
+  text-align: center;
+}
+
+/* Status badge positioning */
+.employee-card .status-badge {
+  align-self: center;
+}
+
+/* Actions cell centered */
+.employee-card .actions-cell {
+  justify-content: center;
+}
+
 .table-responsive {
   width: 100%;
   overflow-x: auto;

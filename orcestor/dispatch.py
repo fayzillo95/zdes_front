@@ -36,6 +36,11 @@ BASE_DIR = Path(__file__).resolve().parent
 REPO_ROOT = BASE_DIR.parent
 PROMPT_TEMPLATE_PATH = BASE_DIR / "prompt.md"
 TASKS_DIR = BASE_DIR / "tasks"
+# Ensure absolute paths for safety
+def _assert_absolute_path(p: Path):
+    """Assert that the provided path is absolute. Raises AssertionError otherwise."""
+    if not p.is_absolute():
+        raise AssertionError(f"Path must be absolute: {p}")
 PENDING_DIR = BASE_DIR / "task_pending"
 COMPLETE_DIR = BASE_DIR / "task_compliete"
 STATUS_DIR = BASE_DIR / "status"
@@ -109,6 +114,7 @@ def cmd_new(args):
     task_id = normalize_task_id(args.task_id)
     filename = f"{task_id}.md"
     target_path = TASKS_DIR / filename
+    _assert_absolute_path(target_path)
 
     if target_path.exists():
         print(f"[ERROR] Task file already exists: {target_path}")

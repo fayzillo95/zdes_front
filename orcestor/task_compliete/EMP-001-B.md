@@ -1,0 +1,62 @@
+## Task ID: EMP-001-B
+### Sarlavha: {{TASK_TITLE}}
+
+**Maqsad (Goal):**
+{{GOAL}}
+<!-- Bitta aniq, o'lchanadigan gap. "Nima qilinishi kerak" — tugagan holat. -->
+
+**Kontekst (Context):**
+{{CONTEXT}}
+<!-- Angular kodbazasining qaysi qismi bilan bog'liq: modul, komponent,
+     servis. Butun faylni joylashtirmang — faqat yo'llarni (path) bering. -->
+
+**Cheklovlar (Constraints):**
+{{CONSTRAINTS}}
+<!-- Masalan: X faylga tegmang; mavjud kod uslubiga (style) rioya qiling;
+     yangi dependency qo'shishdan oldin so'rang; mavjud testlarni buzmang. -->
+
+**Ish doirasidagi fayllar (Files in scope):**
+{{FILES_IN_SCOPE}}
+<!-- Aniq fayl/papka yo'llari ro'yxati (relative path, repo root'dan). -->
+
+**Bajarilgan deb hisoblanish mezoni (Definition of Done):**
+{{DEFINITION_OF_DONE}}
+<!-- Aniq va tekshiriladigan: qanday xatti-harakat kutilyapti, qaysi fayllar
+     yaratilishi kerak, qaysi testlar/lint/build o'tishi kerak. -->
+
+**Tavsiya etilgan Antigravity rejimi (Mode):**
+{{MODE}}
+<!-- Agent-driven / Review-driven / Agent-assisted ichidan bittasi. -->
+
+**Natijani qayerga yozish kerak (Report back):**
+- Ishlash davomida **har bir muhim qadamni** darhol
+  `orcestor/task_pending/EMP-001-B-response.md` fayliga yozib boring
+  (fayl mavjud bo'lmasa, yarating). Bu — jonli jurnal (log): nima qilinyapti,
+  qaysi fayllar yaratildi/o'zgartirildi, qanday qarorlar qabul qilindi,
+  qanday muammolarga duch kelindi. Claude Code shu faylni kuzatib borib,
+  ishning borishini nazorat qiladi — shuning uchun bo'sh yoki umumiy
+  jumlalar emas, aniq va tekshiriladigan yozuvlar kerak (masalan: "T14:32 —
+  `src/app/shared/components/loading-spinner/loading-spinner.component.ts`
+  yaratildi").
+- Topshiriq to'liq bajarilgach:
+  1. `EMP-001-B-response.md` oxiriga yakuniy xulosa qo'shing (nima
+     o'zgardi, qaysi fayllar tegdi, Definition of Done mezonlari
+     tekshirilganmi).
+  2. Xulosadan keyin, aynan shu formatda **"O'zgargan fayllar" jadvali**ni
+     qo'shing — bu Claude Code'ga review paytida faylni to'liq o'qimasdan,
+     faqat kerakli faylga nuqtali `git diff` qilish imkonini beradi:
+
+     ### O'zgargan fayllar
+     | Fayl | Turi | Qisqa sabab |
+     |---|---|---|
+     | src/app/shared/components/ui/data-table/data-table.ts | yangi | Generic DataTable komponenti yozildi |
+     | src/app/core/services/http.ts | o'zgartirilgan | Xato holatini handle qilish qo'shildi |
+
+     Turi ustuni faqat: `yangi` / `o'zgartirilgan` / `o'chirilgan`. Har bir
+     qatordagi "Qisqa sabab" bitta qisqa jumla bo'lsin — bu jadval to'liq
+     bo'lmasa yoki umumiy ("kod yozildi" kabi) bo'lsa, review qiyinlashadi
+     va butun faylni qayta o'qishga to'g'ri keladi — bu esa aynan shu
+     jadval oldini olishi kerak bo'lgan narsa.
+  3. `orcestor/task_pending/EMP-001-B.md` va
+     `orcestor/task_pending/EMP-001-B-response.md` ikkalasini ham
+     `orcestor/task_compliete/` papkasiga ko'chiring (move qiling).
