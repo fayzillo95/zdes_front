@@ -13,37 +13,106 @@
       <i class="fas fa-sync-alt"></i> Qayta urinish
     </button>
   </div>
-} @else if (item()) {
+} @else if (item(); as payroll) {
 <div class="payroll-detail-container">
   <div class="header-section">
     <h2>Ish haqi tafsilotlari</h2>
+    <div class="header-actions">
+      <a [routerLink]="['/payroll', payroll.id, 'edit']" class="btn-secondary">Tahrirlash</a>
+      <button class="btn-danger" [disabled]="busy()" (click)="askDelete()">O'chirish</button>
+    </div>
   </div>
-  
+
+  @if (actionError(); as message) {
+    <div class="alert-error">{{ message }}</div>
+  }
+
   <div class="detail-card">
     <div class="detail-row">
       <span class="label">Xodim ID</span>
-      <span class="value">{{ item()!.employeeId }}</span>
+      <span class="value">{{ payroll.employeeId }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Davr</span>
-      <span class="value">{{ item()!.month }}</span>
+      <span class="value">{{ payroll.month }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Holat</span>
+      <span class="value status-pill" [attr.data-status]="payroll.status">{{ statusLabel(payroll.status) }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Asosiy summa</span>
-      <span class="value amount">{{ item()!.baseSalary | currency }}</span>
+      <span class="value amount">{{ payroll.baseSalary | currency }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Bonus</span>
+      <span class="value amount">{{ payroll.totalBonus | currency }}</span>
     </div>
     <div class="detail-row">
       <span class="label">Ushlab qolingan</span>
-      <span class="value deduction">{{ item()!.totalPenalty | currency }}</span>
+      <span class="value deduction">{{ payroll.totalPenalty | currency }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Avans</span>
+      <span class="value deduction">{{ payroll.totalAdvance | currency }}</span>
     </div>
     <div class="detail-row total-row">
       <span class="label">Yakuniy summa</span>
-      <span class="value total">{{ item()!.netSalary | currency }}</span>
+      <span class="value total">{{ payroll.netSalary | currency }}</span>
     </div>
-    
+    <div class="detail-row">
+      <span class="label">To'langan</span>
+      <span class="value amount">{{ payroll.paidAmount | currency }}</span>
+    </div>
+    <div class="detail-row">
+      <span class="label">Qoldiq</span>
+      <span class="value total">{{ remaining() | currency }}</span>
+    </div>
+    @if (payroll.paidAt) {
+      <div class="detail-row">
+        <span class="label">To'lov sanasi</span>
+        <span class="value">{{ payroll.paidAt | date: 'dd.MM.yyyy' }}</span>
+      </div>
+    }
+
     <div class="action-buttons">
-      <a routerLink="../" class="btn-back">Ortga</a>
+      <a routerLink="/payroll" class="btn-back">Ortga</a>
     </div>
   </div>
+
+  <!-- To'lov -->
+  <div class="detail-card">
+    <h3 class="pay-title">To'lovni qayd etish</h3>
+    @if (isSettled()) {
+      <p class="pay-note">Bu yozuv "{{ statusLabel(payroll.status) }}" holatida — yangi to'lov qo'shilmaydi.</p>
+    } @else {
+      <p class="pay-note">
+        Qisman to'lov ham qabul qilinadi: kiritilgan summa to'langan miqdorga qo'shiladi va
+        holat avtomatik yangilanadi.
+      </p>
+      <div class="pay-row">
+        <input
+          type="number"
+          min="0"
+          step="1000"
+          class="pay-input"
+          [ngModel]="payAmount()"
+          (ngModelChange)="payAmount.set($event)"
+          placeholder="Summa" />
+        <button class="btn-add-new" [disabled]="busy()" (click)="pay()">To'lash</button>
+        <button class="btn-secondary" [disabled]="busy() || remaining() <= 0" (click)="payFull()">
+          To'liq ({{ remaining() | currency }})
+        </button>
+      </div>
+    }
+  </div>
 </div>
+}
+
+@if (showDeleteDialog()) {
+  <app-confirm-dialog
+    title="Ish haqini o'chirish"
+    message="Yozuv butunlay o'chiriladi. Davom etilsinmi?"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"></app-confirm-dialog>
 }

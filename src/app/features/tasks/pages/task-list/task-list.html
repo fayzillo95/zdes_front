@@ -1,0 +1,179 @@
+<div class="tasks-page">
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Tasklar ro'yxati</h1>
+        <p class="page-subtitle">
+          {{ isManager ? 'Kompaniya bo\'yicha barcha vazifalar' : 'Men yaratgan va menga biriktirilgan vazifalar' }}
+          @if (total() > 0) { · jami {{ total() }} ta }
+        </p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/tasks" class="btn-secondary">Doska</a>
+      <a routerLink="/tasks/projects" class="btn-secondary">Loyihalar</a>
+      <a routerLink="/tasks/new" class="btn-add-new">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Yangi task
+      </a>
+    </div>
+  </div>
+
+  <!-- Filtrlar -->
+  <div class="filter-bar">
+    <input
+      type="text"
+      class="filter-input is-grow"
+      placeholder="Qidirish..."
+      [ngModel]="searchFilter()"
+      (ngModelChange)="searchFilter.set($event)"
+      (keyup.enter)="applyFilters()" />
+
+    <select class="filter-input" [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+      <option value="">Holat: hammasi</option>
+      @for (status of statuses; track status) {
+        <option [value]="status">{{ statusLabels[status] }}</option>
+      }
+    </select>
+
+    <select class="filter-input" [ngModel]="priorityFilter()" (ngModelChange)="priorityFilter.set($event)">
+      <option value="">Muhimlik: hammasi</option>
+      @for (priority of priorities; track priority) {
+        <option [value]="priority">{{ priorityLabels[priority] }}</option>
+      }
+    </select>
+
+    <select class="filter-input" [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event)">
+      <option value="">Turi: hammasi</option>
+      @for (type of types; track type) {
+        <option [value]="type">{{ typeLabels[type] }}</option>
+      }
+    </select>
+
+    <select class="filter-input" [ngModel]="projectFilter()" (ngModelChange)="projectFilter.set($event)">
+      <option value="">Loyiha: hammasi</option>
+      @for (project of projects; track project.id) {
+        <option [value]="project.id">{{ project.name }}</option>
+      }
+    </select>
+
+    @if (!isManager) {
+      <input type="date" class="filter-input" [ngModel]="dateFrom()" (ngModelChange)="dateFrom.set($event)" title="Dan" />
+      <input type="date" class="filter-input" [ngModel]="dateTo()" (ngModelChange)="dateTo.set($event)" title="Gacha" />
+    }
+
+    <button class="btn-add-new" (click)="applyFilters()">Qo'llash</button>
+    <button class="btn-secondary" (click)="clearFilters()">Tozalash</button>
+  </div>
+
+  @if (actionError(); as message) {
+    <div class="alert-error">{{ message }}</div>
+  }
+
+  <!-- Jadval -->
+  <div class="table-card">
+    @if (loading) {
+      <div class="loading-state"><app-skeleton-loader [rows]="6" [columns]="7"></app-skeleton-loader></div>
+    } @else if (loadError()) {
+      <div class="error-state-box">
+        <p>Tasklarni yuklashda xatolik yuz berdi</p>
+        <button class="btn-retry" (click)="load()">Qayta urinish</button>
+      </div>
+    } @else if (tasks.length > 0) {
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Sarlavha</th>
+              <th>Holat</th>
+              <th>Muhimlik</th>
+              <th>Turi</th>
+              <th>Loyiha</th>
+              <th>Bajaruvchi</th>
+              <th>Muddat</th>
+              <th>Sarflangan</th>
+              <th>Amallar</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (task of tasks; track task.id; let i = $index) {
+              <tr class="table-row clickable-row" (click)="open(task)">
+                <td class="row-index">{{ (page() - 1) * pageSize + i + 1 }}</td>
+                <td>
+                  <div class="title-cell">
+                    <span class="title-text">{{ task.title }}</span>
+                    <span class="title-sub text-muted">
+                      {{ authorName(task) }}
+                      @if (task.requireProof) { · 🔒 isbot }
+                      @if ((task.attachments?.length ?? 0) > 0) { · 📎 {{ task.attachments?.length }} }
+                    </span>
+                  </div>
+                </td>
+                <td><span [class]="'badge badge-status-' + task.status">{{ statusLabels[task.status] }}</span></td>
+                <td><span [class]="'badge badge-priority-' + task.priority">{{ priorityLabels[task.priority] }}</span></td>
+                <td class="text-muted">{{ typeLabels[task.type] }}</td>
+                <td class="text-muted">{{ task.project?.name || '—' }}</td>
+                <td class="text-muted">{{ assigneeNames(task) }}</td>
+                <td>
+                  @if (isOverdue(task)) {
+                    <span class="badge badge-overdue">{{ day(task.dueDate) }}</span>
+                  } @else {
+                    <span class="text-muted">{{ day(task.dueDate) }}</span>
+                  }
+                </td>
+                <td class="text-muted">{{ duration(task.spentSeconds) }}</td>
+                <td>
+                  <div class="actions-cell">
+                    <button class="btn-action btn-delete" (click)="askDelete(task, $event)" title="O'chirish">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                        <path d="M10 11v6M14 11v6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      @if (totalPages() > 1) {
+        <div class="pagination">
+          <button class="btn-secondary" [disabled]="page() === 1" (click)="goToPage(page() - 1)">Oldingi</button>
+          <span class="page-indicator">{{ page() }} / {{ totalPages() }}</span>
+          <button class="btn-secondary" [disabled]="page() === totalPages()" (click)="goToPage(page() + 1)">Keyingi</button>
+        </div>
+      }
+    } @else {
+      <div class="empty-state">
+        <span class="empty-icon">🗂</span>
+        <p>Filtrga mos task topilmadi</p>
+        <a routerLink="/tasks/new" class="btn-add-new">Birinchi taskni qo'shish</a>
+      </div>
+    }
+  </div>
+</div>
+
+@if (pendingDelete(); as task) {
+  <app-confirm-dialog
+    title="Taskni o'chirish"
+    [message]="deleteMessage(task)"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"></app-confirm-dialog>
+}

@@ -1,0 +1,41 @@
+.projects-layout {
+  display: grid;
+  grid-template-columns: minmax(16rem, 1fr) minmax(0, 2.2fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .projects-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-card-title {
+  margin: 0 0 0.9rem;
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--color-text-primary);
+}
+
+.form-card .form-field {
+  margin-bottom: 0.7rem;
+}
+
+.color-input {
+  width: 3.5rem;
+  height: 2.1rem;
+  padding: 0.15rem;
+  cursor: pointer;
+}
+
+.project-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #fff;
+}

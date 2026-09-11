@@ -4,3 +4,13 @@
   border: 1px solid #ddd;
   border-radius: 8px;
 }
+
+.face-register-status {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  color: var(--color-success);
+}
+
+.face-register-status.is-error {
+  color: var(--color-danger);
+}

@@ -1,0 +1,87 @@
+<div class="payroll-form-page">
+  <div class="page-header-card">
+    <div>
+      <h1 class="page-title">{{ isEditMode ? 'Ish haqini tahrirlash' : 'Yangi ish haqi' }}</h1>
+      <p class="page-subtitle">
+        {{ isEditMode ? "Xodim va oy o'zgartirilmaydi — ular juftlik sifatida noyob" : "Xodim va oy tanlanadi, qolgani hisoblanadi" }}
+      </p>
+    </div>
+    <a routerLink="/payroll" class="btn-secondary">Ro'yxatga qaytish</a>
+  </div>
+
+  <div class="form-card">
+    @if (loading) {
+      <p class="text-muted">Yuklanmoqda...</p>
+    } @else {
+      @if (errorMessage(); as message) {
+        <div class="alert-error">{{ message }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="employeeId">Xodim *</label>
+            <select id="employeeId" formControlName="employeeId">
+              <option value="">— tanlang —</option>
+              @for (employee of employees(); track employee.id) {
+                <option [value]="employee.id">{{ employeeName(employee) }}</option>
+              }
+            </select>
+            @if (form.controls.employeeId.touched && form.controls.employeeId.invalid) {
+              <span class="form-error">Xodim tanlanishi shart</span>
+            }
+          </div>
+
+          <div class="form-field">
+            <label for="month">Oy *</label>
+            <input id="month" type="month" formControlName="month" />
+            @if (form.controls.month.touched && form.controls.month.invalid) {
+              <span class="form-error">Oy YYYY-MM ko'rinishida bo'lishi kerak</span>
+            }
+          </div>
+
+          <div class="form-field">
+            <label for="baseSalary">Asosiy maosh</label>
+            <input id="baseSalary" type="number" min="0" step="1000" formControlName="baseSalary" />
+          </div>
+
+          <div class="form-field">
+            <label for="totalBonus">Bonus</label>
+            <input id="totalBonus" type="number" min="0" step="1000" formControlName="totalBonus" />
+          </div>
+
+          <div class="form-field">
+            <label for="totalPenalty">Jarima</label>
+            <input id="totalPenalty" type="number" min="0" step="1000" formControlName="totalPenalty" />
+          </div>
+
+          <div class="form-field">
+            <label for="totalAdvance">Avans</label>
+            <input id="totalAdvance" type="number" min="0" step="1000" formControlName="totalAdvance" />
+          </div>
+
+          <div class="form-field">
+            <label for="netSalary">Sof maosh</label>
+            <input id="netSalary" type="number" min="0" step="1000" formControlName="netSalary" placeholder="Bo'sh qoldirilsa hisoblanadi" />
+          </div>
+
+          <div class="form-field">
+            <label for="status">Holat</label>
+            <select id="status" formControlName="status">
+              @for (status of statuses; track status) {
+                <option [value]="status">{{ statusLabels[status] }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="cancel()">Bekor qilish</button>
+          <button type="submit" class="btn-add-new" [disabled]="saving()">
+            {{ saving() ? 'Saqlanmoqda...' : (isEditMode ? 'Saqlash' : 'Yaratish') }}
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

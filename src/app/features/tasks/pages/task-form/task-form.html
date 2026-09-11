@@ -1,0 +1,142 @@
+<div class="tasks-page">
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">{{ isEditMode ? 'Taskni tahrirlash' : 'Yangi task' }}</h1>
+        <p class="page-subtitle">Sarlavha majburiy, qolgan maydonlar ixtiyoriy</p>
+      </div>
+    </div>
+    <a routerLink="/tasks" class="btn-secondary">Doskaga qaytish</a>
+  </div>
+
+  <div class="form-card">
+    @if (loading) {
+      <p class="text-muted">Yuklanmoqda...</p>
+    } @else {
+      @if (errorMessage(); as message) {
+        <div class="alert-error">{{ message }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-grid">
+          <div class="form-field is-wide">
+            <label for="title">Sarlavha *</label>
+            <input id="title" type="text" formControlName="title" placeholder="Masalan: Hisobotni tayyorlash" />
+            @if (form.controls.title.touched && form.controls.title.invalid) {
+              <span class="form-error">Sarlavha kiritilishi shart (255 belgigacha)</span>
+            }
+          </div>
+
+          <div class="form-field is-wide">
+            <label for="description">Izoh</label>
+            <textarea id="description" formControlName="description" rows="4" placeholder="Nima qilinishi kerakligini yozing..."></textarea>
+          </div>
+
+          <div class="form-field">
+            <label for="type">Turi</label>
+            <select id="type" formControlName="type">
+              @for (type of types; track type) {
+                <option [value]="type">{{ typeLabels[type] }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="priority">Muhimlik</label>
+            <select id="priority" formControlName="priority">
+              @for (priority of priorities; track priority) {
+                <option [value]="priority">{{ priorityLabels[priority] }}</option>
+              }
+            </select>
+          </div>
+
+          @if (isEditMode) {
+            <div class="form-field">
+              <label for="status">Holat</label>
+              <select id="status" formControlName="status">
+                @for (status of statuses; track status) {
+                  <option [value]="status">{{ statusLabels[status] }}</option>
+                }
+              </select>
+            </div>
+          }
+
+          <div class="form-field">
+            <label for="projectId">Loyiha</label>
+            <select id="projectId" formControlName="projectId">
+              <option value="">— tanlanmagan —</option>
+              @for (project of projects(); track project.id) {
+                <option [value]="project.id">{{ project.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="departmentId">Bo'lim</label>
+            <select id="departmentId" formControlName="departmentId">
+              <option value="">— tanlanmagan —</option>
+              @for (department of departments(); track department.id) {
+                <option [value]="department.id">{{ department.name }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="startDate">Boshlanish sanasi</label>
+            <input id="startDate" type="date" formControlName="startDate" />
+          </div>
+
+          <div class="form-field">
+            <label for="dueDate">Muddat</label>
+            <input id="dueDate" type="date" formControlName="dueDate" />
+          </div>
+
+          <div class="form-field">
+            <label for="estimatedMinutes">Rejalashtirilgan vaqt (daqiqa)</label>
+            <input id="estimatedMinutes" type="number" min="0" formControlName="estimatedMinutes" placeholder="90" />
+          </div>
+
+          <div class="form-field is-wide">
+            <label class="checkbox-field">
+              <input type="checkbox" formControlName="requireProof" />
+              Isbot talab qilinsin — bajaruvchi fayl yoki matn yubormaguncha task "Bajarilgan" bo'lmaydi
+            </label>
+          </div>
+
+          <div class="form-field is-wide">
+            <label>Bajaruvchilar ({{ selectedAssignees().length }} tanlandi)</label>
+            @if (employees().length === 0) {
+              <span class="text-muted">Xodimlar ro'yxati yuklanmadi</span>
+            } @else {
+              <div class="assignee-grid">
+                @for (employee of employees(); track employee.id) {
+                  <button
+                    type="button"
+                    class="assignee-chip"
+                    [class.is-selected]="isAssigned(employee.id)"
+                    (click)="toggleAssignee(employee.id)">
+                    <span class="user-avatar">{{ (employee.firstName || employee.login || '?')[0].toUpperCase() }}</span>
+                    <span>{{ employeeName(employee) }}</span>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="cancel()">Bekor qilish</button>
+          <button type="submit" class="btn-add-new" [disabled]="saving()">
+            {{ saving() ? 'Saqlanmoqda...' : (isEditMode ? 'Saqlash' : 'Yaratish') }}
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

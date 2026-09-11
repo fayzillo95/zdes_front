@@ -5,4 +5,10 @@
   } @placeholder {
     <button class="btn btn-secondary">Kamerani ochish</button>
   }
+
+  @if (saving()) {
+    <p class="face-register-status">Saqlanmoqda...</p>
+  } @else if (message(); as text) {
+    <p class="face-register-status" [class.is-error]="isError()">{{ text }}</p>
+  }
 </div>

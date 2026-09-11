@@ -1,0 +1,227 @@
+/* ─── Asboblar paneli ───────────────────────────────────────────────── */
+
+.board-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.875rem;
+  padding: 0.7rem 0.9rem;
+}
+
+.date-nav,
+.scope-switch,
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.search-box {
+  margin-left: auto;
+}
+
+.date-input,
+.search-box input {
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: 0.8rem;
+}
+
+.search-box input {
+  min-width: 15rem;
+}
+
+/* ─── Kunlik yig'ma ─────────────────────────────────────────────────── */
+
+.summary-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  gap: 0.6rem;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: 0.7rem;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+}
+
+.summary-value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.summary-item.is-danger .summary-value {
+  color: var(--color-danger);
+}
+
+.summary-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-secondary);
+}
+
+.summary-progress {
+  margin-top: 0.35rem;
+  height: 0.25rem;
+  border-radius: 999px;
+  background: var(--color-bg-secondary);
+  overflow: hidden;
+}
+
+.summary-progress-fill {
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.25s;
+}
+
+/* ─── Doska ─────────────────────────────────────────────────────────── */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(14rem, 1fr));
+  gap: 0.75rem;
+  align-items: start;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+@media (max-width: 1100px) {
+  .board {
+    grid-template-columns: repeat(5, 15rem);
+  }
+}
+
+.board-column {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 8rem;
+}
+
+.board-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.7rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.board-count {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+
+.board-column-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  min-height: 5rem;
+}
+
+.board-empty {
+  padding: 1rem 0;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+/* ─── Karta ─────────────────────────────────────────────────────────── */
+
+.task-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.65rem 0.7rem;
+  border-radius: 0.65rem;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 2px var(--shadow-color);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.task-card:hover {
+  border-color: var(--color-primary);
+}
+
+.task-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.task-card-title {
+  margin: 0;
+  font-size: 0.83rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-text-primary);
+}
+
+.task-project {
+  align-self: flex-start;
+  padding: 0.12rem 0.45rem;
+  border-radius: 0.35rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: #fff;
+  mix-blend-mode: normal;
+}
+
+.task-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+}
+
+.task-meta-spacer {
+  flex: 1;
+}
+
+.task-meta-icon.is-running {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+/* ─── Sudrash holatlari ─────────────────────────────────────────────── */
+
+.cdk-drag-preview {
+  border-radius: 0.65rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  opacity: 0.95;
+}
+
+.cdk-drag-animating {
+  transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.task-card-placeholder {
+  height: 3.5rem;
+  border-radius: 0.65rem;
+  border: 2px dashed var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.cdk-drop-list-dragging .task-card:not(.cdk-drag-placeholder) {
+  transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1);
+}

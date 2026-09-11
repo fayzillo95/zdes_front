@@ -50,7 +50,6 @@ export class AttendanceForm implements OnInit {
   employeeFaceWarning = signal<string | null>(null);
 
   imageBase64 = signal<string | null>(null);
-  contentType = signal<string | null>(null);
   imageError = signal<string | null>(null);
   useCamera = signal<boolean>(false);
 
@@ -231,11 +230,9 @@ export class AttendanceForm implements OnInit {
       if (file.size > 3 * 1024 * 1024) { // 3MB limit
         this.imageError.set('Rasm hajmi 3MB dan oshmasligi kerak');
         this.imageBase64.set(null);
-        this.contentType.set(null);
         return;
       }
       this.imageError.set(null);
-      this.contentType.set(file.type);
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result as string;
@@ -249,7 +246,6 @@ export class AttendanceForm implements OnInit {
   // Handle photo captured
   onPhotoCaptured(dataUrl: string): void {
     this.imageError.set(null);
-    this.contentType.set('image/png');
     this.imageBase64.set(dataUrl);
     this.useCamera.set(false); // Close camera stream
     this.cdr.markForCheck();
@@ -257,7 +253,6 @@ export class AttendanceForm implements OnInit {
 
   clearImage(): void {
     this.imageBase64.set(null);
-    this.contentType.set(null);
     this.imageError.set(null);
     this.cdr.markForCheck();
   }
@@ -282,7 +277,6 @@ export class AttendanceForm implements OnInit {
           raw.employeeId,
           this.imageBase64()!,
           raw.terminalId || undefined,
-          this.contentType() || undefined,
           eventTimeIso,
           raw.notes || undefined
         )
@@ -290,7 +284,6 @@ export class AttendanceForm implements OnInit {
           raw.employeeId,
           this.imageBase64()!,
           raw.terminalId || undefined,
-          this.contentType() || undefined,
           eventTimeIso,
           raw.notes || undefined
         );

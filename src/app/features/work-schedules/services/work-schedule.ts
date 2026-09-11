@@ -43,8 +43,40 @@ export class WorkScheduleService {
     return this.http.patch<any>(`${this.path}/${id}/toggle-status`, { isActive }).pipe(map((res: any) => res?.data ?? res));
   }
 
-  setDefault(id: string): Observable<WorkSchedule> {
-    return this.http.patch<any>(`${this.path}/${id}/set-default`, {}).pipe(map((res: any) => res?.data ?? res));
+  /**
+   * Grafikni kompaniya uchun birlamchi qilish.
+   *
+   * Backend yo'li kompaniyani ham talab qiladi
+   * (`PATCH /work-schedules/:id/companies/:companyId/set-default`) —
+   * bitta grafik bir nechta kompaniyaga ulanishi mumkin va "birlamchi"
+   * har biri uchun alohida belgilanadi.
+   */
+  setDefault(id: string, companyId: string): Observable<WorkSchedule> {
+    return this.http
+      .patch<any>(`${this.path}/${id}/companies/${companyId}/set-default`, {})
+      .pipe(map((res: any) => res?.data ?? res));
+  }
+
+  /** Grafikni kompaniyaga ulash. */
+  attachCompany(
+    id: string,
+    companyId: string,
+    options: { branchId?: string; isDefault?: boolean } = {},
+  ): Observable<WorkSchedule> {
+    const body: Record<string, unknown> = { companyId };
+    if (options.branchId) body['branchId'] = options.branchId;
+    if (options.isDefault != null) body['isDefault'] = options.isDefault;
+
+    return this.http
+      .post<any>(`${this.path}/${id}/companies`, body)
+      .pipe(map((res: any) => res?.data ?? res));
+  }
+
+  /** Grafikni kompaniyadan uzish. */
+  detachCompany(id: string, companyId: string): Observable<void> {
+    return this.http
+      .delete<any>(`${this.path}/${id}/companies/${companyId}`)
+      .pipe(map(() => void 0));
   }
 
   assignUser(id: string, userId: string): Observable<void> {

@@ -1,0 +1,244 @@
+<div class="tasks-page">
+  @if (loading) {
+    <div class="form-card"><p class="text-muted">Yuklanmoqda...</p></div>
+  } @else if (loadError()) {
+    <div class="form-card">
+      <div class="error-state-box">
+        <p>Taskni yuklashda xatolik yuz berdi</p>
+        <button class="btn-retry" (click)="load()">Qayta urinish</button>
+      </div>
+    </div>
+  } @else if (task(); as item) {
+
+    <!-- Sarlavha -->
+    <div class="page-header-card">
+      <div class="page-header-title-box">
+        <div class="header-icon-badge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L22 4"></path>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </div>
+        <div>
+          <h1 class="page-title">{{ item.title }}</h1>
+          <p class="page-subtitle">
+            {{ authorName() }} yaratgan · {{ day(item.createdAt) }}
+            @if (item.project) { · {{ item.project.name }} }
+          </p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a routerLink="/tasks" class="btn-secondary">Doska</a>
+        <a [routerLink]="['/tasks', item.id, 'edit']" class="btn-secondary">Tahrirlash</a>
+        <button class="btn-secondary" [disabled]="busy()" (click)="duplicate()">Nusxalash</button>
+        <button class="btn-danger" [disabled]="busy()" (click)="askDelete()">O'chirish</button>
+      </div>
+    </div>
+
+    @if (actionError(); as message) {
+      <div class="alert-error">{{ message }}</div>
+    }
+
+    <div class="detail-grid">
+      <!-- Chap ustun -->
+      <div class="detail-main">
+
+        <!-- Holat -->
+        <section class="detail-card">
+          <h2 class="detail-card-title">Holat</h2>
+          <div class="status-row">
+            <span [class]="'badge badge-status-' + item.status">{{ statusLabels[item.status] }}</span>
+            <span [class]="'badge badge-priority-' + item.priority">{{ priorityLabels[item.priority] }}</span>
+            <span class="badge">{{ typeLabels[item.type] }}</span>
+            @if (item.requireProof) { <span class="badge">🔒 Isbot talab qilinadi</span> }
+            @if (isOverdue()) { <span class="badge badge-overdue">Kechikkan</span> }
+          </div>
+
+          @if (nextStatuses().length > 0) {
+            <div class="status-actions">
+              <span class="detail-label">O'tkazish:</span>
+              @for (status of nextStatuses(); track status) {
+                <button class="btn-secondary" [disabled]="busy()" (click)="changeStatus(status)">
+                  {{ statusLabels[status] }}
+                </button>
+              }
+            </div>
+          }
+        </section>
+
+        <!-- Izoh -->
+        @if (item.description) {
+          <section class="detail-card">
+            <h2 class="detail-card-title">Izoh</h2>
+            <p class="detail-description">{{ item.description }}</p>
+          </section>
+        }
+
+        <!-- Biriktirmalar -->
+        <section class="detail-card">
+          <div class="detail-card-head">
+            <h2 class="detail-card-title">Biriktirmalar ({{ files.length }})</h2>
+            <label class="btn-secondary is-file">
+              Fayl qo'shish
+              <input type="file" hidden (change)="onAttachmentPicked($event)" [disabled]="busy()" />
+            </label>
+          </div>
+
+          @if (files.length === 0) {
+            <p class="text-muted">Biriktirma yo'q</p>
+          } @else {
+            <div class="attachment-grid">
+              @for (file of files; track file.id) {
+                <div class="attachment-item">
+                  @if (isImage(file)) {
+                    <a [href]="file.url" target="_blank" rel="noopener">
+                      <img [src]="file.thumbnailUrl || file.url" [alt]="file.name || 'rasm'" class="attachment-thumb" />
+                    </a>
+                  } @else {
+                    <a [href]="file.url" target="_blank" rel="noopener" class="attachment-file">📄</a>
+                  }
+                  <div class="attachment-meta">
+                    <span class="attachment-name" [title]="file.name || ''">{{ file.name || 'fayl' }}</span>
+                    <span class="text-muted">{{ fileSize(file.sizeBytes) }}</span>
+                  </div>
+                  <button class="btn-action btn-delete" [disabled]="busy()" (click)="removeAttachment(file)" title="O'chirish">×</button>
+                </div>
+              }
+            </div>
+          }
+        </section>
+
+        <!-- Ovoz va video -->
+        <section class="detail-card">
+          <h2 class="detail-card-title">Ovoz va video</h2>
+
+          <div class="media-row">
+            <span class="detail-label">Ovozli xabar</span>
+            @if (voice; as clip) {
+              <audio [src]="clip.url" controls class="audio-player"></audio>
+              @if (clip.durationSeconds) { <span class="text-muted">{{ duration(clip.durationSeconds) }}</span> }
+              <button class="btn-action btn-delete" [disabled]="busy()" (click)="removeVoice()" title="O'chirish">×</button>
+            } @else {
+              <label class="btn-secondary is-file">
+                Ovoz yuklash
+                <input type="file" accept="audio/*" hidden (change)="onVoicePicked($event)" [disabled]="busy()" />
+              </label>
+            }
+          </div>
+
+          <div class="media-row">
+            <span class="detail-label">Video xabar</span>
+            @if (videoNote; as clip) {
+              <video [src]="clip.url" [poster]="clip.thumbnailUrl || ''" controls class="video-player"></video>
+              <button class="btn-action btn-delete" [disabled]="busy()" (click)="removeVideoNote()" title="O'chirish">×</button>
+            } @else {
+              <label class="btn-secondary is-file">
+                Video yuklash
+                <input type="file" accept="video/*" hidden (change)="onVideoNotePicked($event)" [disabled]="busy()" />
+              </label>
+            }
+          </div>
+        </section>
+
+        <!-- Isbot -->
+        <section class="detail-card">
+          <h2 class="detail-card-title">
+            Bajarilganlik isboti
+            @if (item.proofSubmittedAt) {
+              <span class="badge badge-status-done">{{ day(item.proofSubmittedAt) }} yuborilgan</span>
+            }
+          </h2>
+
+          @if (proofFilesUploaded.length > 0) {
+            <div class="attachment-grid">
+              @for (file of proofFilesUploaded; track file.id) {
+                <div class="attachment-item">
+                  @if (isImage(file)) {
+                    <a [href]="file.url" target="_blank" rel="noopener">
+                      <img [src]="file.thumbnailUrl || file.url" [alt]="file.name || 'isbot'" class="attachment-thumb" />
+                    </a>
+                  } @else {
+                    <a [href]="file.url" target="_blank" rel="noopener" class="attachment-file">📄</a>
+                  }
+                  <div class="attachment-meta">
+                    <span class="attachment-name">{{ file.name || 'fayl' }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          <div class="form-field">
+            <label for="proofText">Izoh</label>
+            <textarea
+              id="proofText"
+              rows="3"
+              placeholder="Nima bajarilganini yozing..."
+              [ngModel]="proofText()"
+              (ngModelChange)="proofText.set($event)"></textarea>
+          </div>
+
+          <div class="proof-actions">
+            <label class="btn-secondary is-file">
+              Fayl tanlash (5 tagacha)
+              <input type="file" multiple hidden (change)="onProofFilesPicked($event)" [disabled]="busy()" />
+            </label>
+            @if (proofFiles().length > 0) {
+              <span class="text-muted">{{ proofFiles().length }} ta fayl tanlandi</span>
+            }
+            <button class="btn-add-new" [disabled]="busy()" (click)="submitProof()">Isbotni yuborish</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- O'ng ustun -->
+      <aside class="detail-side">
+        <section class="detail-card">
+          <h2 class="detail-card-title">Ma'lumot</h2>
+          <dl class="detail-facts">
+            <dt>Boshlanish</dt><dd>{{ day(item.startDate) }}</dd>
+            @if (item.originalDate && item.originalDate !== item.startDate) {
+              <dt>Dastlabki kun</dt><dd>{{ day(item.originalDate) }}</dd>
+            }
+            <dt>Muddat</dt><dd>{{ day(item.dueDate) }}</dd>
+            <dt>Rejalashtirilgan</dt><dd>{{ item.estimatedMinutes ? item.estimatedMinutes + ' daqiqa' : '—' }}</dd>
+            <dt>Sarflangan</dt>
+            <dd [class.is-running]="item.startedAt">
+              {{ spentLabel() }}
+              @if (item.startedAt) { <span class="running-dot" title="Hisoblagich ishlayapti"></span> }
+            </dd>
+            @if (item.completedAt) {
+              <dt>Bajarilgan</dt><dd>{{ day(item.completedAt) }}</dd>
+            }
+            <dt>Bo'lim</dt><dd>{{ item.department?.name || '—' }}</dd>
+            <dt>Loyiha</dt><dd>{{ item.project?.name || '—' }}</dd>
+          </dl>
+        </section>
+
+        <section class="detail-card">
+          <h2 class="detail-card-title">Bajaruvchilar ({{ item.assignees?.length || 0 }})</h2>
+          @if ((item.assignees?.length || 0) === 0) {
+            <p class="text-muted">Biriktirilmagan</p>
+          } @else {
+            <ul class="assignee-list">
+              @for (assignee of (item.assignees ?? []); track assignee.id; let i = $index) {
+                <li class="user-chip">
+                  <span class="user-avatar">{{ (assignee.user?.firstName || '?')[0].toUpperCase() }}</span>
+                  <span>{{ assigneeName(i) }}</span>
+                </li>
+              }
+            </ul>
+          }
+        </section>
+      </aside>
+    </div>
+  }
+</div>
+
+@if (showDeleteDialog()) {
+  <app-confirm-dialog
+    title="Taskni o'chirish"
+    message="Task butunlay o'chiriladi. Davom etilsinmi?"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"></app-confirm-dialog>
+}

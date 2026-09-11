@@ -1,0 +1,248 @@
+.detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(15rem, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-main,
+.detail-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.detail-card {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.875rem;
+  padding: 1rem 1.1rem;
+  box-shadow: 0 1px 3px var(--shadow-color);
+}
+
+.detail-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.detail-card-title {
+  margin: 0 0 0.7rem;
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.detail-card-head .detail-card-title {
+  margin-bottom: 0;
+}
+
+.detail-description {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+}
+
+.detail-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  min-width: 8rem;
+}
+
+/* ─── Holat ─────────────────────────────────────────────────────────── */
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.status-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 0.8rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ─── Fayl tanlash tugmasi ──────────────────────────────────────────── */
+
+.btn-secondary.is-file {
+  cursor: pointer;
+  margin: 0;
+}
+
+/* ─── Biriktirmalar ─────────────────────────────────────────────────── */
+
+.attachment-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.7rem;
+}
+
+.attachment-item {
+  position: relative;
+  width: 8.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.6rem;
+  background: var(--color-bg-secondary);
+}
+
+.attachment-thumb {
+  width: 100%;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 0.45rem;
+  display: block;
+}
+
+.attachment-file {
+  display: grid;
+  place-items: center;
+  height: 5rem;
+  font-size: 1.8rem;
+  border-radius: 0.45rem;
+  background: var(--color-bg-primary);
+  text-decoration: none;
+}
+
+.attachment-meta {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.7rem;
+}
+
+.attachment-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text-primary);
+}
+
+.attachment-item .btn-action {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 1.3rem;
+  height: 1.3rem;
+  font-size: 0.9rem;
+  line-height: 1;
+  background: var(--color-bg-primary);
+}
+
+/* ─── Ovoz va video ─────────────────────────────────────────────────── */
+
+.media-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.media-row:last-child {
+  border-bottom: none;
+}
+
+.audio-player {
+  height: 2.1rem;
+  max-width: 20rem;
+  flex: 1;
+}
+
+.video-player {
+  width: 11rem;
+  height: 11rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #000;
+}
+
+/* ─── Isbot ─────────────────────────────────────────────────────────── */
+
+.proof-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.7rem;
+}
+
+/* ─── Yon panel ─────────────────────────────────────────────────────── */
+
+.detail-facts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 0.75rem;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.detail-facts dt {
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.detail-facts dd {
+  margin: 0;
+  color: var(--color-text-primary);
+  text-align: right;
+}
+
+.detail-facts dd.is-running {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.running-dot {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-left: 0.25rem;
+  border-radius: 50%;
+  background: var(--color-success);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .running-dot { animation: none; }
+}
+
+.assignee-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+}

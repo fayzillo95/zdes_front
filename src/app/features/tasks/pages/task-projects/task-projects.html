@@ -1,0 +1,132 @@
+<div class="tasks-page">
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2Z"></path>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Task loyihalari</h1>
+        <p class="page-subtitle">Vazifalarni guruhlash uchun — nom kompaniya ichida takrorlanmasligi kerak</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/tasks" class="btn-secondary">Doska</a>
+      <a routerLink="/tasks/list" class="btn-secondary">Ro'yxat</a>
+    </div>
+  </div>
+
+  @if (errorMessage(); as message) {
+    <div class="alert-error">{{ message }}</div>
+  }
+
+  <div class="projects-layout">
+    <!-- Forma -->
+    <div class="form-card">
+      <h2 class="form-card-title">{{ editingId() ? 'Loyihani tahrirlash' : 'Yangi loyiha' }}</h2>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="form-field">
+          <label for="name">Nomi *</label>
+          <input id="name" type="text" formControlName="name" placeholder="Masalan: Marketing" />
+          @if (form.controls.name.touched && form.controls.name.invalid) {
+            <span class="form-error">Nom kiritilishi shart</span>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="description">Izoh</label>
+          <textarea id="description" formControlName="description" rows="3"></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="color">Rang</label>
+          <input id="color" type="color" formControlName="color" class="color-input" />
+        </div>
+
+        <div class="form-field">
+          <label for="icon">Belgi (emoji)</label>
+          <input id="icon" type="text" formControlName="icon" maxlength="4" placeholder="📊" />
+        </div>
+
+        <label class="checkbox-field">
+          <input type="checkbox" formControlName="isActive" />
+          Faol
+        </label>
+
+        <div class="form-actions">
+          @if (editingId()) {
+            <button type="button" class="btn-secondary" (click)="resetForm()">Bekor qilish</button>
+          }
+          <button type="submit" class="btn-add-new" [disabled]="saving()">
+            {{ saving() ? 'Saqlanmoqda...' : (editingId() ? 'Saqlash' : "Qo'shish") }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Ro'yxat -->
+    <div class="table-card">
+      @if (loading) {
+        <div class="loading-state"><app-skeleton-loader [rows]="5" [columns]="4"></app-skeleton-loader></div>
+      } @else if (loadError()) {
+        <div class="error-state-box">
+          <p>Loyihalarni yuklashda xatolik yuz berdi</p>
+          <button class="btn-retry" (click)="load()">Qayta urinish</button>
+        </div>
+      } @else if (projects.length > 0) {
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Loyiha</th>
+                <th>Izoh</th>
+                <th>Holat</th>
+                <th>Amallar</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (project of projects; track project.id; let i = $index) {
+                <tr class="table-row">
+                  <td class="row-index">{{ i + 1 }}</td>
+                  <td>
+                    <span class="project-chip" [style.background]="project.color || 'var(--color-bg-secondary)'">
+                      {{ project.icon || '' }} {{ project.name }}
+                    </span>
+                  </td>
+                  <td class="text-muted">{{ project.description || '—' }}</td>
+                  <td>
+                    <span class="badge" [class.badge-status-done]="project.isActive" [class.badge-status-cancelled]="!project.isActive">
+                      {{ project.isActive ? 'Faol' : 'Nofaol' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="actions-cell">
+                      <button class="btn-action" (click)="startEdit(project)" title="Tahrirlash">✎</button>
+                      <button class="btn-action btn-delete" (click)="askDelete(project)" title="O'chirish">×</button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <div class="empty-state">
+          <span class="empty-icon">📁</span>
+          <p>Hozircha loyiha yo'q — chapdagi formadan birinchisini qo'shing</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+@if (pendingDelete(); as project) {
+  <app-confirm-dialog
+    title="Loyihani o'chirish"
+    [message]="deleteMessage(project)"
+    (confirm)="confirmDelete()"
+    (cancel)="cancelDelete()"></app-confirm-dialog>
+}

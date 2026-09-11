@@ -68,6 +68,44 @@ export class EmployeeService {
     );
   }
 
+  /**
+   * Yuz namunasini saqlash — davomatdagi yuz solishtiruvi shunga taqqoslanadi.
+   *
+   * Endpoint `multipart/form-data` kutadi (`POST /users/:id/face-image`),
+   * kamera esa `data:` URL beradi, shuning uchun bu yerda `Blob` ga
+   * aylantiriladi.
+   */
+  uploadFaceImage(id: string, imageDataUrl: string): Observable<Employee> {
+    const form = new FormData();
+    form.append('file', this.dataUrlToBlob(imageDataUrl), 'face.jpg');
+
+    return this.http.post<ApiResponse<Employee> | Employee>(`${this.baseUrl}/${id}/face-image`, form).pipe(
+      map((res: any) => res?.data ?? res)
+    );
+  }
+
+  private dataUrlToBlob(dataUrl: string): Blob {
+    const [header, payload] = dataUrl.split(',');
+    const mime = /data:([^;]+)/.exec(header ?? '')?.[1] ?? 'image/jpeg';
+
+    if (!payload || !header?.includes('base64')) {
+      return new Blob([payload ?? ''], { type: mime });
+    }
+
+    try {
+      const binary = atob(payload);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return new Blob([bytes], { type: mime });
+    } catch {
+      // Base64 buzuq bo'lsa `atob` istisno tashlaydi — bo'sh fayl yuborib,
+      // xatoni serverga hal qildirgan ma'quli, oqim uzilib qolmasin.
+      return new Blob([], { type: mime });
+    }
+  }
+
   changePassword(id: string, data: any): Observable<void> {
     return this.http.patch<ApiResponse<any> | void>(`${this.baseUrl}/${id}/change-password`, data).pipe(
       map(() => void 0)

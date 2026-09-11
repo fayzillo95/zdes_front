@@ -46,8 +46,11 @@ export class Scanner implements OnInit {
       this.showMessage('Iltimos, xodimni tanlang', true);
       return;
     }
-    const photo = this.capturedPhoto || 'data:image/jpeg;base64,dummy_string_for_testing';
-    this.attendanceService.checkIn(this.selectedEmployeeId, photo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    if (!this.capturedPhoto) {
+      this.showMessage('Avval suratga oling — yuz tekshiruvi rasmsiz ishlamaydi', true);
+      return;
+    }
+    this.attendanceService.checkIn(this.selectedEmployeeId, this.capturedPhoto).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => this.showMessage('Muvaffaqiyatli kelish qayd etildi', false),
       error: () => this.showMessage('Kelishni qayd etishda xatolik', true)
     });
@@ -58,8 +61,11 @@ export class Scanner implements OnInit {
       this.showMessage('Iltimos, xodimni tanlang', true);
       return;
     }
-    const photo = this.capturedPhoto || 'data:image/jpeg;base64,dummy_string_for_testing';
-    this.attendanceService.checkOut(this.selectedEmployeeId, photo).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+    if (!this.capturedPhoto) {
+      this.showMessage('Avval suratga oling — yuz tekshiruvi rasmsiz ishlamaydi', true);
+      return;
+    }
+    this.attendanceService.checkOut(this.selectedEmployeeId, this.capturedPhoto).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: () => this.showMessage('Muvaffaqiyatli ketish qayd etildi', false),
       error: () => this.showMessage('Ketishni qayd etishda xatolik', true)
     });

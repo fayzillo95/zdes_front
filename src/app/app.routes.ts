@@ -22,6 +22,11 @@ export const routes: Routes = [
         loadChildren: () => import('./features/dashboard/dashboard-module').then((m) => m.DashboardModule),
       },
       {
+        path: 'tasks',
+        data: { breadcrumb: 'Tasklar' },
+        loadChildren: () => import('./features/tasks/tasks-module').then((m) => m.TasksModule),
+      },
+      {
         path: 'employees',
         data: { breadcrumb: 'Xodimlar' },
         loadChildren: () => import('./features/employees/employees-module').then((m) => m.EmployeesModule),

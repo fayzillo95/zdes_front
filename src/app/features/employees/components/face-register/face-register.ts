@@ -1,8 +1,8 @@
-import { Component, Input, inject, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, Input, inject, ChangeDetectionStrategy, DestroyRef, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { CameraCaptureComponent } from '../../../../shared/components/ui/camera-capture/camera-capture';
-import { Http } from '../../../../core/services/http';
+import { EmployeeService } from '../../services/employee';
 
 @Component({
   selector: 'app-face-register',
@@ -14,16 +14,32 @@ import { Http } from '../../../../core/services/http';
 })
 export class FaceRegister {
   @Input() employeeId!: string;
+
   private destroyRef = inject(DestroyRef);
-  private http = inject(Http);
+  private employeeService = inject(EmployeeService);
+
+  readonly saving = signal(false);
+  readonly message = signal<string | null>(null);
+  readonly isError = signal(false);
 
   onPhotoCaptured(dataUrl: string) {
     if (!this.employeeId) return;
-    
-    // Placeholder method for POST /employees/{id}/face
-    this.http.post(`/employees/${this.employeeId}/face`, { photo: dataUrl }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => console.log('Yuz muvaffaqiyatli saqlandi'),
-      error: (err) => console.error('Yuzni saqlashda xatolik', err)
+
+    this.saving.set(true);
+    this.message.set(null);
+
+    this.employeeService.uploadFaceImage(this.employeeId, dataUrl).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: () => {
+        this.saving.set(false);
+        this.isError.set(false);
+        this.message.set('Yuz namunasi saqlandi');
+      },
+      error: (err) => {
+        this.saving.set(false);
+        this.isError.set(true);
+        const detail = err?.response?.data?.message;
+        this.message.set(Array.isArray(detail) ? detail.join(', ') : (detail ?? 'Yuzni saqlashda xatolik'));
+      }
     });
   }
 }

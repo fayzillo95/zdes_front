@@ -1,0 +1,156 @@
+<div class="tasks-page">
+  <!-- Sarlavha -->
+  <div class="page-header-card">
+    <div class="page-header-title-box">
+      <div class="header-icon-badge">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="18" rx="1"></rect>
+          <rect x="14" y="3" width="7" height="11" rx="1"></rect>
+        </svg>
+      </div>
+      <div>
+        <h1 class="page-title">Tasklar</h1>
+        <p class="page-subtitle">Kunlik vazifalar doskasi — kartani sudrab holatini o'zgartiring</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/tasks/list" class="btn-secondary">Ro'yxat</a>
+      <a routerLink="/tasks/projects" class="btn-secondary">Loyihalar</a>
+      <a routerLink="/tasks/new" class="btn-add-new">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Yangi task
+      </a>
+    </div>
+  </div>
+
+  <!-- Filtrlar -->
+  <div class="board-toolbar">
+    <div class="date-nav">
+      <button class="btn-action" (click)="shiftDay(-1)" title="Oldingi kun">‹</button>
+      <input type="date" class="date-input" [ngModel]="date()" (ngModelChange)="changeDate($event)" />
+      <button class="btn-action" (click)="shiftDay(1)" title="Keyingi kun">›</button>
+      <button class="btn-secondary" (click)="goToday()">Bugun</button>
+    </div>
+
+    <div class="scope-switch">
+      @for (option of scopeOptions; track option.id) {
+        <button
+          class="btn-secondary"
+          [class.is-active]="scope() === option.id"
+          (click)="changeScope(option.id)">
+          {{ option.label }}
+        </button>
+      }
+    </div>
+
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Sarlavha yoki izoh bo'yicha qidirish..."
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        (keyup.enter)="applySearch()" />
+      <button class="btn-secondary" (click)="applySearch()">Qidirish</button>
+    </div>
+  </div>
+
+  <!-- Kunlik yig'ma -->
+  @if (summary(); as stat) {
+    <div class="summary-bar">
+      <div class="summary-item"><span class="summary-value">{{ stat.total }}</span><span class="summary-label">Jami</span></div>
+      <div class="summary-item"><span class="summary-value">{{ stat.done }}</span><span class="summary-label">Bajarilgan</span></div>
+      <div class="summary-item"><span class="summary-value">{{ stat.inProgress }}</span><span class="summary-label">Jarayonda</span></div>
+      <div class="summary-item is-danger"><span class="summary-value">{{ stat.overdue }}</span><span class="summary-label">Kechikkan</span></div>
+      <div class="summary-item"><span class="summary-value">{{ duration(stat.spentSeconds) }}</span><span class="summary-label">Sarflangan</span></div>
+      <div class="summary-item">
+        <span class="summary-value">{{ stat.completionRate }}%</span>
+        <span class="summary-label">Bajarilish</span>
+        <div class="summary-progress"><div class="summary-progress-fill" [style.width.%]="stat.completionRate"></div></div>
+      </div>
+    </div>
+  }
+
+  @if (actionError(); as message) {
+    <div class="alert-error">{{ message }}</div>
+  }
+
+  <!-- Doska -->
+  @if (loading) {
+    <div class="table-card"><div class="loading-state"><app-skeleton-loader [rows]="6" [columns]="5"></app-skeleton-loader></div></div>
+  } @else if (loadError()) {
+    <div class="table-card">
+      <div class="error-state-box">
+        <p>Tasklarni yuklashda xatolik yuz berdi</p>
+        <button class="btn-retry" (click)="load()">Qayta urinish</button>
+      </div>
+    </div>
+  } @else {
+    <div class="board" cdkDropListGroup>
+      @for (status of statuses; track status) {
+        <section class="board-column">
+          <header class="board-column-header">
+            <span class="badge" [class]="'badge badge-status-' + status">{{ statusLabels[status] }}</span>
+            <span class="board-count">{{ columns()[status].length }}</span>
+          </header>
+
+          <div
+            class="board-column-body"
+            cdkDropList
+            [id]="'col-' + status"
+            [cdkDropListData]="columns()[status]"
+            [cdkDropListConnectedTo]="dropListIds"
+            (cdkDropListDropped)="drop($event, status)">
+
+            @for (task of columns()[status]; track task.id) {
+              <article class="task-card" cdkDrag [routerLink]="['/tasks', task.id]">
+                <div class="task-card-placeholder" *cdkDragPlaceholder></div>
+
+                <div class="task-card-top">
+                  <span [class]="priorityClass(task.priority)">{{ priorityLabels[task.priority] }}</span>
+                  @if (isOverdue(task)) {
+                    <span class="badge badge-overdue">Kechikkan</span>
+                  }
+                </div>
+
+                <h3 class="task-card-title">{{ task.title }}</h3>
+
+                @if (task.project; as project) {
+                  <span class="task-project" [style.background]="project.color || 'var(--color-bg-secondary)'">
+                    {{ project.name }}
+                  </span>
+                }
+
+                <div class="task-card-meta">
+                  <span class="user-chip" [title]="assigneeNames(task)">
+                    <span class="user-avatar">{{ initials(task) }}</span>
+                  </span>
+
+                  <span class="task-meta-spacer"></span>
+
+                  @if (task.requireProof) {
+                    <span class="task-meta-icon" title="Isbot talab qilinadi">🔒</span>
+                  }
+                  @if (mediaCount(task) > 0) {
+                    <span class="task-meta-icon" title="Biriktirmalar">📎 {{ mediaCount(task) }}</span>
+                  }
+                  @if (task.spentSeconds > 0 || task.startedAt) {
+                    <span class="task-meta-icon" [class.is-running]="task.startedAt" title="Sarflangan vaqt">
+                      ⏱ {{ spentLabel(task) }}
+                    </span>
+                  }
+                </div>
+              </article>
+            }
+
+            @if (columns()[status].length === 0) {
+              <div class="board-empty">Bo'sh</div>
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
+</div>

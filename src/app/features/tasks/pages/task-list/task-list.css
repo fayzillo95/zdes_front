@@ -1,0 +1,54 @@
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.875rem;
+  padding: 0.7rem 0.9rem;
+}
+
+.filter-input {
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-size: 0.8rem;
+}
+
+.filter-input.is-grow {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.title-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  max-width: 22rem;
+}
+
+.title-text {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.title-sub {
+  font-size: 0.72rem;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.page-indicator {
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
